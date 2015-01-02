@@ -22,6 +22,7 @@
 #ifndef __qjackctlSession_h
 #define __qjackctlSession_h
 
+#include <QApplication>
 #include <QString>
 #include <QHash>
 
@@ -29,7 +30,6 @@
 
 // Forward decls.
 class QSettings;
-
 
 //----------------------------------------------------------------------------
 // qjackctlSession -- JACK session container.

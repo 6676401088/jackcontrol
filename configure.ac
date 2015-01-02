@@ -31,22 +31,22 @@ AC_SUBST(ac_debug)
 
 
 # Enable Qt4/5 availability.
-AC_ARG_ENABLE(qt4,
-  AC_HELP_STRING([--enable-qt4], [enable Qt4 build (default=yes)]),
-  [ac_qt4="$enableval"],
-  [ac_qt4="yes"])
+#AC_ARG_ENABLE(qt4,
+#  AC_HELP_STRING([--enable-qt4], [enable Qt4 build (default=no)]),
+#  [ac_qt4="$enableval"],
+#  [ac_qt4="yes"])
 
 AC_ARG_ENABLE(qt5,
-  AC_HELP_STRING([--enable-qt5], [enable Qt5 build (default=no)]),
+  AC_HELP_STRING([--enable-qt5], [enable Qt5 build (default=yes)]),
   [ac_qt5="$enableval"],
-  [ac_qt5="no"])
+  [ac_qt5="yes"])
 
-if test "x$ac_qt4" = "xno"; then
-   ac_qt5="yes"
-fi
-if test "x$ac_qt5" = "xyes"; then
-   ac_qt4="no"
-fi
+#if test "x$ac_qt4" = "xno"; then
+#   ac_qt5="yes"
+#fi
+#if test "x$ac_qt5" = "xyes"; then
+#   ac_qt4="no"
+#fi
 
 # Disable system tray argument option.
 AC_ARG_ENABLE(system_tray,
@@ -142,14 +142,14 @@ AC_LANG_CPLUSPLUS
 ac_arch=`uname -m`
 
 # Check for some a-la-debian alternatives...
-ac_qtdirs="qt"
+ac_qtdirs="qt5"
 
-if test "x$ac_qt4" = "xyes"; then
-   ac_qtdirs="qt4 $ac_qtdirs"
-fi
-if test "x$ac_qt5" = "xyes"; then
-   ac_qtdirs="qt5 $ac_qtdirs"
-fi
+#if test "x$ac_qt4" = "xyes"; then
+#   ac_qtdirs="qt4 $ac_qtdirs"
+#fi
+#if test "x$ac_qt5" = "xyes"; then
+#   ac_qtdirs="qt5 $ac_qtdirs"
+#fi
 
 ac_topdirs="/usr/share /usr/lib"
 
@@ -200,14 +200,14 @@ done
 
 
 # Check for proper Qt version.
-AC_CACHE_CHECK([for Qt library version >= 4.4],
+AC_CACHE_CHECK([for Qt library version >= 5.0],
   ac_cv_qtversion, [
   AC_TRY_LINK([#include "QtCore/qglobal.h"], [
-#if QT_VERSION < 0x040400
-#error Qt library 4.4 or greater required.
+#if QT_VERSION < 0x050000
+#error Qt library 5.0 or greater required.
 #endif
     ], ac_cv_qtversion="yes", [
-      echo "no; Qt 4.4 or greater is required"
+      echo "no; Qt 5.0 or greater is required"
       exit
     ])
 ])

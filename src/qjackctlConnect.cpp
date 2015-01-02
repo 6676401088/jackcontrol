@@ -19,6 +19,8 @@
 
 *****************************************************************************/
 
+#include <Qt>
+
 #include "qjackctlAbout.h"
 #include "qjackctlConnect.h"
 
@@ -32,14 +34,13 @@
 #include <QPainterPath>
 #include <QTimer>
 #include <QMenu>
-
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-
-#if QT_VERSION >= 0x050000
 #include <QMimeData>
 #include <QDrag>
-#endif
+
+
+#include <QHelpEvent>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
 
 
 //----------------------------------------------------------------------

@@ -19,8 +19,9 @@
 
 *****************************************************************************/
 
-#include "qjackctlAbout.h"
+
 #include "qjackctlSession.h"
+#include "qjackctlAbout.h"
 
 #include "qjackctlMainForm.h"
 

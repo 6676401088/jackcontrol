@@ -10,7 +10,7 @@ include(src.pri)
 
 #DEFINES += DEBUG
 
-HEADERS += config.h \
+HEADERS += \
 	qjackctlAbout.h \
 	qjackctlAlsaConnect.h \
 	qjackctlConnect.h \
@@ -117,5 +117,5 @@ QT += xml
 
 # QT5 support
 !lessThan(QT_MAJOR_VERSION, 5) {
-	QT += widgets
+        QT += widgets
 }

@@ -310,29 +310,29 @@ void qjackctlInterfaceComboBox::populateModel (void)
 		}
 	}
 #endif 	// CONFIG_COREAUDIO
-#ifdef CONFIG_PORTAUDIO
-	else if (bPortaudio) {
-		if (Pa_Initialize() == paNoError) {
-			// Fill hostapi info...
-			PaHostApiIndex iNumHostApi = Pa_GetHostApiCount();
-			QString *pHostName = new QString[iNumHostApi];
-			for (PaHostApiIndex i = 0; i < iNumHostApi; ++i)
-				pHostName[i] = QString(Pa_GetHostApiInfo(i)->name);
-			// Fill device info...
-			PaDeviceIndex iNumDevice = Pa_GetDeviceCount();
-			PaDeviceInfo **ppDeviceInfo = new PaDeviceInfo * [iNumDevice];
-			for (PaDeviceIndex i = 0; i < iNumDevice; ++i) {
-				ppDeviceInfo[i] = const_cast<PaDeviceInfo *> (Pa_GetDeviceInfo(i));
-				sName = pHostName[ppDeviceInfo[i]->hostApi] + "::" + QString(ppDeviceInfo[i]->name);
-				addCard(sName, QString());
-				if (sCurName == sName)
-					iCurCard = iCards;
-				++iCards;
-			}
-			Pa_Terminate();
-		}
-	}
-#endif  // CONFIG_PORTAUDIO
+//#ifdef CONFIG_PORTAUDIO
+//	else if (bPortaudio) {
+//		if (Pa_Initialize() == paNoError) {
+//			// Fill hostapi info...
+//			PaHostApiIndex iNumHostApi = Pa_GetHostApiCount();
+//			QString *pHostName = new QString[iNumHostApi];
+//			for (PaHostApiIndex i = 0; i < iNumHostApi; ++i)
+//				pHostName[i] = QString(Pa_GetHostApiInfo(i)->name);
+//			// Fill device info...
+//			PaDeviceIndex iNumDevice = Pa_GetDeviceCount();
+//			PaDeviceInfo **ppDeviceInfo = new PaDeviceInfo * [iNumDevice];
+//			for (PaDeviceIndex i = 0; i < iNumDevice; ++i) {
+//				ppDeviceInfo[i] = const_cast<PaDeviceInfo *> (Pa_GetDeviceInfo(i));
+//				sName = pHostName[ppDeviceInfo[i]->hostApi] + "::" + QString(ppDeviceInfo[i]->name);
+//				addCard(sName, QString());
+//				if (sCurName == sName)
+//					iCurCard = iCards;
+//				++iCards;
+//			}
+//			Pa_Terminate();
+//		}
+//	}
+//#endif  // CONFIG_PORTAUDIO
 
 	addCard(m_sDefName, QString());
 	if (sCurName == m_sDefName || sCurName.isEmpty())

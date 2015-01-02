@@ -19,6 +19,8 @@
 
 *****************************************************************************/
 
+#include <Qt>
+
 #include "qjackctlPatchbay.h"
 
 #include "qjackctlMainForm.h"
