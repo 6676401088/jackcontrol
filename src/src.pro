@@ -11,59 +11,59 @@ include(src.pri)
 #DEFINES += DEBUG
 
 HEADERS += \
-	qjackctlAbout.h \
-	qjackctlAlsaConnect.h \
-	qjackctlConnect.h \
-	qjackctlConnectAlias.h \
-	qjackctlJackInterfaceComboBox.h \
-	qjackctlJackConnect.h \
-	qjackctlPatchbay.h \
-	qjackctlPatchbayFile.h \
-	qjackctlPatchbayRack.h \
-	qjackctlSession.h \
-	qjackctlSetup.h \
-	qjackctlStatus.h \
-	qjackctlSystemTray.h \
-	qjackctlAboutForm.h \
-	qjackctlConnectionsForm.h \
-	qjackctlMainForm.h \
-	qjackctlMessagesStatusForm.h \
-	qjackctlPatchbayForm.h \
-	qjackctlSessionForm.h \
-	qjackctlSetupForm.h \
-	qjackctlSocketForm.h
+    InterfaceComboBox.h \
+    About.h \
+    AboutDialog.h \
+    MainWidget.h \
+    Setup.h \
+    SetupDialog.h \
+    SystemTrayIcon.h \
+    AlsaConnect.h \
+    ConnectAlias.h \
+    ConnectionsWidget.h \
+    JackConnect.h \
+    MessagesStatusWidget.h \
+    SocketDialog.h \
+    PatchbayFile.h \
+    Patchbay.h \
+    PatchbayRack.h \
+    Session.h \
+    SessionWidget.h \
+    Status.h \
+    ConnectViewSplitter.h \
+    PatchbayWidget.h
 
 SOURCES += \
-	qjackctl.cpp \
-	qjackctlAlsaConnect.cpp \
-	qjackctlConnect.cpp \
-	qjackctlConnectAlias.cpp \
-	qjackctlInterfaceComboBox.cpp \
-	qjackctlJackConnect.cpp \
-	qjackctlPatchbay.cpp \
-	qjackctlPatchbayFile.cpp \
-	qjackctlPatchbayRack.cpp \
-	qjackctlSession.cpp \
-	qjackctlSetup.cpp \
-	qjackctlSystemTray.cpp \
-	qjackctlAboutForm.cpp \
-	qjackctlConnectionsForm.cpp \
-	qjackctlMainForm.cpp \
-	qjackctlMessagesStatusForm.cpp \
-	qjackctlPatchbayForm.cpp \
-	qjackctlSessionForm.cpp \
-	qjackctlSetupForm.cpp \
-	qjackctlSocketForm.cpp
+    AboutDialog.cpp \
+    Setup.cpp \
+    SetupDialog.cpp \
+    SystemTrayIcon.cpp \
+    QJackControl.cpp \
+    ConnectionsWidget.cpp \
+    AlsaConnect.cpp \
+    ConnectAlias.cpp \
+    InterfaceComboBox.cpp \
+    JackConnect.cpp \
+    SocketDialog.cpp \
+    Patchbay.cpp \
+    MainWidget.cpp \
+    MessagesStatusWidget.cpp \
+    PatchbayFile.cpp \
+    PatchbayForm.cpp \
+    PatchbayRack.cpp \
+    SessionWidget.cpp \
+    Session.cpp \
+    ConnectViewSplitter.cpp
 
 FORMS += \
-	qjackctlAboutForm.ui \
-	qjackctlConnectionsForm.ui \
-	qjackctlMainForm.ui \
-	qjackctlMessagesStatusForm.ui \
-	qjackctlPatchbayForm.ui \
-	qjackctlSessionForm.ui \
-	qjackctlSetupForm.ui \
-	qjackctlSocketForm.ui
+    AboutDialog.ui \
+    ConnectionsWidget.ui \
+    MainWidget.ui \
+    MessagesStatusWidget.ui \
+    PatchbayWidget.ui \
+    SessionWidget.ui \
+    SetupDialog.ui \
+    SocketDialog.ui
 
 RESOURCES += \
 	qjackctl.qrc
