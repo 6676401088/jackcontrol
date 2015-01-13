@@ -456,8 +456,6 @@ MainWidget *MainWidget::getInstance ()
 	return g_pMainForm;
 }
 
-
-// Make and set a proper setup step.
 bool MainWidget::setup ( Setup *pSetup )
 {
 	// Finally, fix settings descriptor

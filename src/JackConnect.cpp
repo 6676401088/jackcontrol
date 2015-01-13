@@ -61,24 +61,15 @@ qjackctlJackPort::qjackctlJackPort ( qjackctlJackClient *pClient,
 	}
 }
 
-// Default destructor.
 qjackctlJackPort::~qjackctlJackPort ()
 {
 }
 
-
-// Jack port handles accessors.
 jack_port_t *qjackctlJackPort::jackPort () const
 {
 	return m_pJackPort;
 }
 
-
-//----------------------------------------------------------------------
-// class qjackctlJackClient -- Jack client list item.
-//
-
-// Constructor.
 qjackctlJackClient::qjackctlJackClient ( qjackctlJackClientList *pClientList,
 	const QString& sClientName )
 	: JackClientTreeWidgetItem(pClientList, sClientName)
@@ -98,13 +89,10 @@ qjackctlJackClient::qjackctlJackClient ( qjackctlJackClientList *pClientList,
 	}
 }
 
-// Default destructor.
 qjackctlJackClient::~qjackctlJackClient ()
 {
 }
 
-
-// Jack port lookup.
 qjackctlJackPort *qjackctlJackClient::findJackPort ( jack_port_t *pJackPort )
 {
 	QListIterator<JackPortTreeWidgetItem *> iter(ports());
@@ -118,25 +106,17 @@ qjackctlJackPort *qjackctlJackClient::findJackPort ( jack_port_t *pJackPort )
 	return NULL;
 }
 
-
-//----------------------------------------------------------------------
-// qjackctlJackClientList -- Jack client list.
-//
-
-// Constructor.
 qjackctlJackClientList::qjackctlJackClientList (
 	ClientListTreeWidget *pListView, bool bReadable )
 	: JackClientList(pListView, bReadable)
 {
 }
 
-// Default destructor.
 qjackctlJackClientList::~qjackctlJackClientList ()
 {
 }
 
 
-// Jack port lookup.
 qjackctlJackPort *qjackctlJackClientList::findJackClientPort ( jack_port_t *pJackPort )
 {
 	QListIterator<JackClientTreeWidgetItem *> iter(clients());

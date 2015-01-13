@@ -21,7 +21,7 @@
 // Own includes
 #include "About.h"
 #include "Setup.h"
-#include "MainWidget.h"
+#include "MainWindow.h"
 
 // Qt includes
 #include <QApplication>
@@ -63,7 +63,7 @@ class Application : public QApplication
 public:
 
     Application(int& argc, char **argv) : QApplication(argc, argv),
-		m_pQtTranslator(0), m_pMyTranslator(0), m_pWidget(0)	
+        m_pQtTranslator(0), m_pMyTranslator(0), _mainWindow(0)
 	{
 		// Load translation support.
 		QLocale loc;
@@ -119,20 +119,20 @@ public:
 	}
 
 	// Main application widget accessors.
-	void setMainWidget(QWidget *pWidget)
+    void setMainWindow(MainWindow *mainWindow)
 	{
-		m_pWidget = pWidget;
-	#if defined(Q_WS_X11)
-		if (m_pDisplay) {
-			XGrabServer(m_pDisplay);
-			m_wOwner = m_pWidget->winId();
-			XSetSelectionOwner(m_pDisplay, m_aUnique, m_wOwner, CurrentTime);
-			XUngrabServer(m_pDisplay);
-		}
-	#endif
+        _mainWindow = mainWindow;
+//	#if defined(Q_WS_X11)
+//		if (m_pDisplay) {
+//			XGrabServer(m_pDisplay);
+//			m_wOwner = m_pWidget->winId();
+//			XSetSelectionOwner(m_pDisplay, m_aUnique, m_wOwner, CurrentTime);
+//			XUngrabServer(m_pDisplay);
+//		}
+//	#endif
 	}
 
-	QWidget *mainWidget() const { return m_pWidget; }
+    MainWindow *mainWindow() const { return _mainWindow; }
 
 	// Check if another instance is running,
     // and raise its proper main widget...
@@ -249,22 +249,18 @@ public:
 	// Session shutdown handler.
 	void commitData(QSessionManager& sm)
 	{
-        MainWidget *pMainForm = MainWidget::getInstance();
-		if (pMainForm)
-			pMainForm->setQuitForce(true);
-	#if QT_VERSION < 0x050000
-		QApplication::commitData(sm);
-	#endif
+//        MainWidget *pMainForm = MainWidget::getInstance();
+//		if (pMainForm)
+//			pMainForm->setQuitForce(true);
 	}
 
 private:
-
 	// Translation support.
 	QTranslator *m_pQtTranslator;
 	QTranslator *m_pMyTranslator;
 
 	// Instance variables.
-	QWidget *m_pWidget;
+    MainWindow *_mainWindow;
 
 #if defined(Q_WS_X11)
 	Display *m_pDisplay;
@@ -330,11 +326,6 @@ void stacktrace ( int signo )
 
 #endif
 #endif
-
-
-//-------------------------------------------------------------------------
-// main - The main program trunk.
-//
 
 int main ( int argc, char **argv )
 {
@@ -421,20 +412,20 @@ int main ( int argc, char **argv )
 		| Qt::WindowCloseButtonHint;
 	if (settings.bKeepOnTop)
 		wflags |= Qt::Tool;
+
+
 	// Construct the main form, and show it to the world.
-    MainWidget w(0, wflags);
-	w.setup(&settings);
+    MainWindow mainWindow(0, wflags);
+
+    mainWindow.setup(&settings);
 	// If we have a systray icon, we'll skip this.
 	if (!settings.bSystemTray) {
-		w.show();
-		w.adjustSize();
+        mainWindow.show();
+        mainWindow.adjustSize();
 	}
 
 	// Settle this one as application main widget...
-	app.setMainWidget(&w);
-
-	// Register the quit signal/slot.
-	app.setQuitOnLastWindowClosed(false);
+    app.setMainWindow(&mainWindow);
 
 	return app.exec();
 }

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>595</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>QJackControl</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="qjackctl.qrc">
+    <normaloff>:/images/aportlni_64x64.png</normaloff>:/images/aportlni_64x64.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="mainTabWidget">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="connectionsTab">
+       <attribute name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/aportlni_64x64.png</normaloff>:/images/aportlni_64x64.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Connections</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QGraphicsView" name="graphicsView"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="messagesTab">
+       <attribute name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/messages1.png</normaloff>:/images/messages1.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Messages</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QTextEdit" name="messagesTextEdit">
+          <property name="font">
+           <font>
+            <family>Ubuntu Mono</family>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="statusTab">
+       <attribute name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/status1.png</normaloff>:/images/status1.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Status</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QTreeWidget" name="statusTreeWidget">
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="transportToolBar">
+   <property name="windowTitle">
+    <string>Transport</string>
+   </property>
+   <property name="toolTip">
+    <string>Transport</string>
+   </property>
+   <property name="statusTip">
+    <string>Transport</string>
+   </property>
+   <property name="whatsThis">
+    <string>Transport Toolbar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionTransportRewind"/>
+   <addaction name="actionTransportBackward"/>
+   <addaction name="actionTransportStart"/>
+   <addaction name="actionTransportStop"/>
+   <addaction name="actionTransportForward"/>
+  </widget>
+  <widget class="QToolBar" name="jackControlToolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionStartJackServer"/>
+   <addaction name="actionStopJackServer"/>
+   <addaction name="actionSetup"/>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMisc">
+    <property name="title">
+     <string>Misc</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuTransport">
+    <property name="title">
+     <string>Transport</string>
+    </property>
+    <addaction name="actionTransportRewind"/>
+    <addaction name="actionTransportBackward"/>
+    <addaction name="actionTransportStart"/>
+    <addaction name="actionTransportStop"/>
+    <addaction name="actionTransportForward"/>
+   </widget>
+   <widget class="QMenu" name="menuJACK">
+    <property name="title">
+     <string>JACK</string>
+    </property>
+    <addaction name="actionStartJackServer"/>
+    <addaction name="actionStopJackServer"/>
+    <addaction name="actionSetup"/>
+   </widget>
+   <addaction name="menuJACK"/>
+   <addaction name="menuTransport"/>
+   <addaction name="menuMisc"/>
+  </widget>
+  <action name="actionSetup">
+   <property name="icon">
+    <iconset resource="qjackctl.qrc">
+     <normaloff>:/images/setup1.png</normaloff>:/images/setup1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Setup</string>
+   </property>
+   <property name="statusTip">
+    <string>Setup</string>
+   </property>
+   <property name="whatsThis">
+    <string>Setup</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionTransportStart">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qjackctl.qrc">
+     <normaloff>:/images/play1.png</normaloff>:/images/play1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transport Start</string>
+   </property>
+   <property name="toolTip">
+    <string>Transport Start</string>
+   </property>
+   <property name="statusTip">
+    <string>Transport Start</string>
+   </property>
+   <property name="whatsThis">
+    <string>Transport Start</string>
+   </property>
+  </action>
+  <action name="actionTransportStop">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qjackctl.qrc">
+     <normaloff>:/images/pause1.png</normaloff>:/images/pause1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transport Stop</string>
+   </property>
+   <property name="toolTip">
+    <string>Transport Stop</string>
+   </property>
+   <property name="statusTip">
+    <string>Transport Stop</string>
+   </property>
+   <property name="whatsThis">
+    <string>Transport Stop</string>
+   </property>
+  </action>
+  <action name="actionTransportBackward">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qjackctl.qrc">
+     <normaloff>:/images/backward1.png</normaloff>:/images/backward1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transport Backward</string>
+   </property>
+   <property name="toolTip">
+    <string>Transport Backward</string>
+   </property>
+   <property name="statusTip">
+    <string>Transport Backward</string>
+   </property>
+   <property name="whatsThis">
+    <string>Transport Backward</string>
+   </property>
+  </action>
+  <action name="actionTransportForward">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qjackctl.qrc">
+     <normaloff>:/images/forward1.png</normaloff>:/images/forward1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transport Forward</string>
+   </property>
+   <property name="toolTip">
+    <string>Transport Forward</string>
+   </property>
+   <property name="statusTip">
+    <string>Transport Forward</string>
+   </property>
+   <property name="whatsThis">
+    <string>Transport Forward</string>
+   </property>
+  </action>
+  <action name="actionTransportRewind">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qjackctl.qrc">
+     <normaloff>:/images/rewind1.png</normaloff>:/images/rewind1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transport Rewind</string>
+   </property>
+   <property name="toolTip">
+    <string>Transport Rewind</string>
+   </property>
+   <property name="statusTip">
+    <string>Transport Rewind</string>
+   </property>
+   <property name="whatsThis">
+    <string>Transport Rewind</string>
+   </property>
+  </action>
+  <action name="actionStartJackServer">
+   <property name="icon">
+    <iconset resource="qjackctl.qrc">
+     <normaloff>:/images/start1.png</normaloff>:/images/start1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start JACK Server</string>
+   </property>
+   <property name="toolTip">
+    <string>Start JACK Server</string>
+   </property>
+   <property name="statusTip">
+    <string>Start JACK Server</string>
+   </property>
+   <property name="whatsThis">
+    <string>Start JACK Server</string>
+   </property>
+  </action>
+  <action name="actionStopJackServer">
+   <property name="icon">
+    <iconset resource="qjackctl.qrc">
+     <normaloff>:/images/stop1.png</normaloff>:/images/stop1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop JACK Server</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop JACK Server</string>
+   </property>
+   <property name="statusTip">
+    <string>Stop JACK Server</string>
+   </property>
+   <property name="whatsThis">
+    <string>Stop JACK Server</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="qjackctl.qrc"/>
+ </resources>
+ <connections/>
+</ui>

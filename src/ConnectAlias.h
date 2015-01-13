@@ -20,12 +20,10 @@
 
 #pragma once
 
-#include <QSettings>
 #include <QRegExp>
 #include <QMap>
+#include <QSettings>
 
-
-// Client item alias map.
 class qjackctlClientAlias
 {
 public:

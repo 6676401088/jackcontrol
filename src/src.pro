@@ -31,14 +31,14 @@ HEADERS += \
     SessionWidget.h \
     Status.h \
     ConnectViewSplitter.h \
-    PatchbayWidget.h
+    PatchbayWidget.h \
+    MainWindow.h
 
 SOURCES += \
     AboutDialog.cpp \
     Setup.cpp \
     SetupDialog.cpp \
     SystemTrayIcon.cpp \
-    QJackControl.cpp \
     ConnectionsWidget.cpp \
     AlsaConnect.cpp \
     ConnectAlias.cpp \
@@ -53,7 +53,9 @@ SOURCES += \
     PatchbayRack.cpp \
     SessionWidget.cpp \
     Session.cpp \
-    ConnectViewSplitter.cpp
+    ConnectViewSplitter.cpp \
+    MainWindow.cpp \
+    Application.cpp
 
 FORMS += \
     AboutDialog.ui \
@@ -63,7 +65,8 @@ FORMS += \
     PatchbayWidget.ui \
     SessionWidget.ui \
     SetupDialog.ui \
-    SocketDialog.ui
+    SocketDialog.ui \
+    MainWindow.ui
 
 RESOURCES += \
 	qjackctl.qrc
@@ -119,3 +122,10 @@ QT += xml
 !lessThan(QT_MAJOR_VERSION, 5) {
         QT += widgets
 }
+
+INCLUDEPATH += .. ../qjack
+
+LIBS += -L../qjack/lib \
+                -lqjack \
+                -ljack \
+                -ljackserver
