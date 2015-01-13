@@ -22,7 +22,6 @@ HEADERS += \
     ConnectAlias.h \
     ConnectionsWidget.h \
     JackConnect.h \
-    MessagesStatusWidget.h \
     SocketDialog.h \
     PatchbayFile.h \
     Patchbay.h \
@@ -32,7 +31,8 @@ HEADERS += \
     Status.h \
     ConnectViewSplitter.h \
     PatchbayWidget.h \
-    MainWindow.h
+    MainWindow.h \
+    statuswidget.h
 
 SOURCES += \
     AboutDialog.cpp \
@@ -47,7 +47,6 @@ SOURCES += \
     SocketDialog.cpp \
     Patchbay.cpp \
     MainWidget.cpp \
-    MessagesStatusWidget.cpp \
     PatchbayFile.cpp \
     PatchbayForm.cpp \
     PatchbayRack.cpp \
@@ -55,18 +54,19 @@ SOURCES += \
     Session.cpp \
     ConnectViewSplitter.cpp \
     MainWindow.cpp \
-    Application.cpp
+    Application.cpp \
+    statuswidget.cpp
 
 FORMS += \
     AboutDialog.ui \
     ConnectionsWidget.ui \
     MainWidget.ui \
-    MessagesStatusWidget.ui \
     PatchbayWidget.ui \
     SessionWidget.ui \
     SetupDialog.ui \
     SocketDialog.ui \
-    MainWindow.ui
+    MainWindow.ui \
+    statuswidget.ui
 
 RESOURCES += \
 	qjackctl.qrc

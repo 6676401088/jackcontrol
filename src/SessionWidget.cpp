@@ -621,8 +621,8 @@ void SessionWidget::loadSessionDir ( const QString& sSessionDir )
 	if (pJackClient == NULL)
 		return;
 
-	pMainForm->appendMessages(
-		tr("%1: loading session...").arg(sSessionDir));
+//	pMainForm->appendMessages(
+//		tr("%1: loading session...").arg(sSessionDir));
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -634,9 +634,9 @@ void SessionWidget::loadSessionDir ( const QString& sSessionDir )
 
 	QApplication::restoreOverrideCursor();
 
-	pMainForm->appendMessages(
-		tr("%1: load session %2.").arg(sSessionDir)
-		.arg(bLoadSession ? "OK" : "FAILED"));
+//	pMainForm->appendMessages(
+//		tr("%1: load session %2.").arg(sSessionDir)
+//		.arg(bLoadSession ? "OK" : "FAILED"));
 }
 
 
@@ -677,8 +677,8 @@ void SessionWidget::saveSessionDir (
 	if (pJackClient == NULL)
 		return;
 
-	pMainForm->appendMessages(
-		tr("%1: saving session...").arg(sSessionDir));
+//	pMainForm->appendMessages(
+//		tr("%1: saving session...").arg(sSessionDir));
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -706,9 +706,9 @@ void SessionWidget::saveSessionDir (
 
 	QApplication::restoreOverrideCursor();
 
-	pMainForm->appendMessages(
-		tr("%1: save session %2.").arg(sSessionDir)
-		.arg(bSaveSession ? "OK" : "FAILED"));
+//	pMainForm->appendMessages(
+//		tr("%1: save session %2.").arg(sSessionDir)
+//		.arg(bSaveSession ? "OK" : "FAILED"));
 }
 
 

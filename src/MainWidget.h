@@ -42,7 +42,7 @@ typedef void snd_seq_t;
 
 // Forward declarations.
 class Setup;
-class MessagesStatusWidget;
+class StatusWidget;
 class SessionWidget;
 class ConnectionsWidget;
 class PatchbayWidget;
@@ -70,8 +70,6 @@ public:
 
 	jack_client_t *jackClient() const;
 	snd_seq_t *alsaSeq() const;
-
-	void appendMessages(const QString& s);
 
 	bool isActivePatchbay(const QString& sPatchbayPath) const;
 	void updateActivePatchbay();
@@ -123,8 +121,7 @@ protected slots:
 	void cableConnectSlot(const QString&, const QString&, unsigned int);
 
 	void toggleMainForm();
-	void toggleMessagesStatusForm();
-	void toggleMessagesForm();
+    void toggleMessagesStatusForm();
 	void toggleStatusForm();
 	void toggleSessionForm();
 	void toggleConnectionsForm();
@@ -167,12 +164,6 @@ protected:
 	QString& detectXrun(QString& s);
 	void updateXrunStats(float fXrunLast);
 
-	void appendMessagesColor(const QString& s, const QString& c);
-	void appendMessagesText(const QString& s);
-	void appendMessagesError(const QString& s);
-
-	void updateMessagesFont();
-	void updateMessagesLimit();
 	void updateConnectionsFont();
 	void updateConnectionsIconSize();
 	void updateJackClientPortAlias();
@@ -293,7 +284,7 @@ private:
 	QTime m_tXrunLast;
 	QTime m_tResetLast;
 
-    MessagesStatusWidget *m_pMessagesStatusForm;
+    StatusWidget *m_pMessagesStatusForm;
     SessionWidget     *m_pSessionForm;
     ConnectionsWidget *m_pConnectionsForm;
     PatchbayWidget    *m_pPatchbayForm;
