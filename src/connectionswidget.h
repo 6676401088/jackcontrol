@@ -21,7 +21,7 @@
 #pragma once
 
 // uic includes
-#include "ui_ConnectionsWidget.h"
+#include "ui_connectionswidget.h"
 
 // Own includes
 #include "JackConnect.h"
@@ -30,11 +30,10 @@
 // Forward declarations.
 class Setup;
 
-class ConnectionsWidget : public QWidget
-{
+class ConnectionsWidget : public QWidget {
 	Q_OBJECT
 public:
-    ConnectionsWidget(QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
+    ConnectionsWidget(QWidget *parent = 0);
     ~ConnectionsWidget();
 
     void setup(Setup *pSetup);
@@ -113,12 +112,12 @@ protected:
 	void keyPressEvent(QKeyEvent *);
 
 private:
-    Ui::ConnectionsWidget m_ui;
+    Ui::ConnectionsWidget ui;
 
 	// Instance variables.
 	JackConnectionsModel *m_pAudioConnect;
 	JackConnectionsModel *m_pMidiConnect;
 	qjackctlAlsaConnect *m_pAlsaConnect;
-    Setup       *m_pSetup;
+    Setup               *m_pSetup;
 	QString              m_sPreset;
 };

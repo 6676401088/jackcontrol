@@ -23,7 +23,9 @@
 #include "SocketDialog.h"
 #include "MainWidget.h"
 #include "Patchbay.h"
-#include "ConnectAlias.h"
+//#include "ConnectAlias.h"
+#include "socketlist.h"
+#include "sockettreewidgetitem.h"
 
 // Qt includes
 #include <QMessageBox>
@@ -77,61 +79,61 @@ SocketDialog::SocketDialog (
 
 	// UI connections...
 
-	QObject::connect(m_ui.PlugAddPushButton,
+	connect(m_ui.PlugAddPushButton,
 		SIGNAL(clicked()),
 		SLOT(addPlug()));
-	QObject::connect(m_ui.PlugRemovePushButton,
+	connect(m_ui.PlugRemovePushButton,
 		SIGNAL(clicked()),
 		SLOT(removePlug()));
-	QObject::connect(m_ui.PlugEditPushButton,
+	connect(m_ui.PlugEditPushButton,
 		SIGNAL(clicked()),
 		SLOT(editPlug()));
-	QObject::connect(m_ui.PlugUpPushButton,
+	connect(m_ui.PlugUpPushButton,
 		SIGNAL(clicked()),
 		SLOT(moveUpPlug()));
-	QObject::connect(m_ui.PlugDownPushButton,
+	connect(m_ui.PlugDownPushButton,
 		SIGNAL(clicked()),
 		SLOT(moveDownPlug()));
-	QObject::connect(m_ui.PlugListView,
+	connect(m_ui.PlugListView,
 		SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
 		SLOT(selectedPlug()));
 
-	QObject::connect(m_ui.SocketNameLineEdit,
+	connect(m_ui.SocketNameLineEdit,
 		SIGNAL(textChanged(const QString&)),
 		SLOT(changed()));
-	QObject::connect(m_ui.AudioRadioButton,
+	connect(m_ui.AudioRadioButton,
 		SIGNAL(toggled(bool)),
 		SLOT(socketTypeChanged()));
-	QObject::connect(m_ui.MidiRadioButton,
+	connect(m_ui.MidiRadioButton,
 		SIGNAL(toggled(bool)),
 		SLOT(socketTypeChanged()));
-	QObject::connect(m_ui.AlsaRadioButton,
+	connect(m_ui.AlsaRadioButton,
 		SIGNAL(toggled(bool)),
 		SLOT(socketTypeChanged()));
-	QObject::connect(m_ui.ExclusiveCheckBox,
+	connect(m_ui.ExclusiveCheckBox,
 		SIGNAL(toggled(bool)),
 		SLOT(socketTypeChanged()));
-	QObject::connect(m_ui.ClientNameComboBox,
+	connect(m_ui.ClientNameComboBox,
 		SIGNAL(editTextChanged(const QString&)),
 		SLOT(clientNameChanged()));
-	QObject::connect(m_ui.PlugNameComboBox,
+	connect(m_ui.PlugNameComboBox,
 		SIGNAL(editTextChanged(const QString&)),
 		SLOT(changed()));
 
-	QObject::connect(m_ui.PlugListView,
+	connect(m_ui.PlugListView,
 		SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(customContextMenu(const QPoint&)));
-	QObject::connect(m_ui.PlugListView->itemDelegate(),
+	connect(m_ui.PlugListView->itemDelegate(),
 		SIGNAL(commitData(QWidget*)),
 		SLOT(changed()));
-	QObject::connect(m_ui.SocketForwardComboBox,
+	connect(m_ui.SocketForwardComboBox,
 		SIGNAL(activated(int)),
 		SLOT(changed()));
 
-	QObject::connect(m_ui.DialogButtonBox,
+	connect(m_ui.DialogButtonBox,
 		SIGNAL(accepted()),
 		SLOT(accept()));
-	QObject::connect(m_ui.DialogButtonBox,
+	connect(m_ui.DialogButtonBox,
 		SIGNAL(rejected()),
 		SLOT(reject()));
 }
@@ -487,7 +489,7 @@ void SocketDialog::customContextMenu ( const QPoint& pos )
 			m_ui.PlugNameComboBox->itemText(iIndex));
 		pAction->setData(iIndex);
 	}
-	QObject::connect(pAddPlugMenu,
+	connect(pAddPlugMenu,
 		SIGNAL(triggered(QAction*)),
 		SLOT(activateAddPlugMenu(QAction*)));
 	pAddPlugMenu->setEnabled(iIndex > 0);
@@ -543,7 +545,7 @@ void SocketDialog::updateJackClients ( int iSocketType )
 			int iColon = sClientPort.indexOf(':');
 			if (iColon >= 0) {
 				QString sClientName
-					= qjackctlClientAlias::escapeRegExpDigits(
+					= ClientAlias::escapeRegExpDigits(
 						sClientPort.left(iColon));
 				bool bExists = false;
 				for (int i = 0;
@@ -566,55 +568,55 @@ void SocketDialog::updateAlsaClients ( int iSocketType )
 
 #ifdef CONFIG_ALSA_SEQ
 
-    MainWidget *pMainForm = MainWidget::getInstance();
-	if (pMainForm == NULL)
-		return;
+//    MainWidget *pMainForm = MainWidget::getInstance();
+//	if (pMainForm == NULL)
+//		return;
 
-	snd_seq_t *pAlsaSeq = pMainForm->alsaSeq();
-	if (pAlsaSeq == NULL)
-		return;
+//	snd_seq_t *pAlsaSeq = pMainForm->alsaSeq();
+//	if (pAlsaSeq == NULL)
+//		return;
 
-	bool bReadable = m_pSocketList->isReadable();
-	const QIcon icon(*m_ppPixmaps[QJACKCTL_XPM_MIDI_CLIENT]);
+//	bool bReadable = m_pSocketList->isReadable();
+//	const QIcon icon(*m_ppPixmaps[QJACKCTL_XPM_MIDI_CLIENT]);
 
-	// Readd all subscribers...
-	snd_seq_client_info_t *pClientInfo;
-	snd_seq_port_info_t   *pPortInfo;
-	unsigned int uiAlsaFlags;
-	if (bReadable)
-		uiAlsaFlags = SND_SEQ_PORT_CAP_READ  | SND_SEQ_PORT_CAP_SUBS_READ;
-	else
-		uiAlsaFlags = SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
+//	// Readd all subscribers...
+//	snd_seq_client_info_t *pClientInfo;
+//	snd_seq_port_info_t   *pPortInfo;
+//	unsigned int uiAlsaFlags;
+//	if (bReadable)
+//		uiAlsaFlags = SND_SEQ_PORT_CAP_READ  | SND_SEQ_PORT_CAP_SUBS_READ;
+//	else
+//		uiAlsaFlags = SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
 
-	snd_seq_client_info_alloca(&pClientInfo);
-	snd_seq_port_info_alloca(&pPortInfo);
-	snd_seq_client_info_set_client(pClientInfo, -1);
-	while (snd_seq_query_next_client(pAlsaSeq, pClientInfo) >= 0) {
-		int iAlsaClient = snd_seq_client_info_get_client(pClientInfo);
-		QString sClient
-			= qjackctlClientAlias::escapeRegExpDigits(
-				QString::fromUtf8(snd_seq_client_info_get_name(pClientInfo)));
-		if (iAlsaClient > 0) {
-			bool bExists = false;
-			snd_seq_port_info_set_client(pPortInfo, iAlsaClient);
-			snd_seq_port_info_set_port(pPortInfo, -1);
-			while (!bExists
-				&& snd_seq_query_next_port(pAlsaSeq, pPortInfo) >= 0) {
-				unsigned int uiPortCapability
-					= snd_seq_port_info_get_capability(pPortInfo);
-				if (((uiPortCapability & uiAlsaFlags) == uiAlsaFlags) &&
-					((uiPortCapability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0)) {
-					for (int i = 0;
-						i < m_ui.ClientNameComboBox->count() && !bExists; i++)
-						bExists = (sClient == m_ui.ClientNameComboBox->itemText(i));
-					if (!bExists) {
-						m_ui.ClientNameComboBox->addItem(icon, sClient);
-						bExists = true;
-					}
-				}
-			}
-		}
-	}
+//	snd_seq_client_info_alloca(&pClientInfo);
+//	snd_seq_port_info_alloca(&pPortInfo);
+//	snd_seq_client_info_set_client(pClientInfo, -1);
+//	while (snd_seq_query_next_client(pAlsaSeq, pClientInfo) >= 0) {
+//		int iAlsaClient = snd_seq_client_info_get_client(pClientInfo);
+//		QString sClient
+//			= qjackctlClientAlias::escapeRegExpDigits(
+//				QString::fromUtf8(snd_seq_client_info_get_name(pClientInfo)));
+//		if (iAlsaClient > 0) {
+//			bool bExists = false;
+//			snd_seq_port_info_set_client(pPortInfo, iAlsaClient);
+//			snd_seq_port_info_set_port(pPortInfo, -1);
+//			while (!bExists
+//				&& snd_seq_query_next_port(pAlsaSeq, pPortInfo) >= 0) {
+//				unsigned int uiPortCapability
+//					= snd_seq_port_info_get_capability(pPortInfo);
+//				if (((uiPortCapability & uiAlsaFlags) == uiAlsaFlags) &&
+//					((uiPortCapability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0)) {
+//					for (int i = 0;
+//						i < m_ui.ClientNameComboBox->count() && !bExists; i++)
+//						bExists = (sClient == m_ui.ClientNameComboBox->itemText(i));
+//					if (!bExists) {
+//						m_ui.ClientNameComboBox->addItem(icon, sClient);
+//						bExists = true;
+//					}
+//				}
+//			}
+//		}
+//	}
 
 #endif	// CONFIG_ALSA_SEQ
 }
@@ -747,7 +749,7 @@ void SocketDialog::updateJackPlugs ( int iSocketType )
 			int iColon = sClientPort.indexOf(':');
 			if (iColon >= 0 && rxClientName.exactMatch(sClientPort.left(iColon))) {
 				QString sPort
-					= qjackctlClientAlias::escapeRegExpDigits(
+					= ClientAlias::escapeRegExpDigits(
 						sClientPort.right(sClientPort.length() - iColon - 1));
 				if (m_ui.PlugListView->findItems(sPort, Qt::MatchExactly).isEmpty())
 					m_ui.PlugNameComboBox->addItem(icon, sPort);
@@ -765,55 +767,55 @@ void SocketDialog::updateAlsaPlugs ( int iSocketType )
 
 #ifdef CONFIG_ALSA_SEQ
 
-    MainWidget *pMainForm = MainWidget::getInstance();
-	if (pMainForm == NULL)
-		return;
+//    MainWidget *pMainForm = MainWidget::getInstance();
+//	if (pMainForm == NULL)
+//		return;
 
-	snd_seq_t *pAlsaSeq = pMainForm->alsaSeq();
-	if (pAlsaSeq == NULL)
-		return;
+//	snd_seq_t *pAlsaSeq = pMainForm->alsaSeq();
+//	if (pAlsaSeq == NULL)
+//		return;
 
-	QString sClientName = m_ui.ClientNameComboBox->currentText();
-	if (sClientName.isEmpty())
-		return;
-	QRegExp rxClientName(sClientName);
+//	QString sClientName = m_ui.ClientNameComboBox->currentText();
+//	if (sClientName.isEmpty())
+//		return;
+//	QRegExp rxClientName(sClientName);
 
-	bool bReadable = m_pSocketList->isReadable();
-	const QIcon icon(*m_ppPixmaps[QJACKCTL_XPM_MIDI_PLUG]);
+//	bool bReadable = m_pSocketList->isReadable();
+//	const QIcon icon(*m_ppPixmaps[QJACKCTL_XPM_MIDI_PLUG]);
 
-	// Fill sequencer plugs...
-	snd_seq_client_info_t *pClientInfo;
-	snd_seq_port_info_t   *pPortInfo;
-	unsigned int uiAlsaFlags;
-	if (bReadable)
-		uiAlsaFlags = SND_SEQ_PORT_CAP_READ  | SND_SEQ_PORT_CAP_SUBS_READ;
-	else
-		uiAlsaFlags = SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
+//	// Fill sequencer plugs...
+//	snd_seq_client_info_t *pClientInfo;
+//	snd_seq_port_info_t   *pPortInfo;
+//	unsigned int uiAlsaFlags;
+//	if (bReadable)
+//		uiAlsaFlags = SND_SEQ_PORT_CAP_READ  | SND_SEQ_PORT_CAP_SUBS_READ;
+//	else
+//		uiAlsaFlags = SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
 
-	snd_seq_client_info_alloca(&pClientInfo);
-	snd_seq_port_info_alloca(&pPortInfo);
-	snd_seq_client_info_set_client(pClientInfo, -1);
-	while (snd_seq_query_next_client(pAlsaSeq, pClientInfo) >= 0) {
-		int iAlsaClient = snd_seq_client_info_get_client(pClientInfo);
-		QString sClient = QString::fromUtf8(
-			snd_seq_client_info_get_name(pClientInfo));
-		if (iAlsaClient > 0 && rxClientName.exactMatch(sClient)) {
-			snd_seq_port_info_set_client(pPortInfo, iAlsaClient);
-			snd_seq_port_info_set_port(pPortInfo, -1);
-			while (snd_seq_query_next_port(pAlsaSeq, pPortInfo) >= 0) {
-				unsigned int uiPortCapability
-					= snd_seq_port_info_get_capability(pPortInfo);
-				if (((uiPortCapability & uiAlsaFlags) == uiAlsaFlags) &&
-					((uiPortCapability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0)) {
-					QString sPort
-						= qjackctlClientAlias::escapeRegExpDigits(
-							QString::fromUtf8(snd_seq_port_info_get_name(pPortInfo)));
-					if (m_ui.PlugListView->findItems(sPort, Qt::MatchExactly).isEmpty())
-						m_ui.PlugNameComboBox->addItem(icon, sPort);
-				}
-			}
-		}
-	}
+//	snd_seq_client_info_alloca(&pClientInfo);
+//	snd_seq_port_info_alloca(&pPortInfo);
+//	snd_seq_client_info_set_client(pClientInfo, -1);
+//	while (snd_seq_query_next_client(pAlsaSeq, pClientInfo) >= 0) {
+//		int iAlsaClient = snd_seq_client_info_get_client(pClientInfo);
+//		QString sClient = QString::fromUtf8(
+//			snd_seq_client_info_get_name(pClientInfo));
+//		if (iAlsaClient > 0 && rxClientName.exactMatch(sClient)) {
+//			snd_seq_port_info_set_client(pPortInfo, iAlsaClient);
+//			snd_seq_port_info_set_port(pPortInfo, -1);
+//			while (snd_seq_query_next_port(pAlsaSeq, pPortInfo) >= 0) {
+//				unsigned int uiPortCapability
+//					= snd_seq_port_info_get_capability(pPortInfo);
+//				if (((uiPortCapability & uiAlsaFlags) == uiAlsaFlags) &&
+//					((uiPortCapability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0)) {
+//					QString sPort
+//						= qjackctlClientAlias::escapeRegExpDigits(
+//							QString::fromUtf8(snd_seq_port_info_get_name(pPortInfo)));
+//					if (m_ui.PlugListView->findItems(sPort, Qt::MatchExactly).isEmpty())
+//						m_ui.PlugNameComboBox->addItem(icon, sPort);
+//				}
+//			}
+//		}
+//	}
 
 #endif	// CONFIG_ALSA_SEQ
 }

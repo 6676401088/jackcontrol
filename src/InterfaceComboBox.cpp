@@ -22,7 +22,7 @@
 // Own includes
 #include "About.h"
 #include "InterfaceComboBox.h"
-#include "Setup.h"
+#include "settings.h"
 
 // Qt includes
 #include <QTreeView>

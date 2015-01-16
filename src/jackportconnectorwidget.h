@@ -1,5 +1,4 @@
 /****************************************************************************
-   Copyright (C) 2003-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2015, Jacob Dawid <jacob@omg-it.works>
 
    This program is free software; you can redistribute it and/or
@@ -20,19 +19,41 @@
 
 #pragma once
 
-#include "ui_AboutDialog.h"
+// Own includes
+class ConnectionsViewSplitter;
 
-class AboutDialog : public QDialog
-{
-	Q_OBJECT
+// Qt includes
+#include <QWidget>
+#include <QTreeWidgetItem>
 
+class JackPortConnectorWidget : public QWidget {
+    Q_OBJECT
 public:
-    AboutDialog(QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
-    ~AboutDialog();
+    JackPortConnectorWidget(ConnectionsViewSplitter *pConnectView);
+    ~JackPortConnectorWidget();
 
 public slots:
-	void aboutQt();
+
+    // Useful slots (should this be protected?).
+    void contentsChanged();
+
+protected:
+
+    // Draw visible port connection relation arrows.
+    void paintEvent(QPaintEvent *);
+
+    // Context menu request event handler.
+    virtual void contextMenuEvent(QContextMenuEvent *);
 
 private:
-    Ui::AboutDialog m_ui;
+
+    // Legal client/port item position helper.
+    int itemY(QTreeWidgetItem *pItem) const;
+
+    // Drawing methods.
+    void drawConnectionLine(QPainter *pPainter,
+        int x1, int y1, int x2, int y2, int h1, int h2);
+
+    // Local instance variables.
+    ConnectionsViewSplitter *m_pConnectView;
 };

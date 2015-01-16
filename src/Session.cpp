@@ -20,7 +20,7 @@
 
 // Own includes
 #include "Session.h"
-#include "AboutDialog.h"
+#include "aboutdialog.h"
 #include "MainWidget.h"
 
 #include <errno.h>

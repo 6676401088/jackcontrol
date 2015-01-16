@@ -24,7 +24,7 @@
 #include "ui_MainWidget.h"
 
 // Own includes
-#include "Setup.h"
+#include "settings.h"
 
 // Qt includes
 #include <QProcess>
@@ -36,7 +36,7 @@
 #ifdef CONFIG_ALSA_SEQ
 #include <alsa/asoundlib.h>
 #else
-typedef void snd_seq_t;
+//typedef void snd_seq_t;
 #endif
 
 
@@ -69,7 +69,7 @@ public:
     bool setup(Setup * pSetup);
 
 	jack_client_t *jackClient() const;
-	snd_seq_t *alsaSeq() const;
+    //snd_seq_t *alsaSeq() const;
 
 	bool isActivePatchbay(const QString& sPatchbayPath) const;
 	void updateActivePatchbay();
@@ -250,7 +250,7 @@ private:
 	bool m_bJackDetach;
 	bool m_bJackShutdown;
 
-	snd_seq_t *m_pAlsaSeq;
+    //snd_seq_t *m_pAlsaSeq;
 
 #ifdef CONFIG_DBUS
 	QDBusInterface *m_pDBusControl;

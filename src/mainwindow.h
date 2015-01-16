@@ -21,29 +21,21 @@
 #define MAINWINDOW_H
 
 // Own includes
-#include "Setup.h"
-#include "MainWidget.h"
+#include "settings.h"
+#include "jackservice.h"
 
 // Qt includes
 #include <QMainWindow>
-#include <QSocketNotifier>
-
-// QJack includes
-#include <Server>
-#include <Client>
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = 0, Qt::WindowFlags windowFlags = 0);
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
-    bool setup(Setup *pSetup);
 
 public slots:
     void on_actionAbout_triggered();
@@ -51,7 +43,6 @@ public slots:
     // JACK toolbar
     void on_actionStartJackServer_triggered();
     void on_actionStopJackServer_triggered();
-    void on_actionSetup_triggered();
 
     // Transport toolbar
     void on_actionTransportRewind_triggered();
@@ -60,31 +51,13 @@ public slots:
     void on_actionTransportStop_triggered();
     void on_actionTransportForward_triggered();
 
-    void handleConnectedToServer();
-    void handleDisconnectedFromServer();
-    void handleError(QString errorMessage);
-
-private slots:
-    void stdOutActivated(int fileDescriptor);
-
-private:
-    void setupStdOutRedirect();
     void setupStatusTab();
 
-    enum MessageType {
-        MessageTypeNormal,
-        MessageTypeError,
-        MessageTypeStdOut
-    };
+    void message(QString message, JackService::MessageType messageType);
 
-    void message(QString message, MessageType messageType = MessageTypeNormal);
-
+protected:
     Ui::MainWindow *ui;
     Setup *_setup;
-
-    QSocketNotifier *_stdOutSocketNotifier;
-    QJack::Server *_jackServer;
-    QJack::Client *_jackClient;
 };
 
 #endif // MAINWINDOW_H

@@ -36,7 +36,7 @@ SystemTrayIcon::SystemTrayIcon ( QWidget *pParent )
 		QSystemTrayIcon::setToolTip(pParent->windowTitle());
 	}
 
-	QObject::connect(this,
+	connect(this,
 		SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
 		SLOT(activated(QSystemTrayIcon::ActivationReason)));
 

@@ -22,9 +22,9 @@
 
 // Own includes
 #include "About.h"
-#include "PatchbayWidget.h"
+#include "patchbaywidget.h"
 #include "PatchbayFile.h"
-#include "Setup.h"
+#include "settings.h"
 #include "MainWidget.h"
 
 // Qt includes
@@ -54,88 +54,88 @@ PatchbayWidget::PatchbayWidget (
 
 	// UI connections...
 
-	QObject::connect(m_ui.NewPatchbayPushButton,
+	connect(m_ui.NewPatchbayPushButton,
 		SIGNAL(clicked()),
 		SLOT(newPatchbay()));
-	QObject::connect(m_ui.LoadPatchbayPushButton,
+	connect(m_ui.LoadPatchbayPushButton,
 		SIGNAL(clicked()),
 		SLOT(loadPatchbay()));
-	QObject::connect(m_ui.SavePatchbayPushButton,
+	connect(m_ui.SavePatchbayPushButton,
 		SIGNAL(clicked()),
 		SLOT(savePatchbay()));
-	QObject::connect(m_ui.PatchbayComboBox,
+	connect(m_ui.PatchbayComboBox,
 		SIGNAL(activated(int)),
 		SLOT(selectPatchbay(int)));
-	QObject::connect(m_ui.ActivatePatchbayPushButton,
+	connect(m_ui.ActivatePatchbayPushButton,
 		SIGNAL(clicked()),
 		SLOT(toggleActivePatchbay()));
 
-	QObject::connect(m_ui.OSocketAddPushButton,
+	connect(m_ui.OSocketAddPushButton,
 		SIGNAL(clicked()),
 		SLOT(addOSocket()));
-	QObject::connect(m_ui.OSocketEditPushButton,
+	connect(m_ui.OSocketEditPushButton,
 		SIGNAL(clicked()),
 		SLOT(editOSocket()));
-	QObject::connect(m_ui.OSocketCopyPushButton,
+	connect(m_ui.OSocketCopyPushButton,
 		SIGNAL(clicked()),
 		SLOT(copyOSocket()));
-	QObject::connect(m_ui.OSocketRemovePushButton,
+	connect(m_ui.OSocketRemovePushButton,
 		SIGNAL(clicked()),
 		SLOT(removeOSocket()));
-	QObject::connect(m_ui.OSocketMoveUpPushButton,
+	connect(m_ui.OSocketMoveUpPushButton,
 		SIGNAL(clicked()),
 		SLOT(moveUpOSocket()));
-	QObject::connect(m_ui.OSocketMoveDownPushButton,
+	connect(m_ui.OSocketMoveDownPushButton,
 		SIGNAL(clicked()),
 		SLOT(moveDownOSocket()));
 
-	QObject::connect(m_ui.ISocketAddPushButton,
+	connect(m_ui.ISocketAddPushButton,
 		SIGNAL(clicked()),
 		SLOT(addISocket()));
-	QObject::connect(m_ui.ISocketEditPushButton,
+	connect(m_ui.ISocketEditPushButton,
 		SIGNAL(clicked()),
 		SLOT(editISocket()));
-	QObject::connect(m_ui.ISocketCopyPushButton,
+	connect(m_ui.ISocketCopyPushButton,
 		SIGNAL(clicked()),
 		SLOT(copyISocket()));
-	QObject::connect(m_ui.ISocketRemovePushButton,
+	connect(m_ui.ISocketRemovePushButton,
 		SIGNAL(clicked()),
 		SLOT(removeISocket()));
-	QObject::connect(m_ui.ISocketMoveUpPushButton,
+	connect(m_ui.ISocketMoveUpPushButton,
 		SIGNAL(clicked()),
 		SLOT(moveUpISocket()));
-	QObject::connect(m_ui.ISocketMoveDownPushButton,
+	connect(m_ui.ISocketMoveDownPushButton,
 		SIGNAL(clicked()),
 		SLOT(moveDownISocket()));
 
-	QObject::connect(m_ui.ConnectPushButton,
+	connect(m_ui.ConnectPushButton,
 		SIGNAL(clicked()),
 		SLOT(connectSelected()));
-	QObject::connect(m_ui.DisconnectPushButton,
+	connect(m_ui.DisconnectPushButton,
 		SIGNAL(clicked()),
 		SLOT(disconnectSelected()));
-	QObject::connect(m_ui.DisconnectAllPushButton,
+	connect(m_ui.DisconnectAllPushButton,
 		SIGNAL(clicked()),
 		SLOT(disconnectAll()));
 
-	QObject::connect(m_ui.ExpandAllPushButton,
+	connect(m_ui.ExpandAllPushButton,
 		SIGNAL(clicked()),
 		SLOT(expandAll()));
 
-	QObject::connect(m_ui.RefreshPushButton,
+	connect(m_ui.RefreshPushButton,
 		SIGNAL(clicked()),
 		SLOT(refreshForm()));
 
 	// Connect it to some UI feedback slot.
-    QObject::connect(m_ui.patchbaySplitter->OListView(),
+    connect(m_ui.patchbaySplitter->OListView(),
 		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
 		SLOT(stabilizeForm()));
-    QObject::connect(m_ui.patchbaySplitter->IListView(),
+    connect(m_ui.patchbaySplitter->IListView(),
 		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
 		SLOT(stabilizeForm()));
 
 	// Dirty patchbay dispatcher (stabilization deferral).
-    QObject::connect(m_ui.patchbaySplitter,
+    connect(m_ui.patchbaySplitter,
 		SIGNAL(contentsChanged()),
 		SLOT(contentsChanged()));
 
@@ -428,7 +428,7 @@ void PatchbayWidget::newPatchbay ()
 
 	// Ask user what he/she wants to do...
     MainWidget *pMainForm = MainWidget::getInstance();
-	if (pMainForm && (pMainForm->jackClient() || pMainForm->alsaSeq())) {
+    if (pMainForm && (pMainForm->jackClient() /*|| pMainForm->alsaSeq()*/)) {
 		switch (QMessageBox::information(this,
 			tr("New Patchbay definition") + " - " QJACKCTL_SUBTITLE1,
 			tr("Create patchbay definition as a snapshot\n"

@@ -137,86 +137,86 @@ AlsaPortTreeWidgetItem *qjackctlAlsaClientList::findClientPort ( int iAlsaClient
 
 int qjackctlAlsaClientList::updateClientPorts ()
 {
-	MainWidget *pMainForm = MainWidget::getInstance();
-	if (pMainForm == NULL)
-		return 0;
+//	MainWidget *pMainForm = MainWidget::getInstance();
+//	if (pMainForm == NULL)
+//		return 0;
 
-	snd_seq_t *pAlsaSeq = pMainForm->alsaSeq();
-	if (pAlsaSeq == NULL)
-		return 0;
+//	snd_seq_t *pAlsaSeq = pMainForm->alsaSeq();
+//	if (pAlsaSeq == NULL)
+//		return 0;
 
-	int iDirtyCount = 0;
+//	int iDirtyCount = 0;
 
-	markClientPorts(0);
+//	markClientPorts(0);
 
-#ifdef CONFIG_ALSA_SEQ
+//#ifdef CONFIG_ALSA_SEQ
 
-	unsigned int uiAlsaFlags;
-	if (isReadable())
-		uiAlsaFlags = SND_SEQ_PORT_CAP_READ  | SND_SEQ_PORT_CAP_SUBS_READ;
-	else
-		uiAlsaFlags = SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
+//	unsigned int uiAlsaFlags;
+//	if (isReadable())
+//		uiAlsaFlags = SND_SEQ_PORT_CAP_READ  | SND_SEQ_PORT_CAP_SUBS_READ;
+//	else
+//		uiAlsaFlags = SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
 
-	snd_seq_client_info_t *pClientInfo;
-	snd_seq_port_info_t   *pPortInfo;
+//	snd_seq_client_info_t *pClientInfo;
+//	snd_seq_port_info_t   *pPortInfo;
 
-	snd_seq_client_info_alloca(&pClientInfo);
-	snd_seq_port_info_alloca(&pPortInfo);
-	snd_seq_client_info_set_client(pClientInfo, -1);
+//	snd_seq_client_info_alloca(&pClientInfo);
+//	snd_seq_port_info_alloca(&pPortInfo);
+//	snd_seq_client_info_set_client(pClientInfo, -1);
 
-	while (snd_seq_query_next_client(pAlsaSeq, pClientInfo) >= 0) {
+//	while (snd_seq_query_next_client(pAlsaSeq, pClientInfo) >= 0) {
 
-		int iAlsaClient = snd_seq_client_info_get_client(pClientInfo);
-		if (iAlsaClient > 0) {
-			qjackctlAlsaClient *pClient = findClient(iAlsaClient);
-			snd_seq_port_info_set_client(pPortInfo, iAlsaClient);
-			snd_seq_port_info_set_port(pPortInfo, -1);
-			while (snd_seq_query_next_port(pAlsaSeq, pPortInfo) >= 0) {
-				unsigned int uiPortCapability
-					= snd_seq_port_info_get_capability(pPortInfo);
-				if (((uiPortCapability & uiAlsaFlags) == uiAlsaFlags) &&
-					((uiPortCapability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0)) {
-					QString sClientName = QString::number(iAlsaClient) + ':';
-					sClientName += QString::fromUtf8(
-						snd_seq_client_info_get_name(pClientInfo));
-                    AlsaPortTreeWidgetItem *pPort = 0;
-					int iAlsaPort = snd_seq_port_info_get_port(pPortInfo);
-					if (pClient == 0) {
-						pClient = new qjackctlAlsaClient(this,
-							sClientName, iAlsaClient);
-						iDirtyCount++;
-					} else {
-						pPort = pClient->findPort(iAlsaPort);
-						if (sClientName != pClient->clientName()) {
-							pClient->setClientName(sClientName);
-							iDirtyCount++;
-						}
-					}
-					if (pClient) {
-						QString sPortName = QString::number(iAlsaPort) + ':';
-						sPortName += QString::fromUtf8(
-							snd_seq_port_info_get_name(pPortInfo));
-						if (pPort == 0) {
-                            pPort = new AlsaPortTreeWidgetItem(pClient,
-								sPortName, iAlsaPort);
-							iDirtyCount++;
-						} else if (sPortName != pPort->portName()) {
-							pPort->setPortName(sPortName);
-							iDirtyCount++;
-						}
-					}
-					if (pPort)
-						pPort->markClientPort(1);
-				}
-			}
-		}
-	}
+//		int iAlsaClient = snd_seq_client_info_get_client(pClientInfo);
+//		if (iAlsaClient > 0) {
+//			qjackctlAlsaClient *pClient = findClient(iAlsaClient);
+//			snd_seq_port_info_set_client(pPortInfo, iAlsaClient);
+//			snd_seq_port_info_set_port(pPortInfo, -1);
+//			while (snd_seq_query_next_port(pAlsaSeq, pPortInfo) >= 0) {
+//				unsigned int uiPortCapability
+//					= snd_seq_port_info_get_capability(pPortInfo);
+//				if (((uiPortCapability & uiAlsaFlags) == uiAlsaFlags) &&
+//					((uiPortCapability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0)) {
+//					QString sClientName = QString::number(iAlsaClient) + ':';
+//					sClientName += QString::fromUtf8(
+//						snd_seq_client_info_get_name(pClientInfo));
+//                    AlsaPortTreeWidgetItem *pPort = 0;
+//					int iAlsaPort = snd_seq_port_info_get_port(pPortInfo);
+//					if (pClient == 0) {
+//						pClient = new qjackctlAlsaClient(this,
+//							sClientName, iAlsaClient);
+//						iDirtyCount++;
+//					} else {
+//						pPort = pClient->findPort(iAlsaPort);
+//						if (sClientName != pClient->clientName()) {
+//							pClient->setClientName(sClientName);
+//							iDirtyCount++;
+//						}
+//					}
+//					if (pClient) {
+//						QString sPortName = QString::number(iAlsaPort) + ':';
+//						sPortName += QString::fromUtf8(
+//							snd_seq_port_info_get_name(pPortInfo));
+//						if (pPort == 0) {
+//                            pPort = new AlsaPortTreeWidgetItem(pClient,
+//								sPortName, iAlsaPort);
+//							iDirtyCount++;
+//						} else if (sPortName != pPort->portName()) {
+//							pPort->setPortName(sPortName);
+//							iDirtyCount++;
+//						}
+//					}
+//					if (pPort)
+//						pPort->markClientPort(1);
+//				}
+//			}
+//		}
+//	}
 
-#endif	// CONFIG_ALSA_SEQ
+//#endif	// CONFIG_ALSA_SEQ
 
-	iDirtyCount += cleanClientPorts(0);
+//	iDirtyCount += cleanClientPorts(0);
 
-	return iDirtyCount;
+//	return iDirtyCount;
 }
 
 qjackctlAlsaConnect::qjackctlAlsaConnect ( ConnectionsViewSplitter *pConnectView )
@@ -262,31 +262,31 @@ bool qjackctlAlsaConnect::connectPorts (
 {
 #ifdef CONFIG_ALSA_SEQ
 
-    MainWidget *mainWidget = MainWidget::getInstance();
-    if (mainWidget == NULL)
-		return false;
+//    MainWidget *mainWidget = MainWidget::getInstance();
+//    if (mainWidget == NULL)
+//		return false;
 
-    snd_seq_t *pAlsaSeq = mainWidget->alsaSeq();
-	if (pAlsaSeq == NULL)
-		return false;
+//    snd_seq_t *pAlsaSeq = mainWidget->alsaSeq();
+//	if (pAlsaSeq == NULL)
+//		return false;
 
-    AlsaPortTreeWidgetItem *pOAlsa = static_cast<AlsaPortTreeWidgetItem *> (pOPort);
-    AlsaPortTreeWidgetItem *pIAlsa = static_cast<AlsaPortTreeWidgetItem *> (pIPort);
+//    AlsaPortTreeWidgetItem *pOAlsa = static_cast<AlsaPortTreeWidgetItem *> (pOPort);
+//    AlsaPortTreeWidgetItem *pIAlsa = static_cast<AlsaPortTreeWidgetItem *> (pIPort);
 
-	snd_seq_port_subscribe_t *pAlsaSubs;
-	snd_seq_addr_t seq_addr;
+//	snd_seq_port_subscribe_t *pAlsaSubs;
+//	snd_seq_addr_t seq_addr;
 
-	snd_seq_port_subscribe_alloca(&pAlsaSubs);
+//	snd_seq_port_subscribe_alloca(&pAlsaSubs);
 
-	seq_addr.client = pOAlsa->alsaClient();
-	seq_addr.port   = pOAlsa->alsaPort();
-	snd_seq_port_subscribe_set_sender(pAlsaSubs, &seq_addr);
+//	seq_addr.client = pOAlsa->alsaClient();
+//	seq_addr.port   = pOAlsa->alsaPort();
+//	snd_seq_port_subscribe_set_sender(pAlsaSubs, &seq_addr);
 
-	seq_addr.client = pIAlsa->alsaClient();
-	seq_addr.port   = pIAlsa->alsaPort();
-	snd_seq_port_subscribe_set_dest(pAlsaSubs, &seq_addr);
+//	seq_addr.client = pIAlsa->alsaClient();
+//	seq_addr.port   = pIAlsa->alsaPort();
+//	snd_seq_port_subscribe_set_dest(pAlsaSubs, &seq_addr);
 
-	return (snd_seq_subscribe_port(pAlsaSeq, pAlsaSubs) >= 0);
+//	return (snd_seq_subscribe_port(pAlsaSeq, pAlsaSubs) >= 0);
 
 #else
 
@@ -300,31 +300,31 @@ bool qjackctlAlsaConnect::disconnectPorts (
 {
 #ifdef CONFIG_ALSA_SEQ
 
-    MainWidget *mainWidget = MainWidget::getInstance();
-    if (mainWidget == NULL)
-		return false;
+//    MainWidget *mainWidget = MainWidget::getInstance();
+//    if (mainWidget == NULL)
+//		return false;
 
-    snd_seq_t *pAlsaSeq = mainWidget->alsaSeq();
-	if (pAlsaSeq == NULL)
-		return false;
+//    snd_seq_t *pAlsaSeq = mainWidget->alsaSeq();
+//	if (pAlsaSeq == NULL)
+//		return false;
 
-    AlsaPortTreeWidgetItem *pOAlsa = static_cast<AlsaPortTreeWidgetItem *> (pOPort);
-    AlsaPortTreeWidgetItem *pIAlsa = static_cast<AlsaPortTreeWidgetItem *> (pIPort);
+//    AlsaPortTreeWidgetItem *pOAlsa = static_cast<AlsaPortTreeWidgetItem *> (pOPort);
+//    AlsaPortTreeWidgetItem *pIAlsa = static_cast<AlsaPortTreeWidgetItem *> (pIPort);
 
-	snd_seq_port_subscribe_t *pAlsaSubs;
-	snd_seq_addr_t seq_addr;
+//	snd_seq_port_subscribe_t *pAlsaSubs;
+//	snd_seq_addr_t seq_addr;
 
-	snd_seq_port_subscribe_alloca(&pAlsaSubs);
+//	snd_seq_port_subscribe_alloca(&pAlsaSubs);
 
-	seq_addr.client = pOAlsa->alsaClient();
-	seq_addr.port   = pOAlsa->alsaPort();
-	snd_seq_port_subscribe_set_sender(pAlsaSubs, &seq_addr);
+//	seq_addr.client = pOAlsa->alsaClient();
+//	seq_addr.port   = pOAlsa->alsaPort();
+//	snd_seq_port_subscribe_set_sender(pAlsaSubs, &seq_addr);
 
-	seq_addr.client = pIAlsa->alsaClient();
-	seq_addr.port   = pIAlsa->alsaPort();
-	snd_seq_port_subscribe_set_dest(pAlsaSubs, &seq_addr);
+//	seq_addr.client = pIAlsa->alsaClient();
+//	seq_addr.port   = pIAlsa->alsaPort();
+//	snd_seq_port_subscribe_set_dest(pAlsaSubs, &seq_addr);
 
-	return (snd_seq_unsubscribe_port(pAlsaSeq, pAlsaSubs) >= 0);
+//	return (snd_seq_unsubscribe_port(pAlsaSeq, pAlsaSubs) >= 0);
 
 #else
 
@@ -337,59 +337,59 @@ void qjackctlAlsaConnect::updateConnections ()
 {
 #ifdef CONFIG_ALSA_SEQ
 
-    MainWidget *mainWidget = MainWidget::getInstance();
-    if (mainWidget == NULL)
-		return;
+//    MainWidget *mainWidget = MainWidget::getInstance();
+//    if (mainWidget == NULL)
+//		return;
 
-    snd_seq_t *pAlsaSeq = mainWidget->alsaSeq();
-	if (pAlsaSeq == NULL)
-		return;
+//    snd_seq_t *pAlsaSeq = mainWidget->alsaSeq();
+//	if (pAlsaSeq == NULL)
+//		return;
 
-	snd_seq_query_subscribe_t *pAlsaSubs;
-	snd_seq_addr_t seq_addr;
+//	snd_seq_query_subscribe_t *pAlsaSubs;
+//	snd_seq_addr_t seq_addr;
 
-	snd_seq_query_subscribe_alloca(&pAlsaSubs);
+//	snd_seq_query_subscribe_alloca(&pAlsaSubs);
 
-	// Proper type casts.
-	qjackctlAlsaClientList *pOClientList
-		= static_cast<qjackctlAlsaClientList *> (OClientList());
-	qjackctlAlsaClientList *pIClientList
-		= static_cast<qjackctlAlsaClientList *> (IClientList());
+//	// Proper type casts.
+//	qjackctlAlsaClientList *pOClientList
+//		= static_cast<qjackctlAlsaClientList *> (OClientList());
+//	qjackctlAlsaClientList *pIClientList
+//		= static_cast<qjackctlAlsaClientList *> (IClientList());
 
-	// For each output client item...
-	QListIterator<JackClientTreeWidgetItem *> oclient(pOClientList->clients());
-	while (oclient.hasNext()) {
-		JackClientTreeWidgetItem *pOClient = oclient.next();
-		// For each output port item...
-		QListIterator<JackPortTreeWidgetItem *> oport(pOClient->ports());
-		while (oport.hasNext()) {
-			JackPortTreeWidgetItem *pOPort = oport.next();
-			// Are there already any connections?
-			if (pOPort->connects().count() > 0)
-				continue;
-			// Hava a proper type cast.
-            AlsaPortTreeWidgetItem *pOAlsa
-                = static_cast<AlsaPortTreeWidgetItem *> (pOPort);
-			// Get port connections...
-			snd_seq_query_subscribe_set_type(pAlsaSubs, SND_SEQ_QUERY_SUBS_READ);
-			snd_seq_query_subscribe_set_index(pAlsaSubs, 0);
-			seq_addr.client = pOAlsa->alsaClient();
-			seq_addr.port   = pOAlsa->alsaPort();
-			snd_seq_query_subscribe_set_root(pAlsaSubs, &seq_addr);
-			while (snd_seq_query_port_subscribers(pAlsaSeq, pAlsaSubs) >= 0) {
-				seq_addr = *snd_seq_query_subscribe_get_addr(pAlsaSubs);
-				JackPortTreeWidgetItem *pIPort
-					= pIClientList->findClientPort(
-						seq_addr.client, seq_addr.port);
-				if (pIPort) {
-					pOPort->addConnect(pIPort);
-					pIPort->addConnect(pOPort);
-				}
-				snd_seq_query_subscribe_set_index(pAlsaSubs,
-					snd_seq_query_subscribe_get_index(pAlsaSubs) + 1);
-			}
-		}
-	}
+//	// For each output client item...
+//	QListIterator<JackClientTreeWidgetItem *> oclient(pOClientList->clients());
+//	while (oclient.hasNext()) {
+//		JackClientTreeWidgetItem *pOClient = oclient.next();
+//		// For each output port item...
+//		QListIterator<JackPortTreeWidgetItem *> oport(pOClient->ports());
+//		while (oport.hasNext()) {
+//			JackPortTreeWidgetItem *pOPort = oport.next();
+//			// Are there already any connections?
+//			if (pOPort->connects().count() > 0)
+//				continue;
+//			// Hava a proper type cast.
+//            AlsaPortTreeWidgetItem *pOAlsa
+//                = static_cast<AlsaPortTreeWidgetItem *> (pOPort);
+//			// Get port connections...
+//			snd_seq_query_subscribe_set_type(pAlsaSubs, SND_SEQ_QUERY_SUBS_READ);
+//			snd_seq_query_subscribe_set_index(pAlsaSubs, 0);
+//			seq_addr.client = pOAlsa->alsaClient();
+//			seq_addr.port   = pOAlsa->alsaPort();
+//			snd_seq_query_subscribe_set_root(pAlsaSubs, &seq_addr);
+//			while (snd_seq_query_port_subscribers(pAlsaSeq, pAlsaSubs) >= 0) {
+//				seq_addr = *snd_seq_query_subscribe_get_addr(pAlsaSubs);
+//				JackPortTreeWidgetItem *pIPort
+//					= pIClientList->findClientPort(
+//						seq_addr.client, seq_addr.port);
+//				if (pIPort) {
+//					pOPort->addConnect(pIPort);
+//					pIPort->addConnect(pOPort);
+//				}
+//				snd_seq_query_subscribe_set_index(pAlsaSubs,
+//					snd_seq_query_subscribe_get_index(pAlsaSubs) + 1);
+//			}
+//		}
+//	}
 
 #endif	// CONFIG_ALSA_SEQ
 }

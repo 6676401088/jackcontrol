@@ -20,15 +20,13 @@
 
 #pragma once
 
-// Own includes
-#include "ConnectAlias.h"
-
 // Qt includes
 #include <QWidget>
-
-// Forward declarations.
 class QComboBox;
 class QSplitter;
+
+// Own includes
+#include "connectalias.h"
 
 // Audio mode combobox item indexes.
 #define QJACKCTL_DUPLEX     0
@@ -40,44 +38,42 @@ class QSplitter;
 #define QJACKCTL_ICON_32X32 1
 #define QJACKCTL_ICON_64X64 2
 
-
 // Server settings preset struct.
-struct Preset
-{
-	QString sServerPrefix;
-	QString sServerName;
-	bool    bRealtime;
-	bool    bSoftMode;
-	bool    bMonitor;
-	bool    bShorts;
-	bool    bNoMemLock;
-	bool    bUnlockMem;
-	bool    bHWMon;
-	bool    bHWMeter;
-	bool    bIgnoreHW;
-	int     iPriority;
-	int     iFrames;
-	int     iSampleRate;
-	int     iPeriods;
-	int     iWordLength;
-	int     iWait;
-	int     iChan;
-	QString sDriver;
-	QString sInterface;
-	int     iAudio;
-	int     iDither;
-	int     iTimeout;
-	QString sInDevice;
-	QString sOutDevice;
-	int     iInChannels;
-	int     iOutChannels;
-	int     iInLatency;
-	int     iOutLatency;
-	int     iStartDelay;
-	bool    bVerbose;
-	int     iPortMax;
-	QString sMidiDriver;
-	QString sServerSuffix;
+struct Preset {
+    QString serverPrefix;
+    QString serverName;
+    bool    realtime;
+    bool    softMode;
+    bool    monitor;
+    bool    shorts;
+    bool    noMemoryLock;
+    bool    unlockMemory;
+    bool    HWMonitor;
+    bool    HWMeter;
+    bool    ignoreHW;
+    int     priority;
+    int     frames;
+    int     sampleRate;
+    int     periods;
+    int     wordLength;
+    int     wait;
+    int     channels;
+    QString driver;
+    QString interface;
+    int     audio;
+    int     dither;
+    int     timeout;
+    QString inputDevice;
+    QString outputDevice;
+    int     inputChannels;
+    int     outputChannels;
+    int     inputLatency;
+    int     outputLatency;
+    int     startDelay;
+    bool    verbose;
+    int     maximumNumberOfPorts;
+    QString midiDriver;
+    QString serverSuffix;
 };
 
 // Common settings profile class.
@@ -187,12 +183,12 @@ public:
 	bool bSessionSaveVersion;
 	
 	// Aliases containers.
-	qjackctlConnectAlias aliasAudioOutputs;
-	qjackctlConnectAlias aliasAudioInputs;
-	qjackctlConnectAlias aliasMidiOutputs;
-	qjackctlConnectAlias aliasMidiInputs;
-	qjackctlConnectAlias aliasAlsaOutputs;
-	qjackctlConnectAlias aliasAlsaInputs;
+    ConnectAlias aliasAudioOutputs;
+    ConnectAlias aliasAudioInputs;
+    ConnectAlias aliasMidiOutputs;
+    ConnectAlias aliasMidiInputs;
+    ConnectAlias aliasAlsaOutputs;
+    ConnectAlias aliasAlsaInputs;
 
 	// Aliases preset management methods.
 	bool loadAliases(const QString& sPreset);
@@ -217,7 +213,7 @@ public:
 private:
 
 	// Our proper settings profile.
-	QSettings m_settings;
+    QSettings _settings;
 };
 
 

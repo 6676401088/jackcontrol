@@ -27,11 +27,10 @@
 #include "Patchbay.h"
 #include "PatchbayFile.h"
 #include "statuswidget.h"
-#include "SessionWidget.h"
-#include "ConnectionsWidget.h"
-#include "PatchbayWidget.h"
-#include "SetupDialog.h"
-#include "AboutDialog.h"
+#include "sessionwidget.h"
+#include "connectionswidget.h"
+#include "patchbaywidget.h"
+#include "aboutdialog.h"
 #include "SystemTrayIcon.h"
 
 // Qt includes
@@ -285,7 +284,7 @@ MainWidget::MainWidget (
     m_pJackClient   = NULL;
     m_bJackDetach   = false;
     m_bJackShutdown = false;
-    m_pAlsaSeq      = NULL;
+    //m_pAlsaSeq      = NULL;
 #ifdef CONFIG_DBUS
     m_pDBusControl  = NULL;
     m_pDBusConfig   = NULL;
@@ -350,45 +349,45 @@ MainWidget::MainWidget (
 
     // UI connections...
 
-    QObject::connect(m_ui.StartToolButton,
+    connect(m_ui.StartToolButton,
         SIGNAL(clicked()),
         SLOT(startJack()));
-    QObject::connect(m_ui.StopToolButton,
+    connect(m_ui.StopToolButton,
         SIGNAL(clicked()),
         SLOT(stopJack()));
-    QObject::connect(m_ui.MessagesStatusToolButton,
+    connect(m_ui.MessagesStatusToolButton,
         SIGNAL(clicked()),
         SLOT(toggleMessagesStatusForm()));
-    QObject::connect(m_ui.SessionToolButton,
+    connect(m_ui.SessionToolButton,
         SIGNAL(clicked()),
         SLOT(toggleSessionForm()));
-    QObject::connect(m_ui.ConnectionsToolButton,
+    connect(m_ui.ConnectionsToolButton,
         SIGNAL(clicked()),
         SLOT(toggleConnectionsForm()));
-    QObject::connect(m_ui.PatchbayToolButton,
+    connect(m_ui.PatchbayToolButton,
         SIGNAL(clicked()),
         SLOT(togglePatchbayForm()));
 
-    QObject::connect(m_ui.SetupToolButton,
+    connect(m_ui.SetupToolButton,
         SIGNAL(clicked()),
         SLOT(showSetupForm()));
-    QObject::connect(m_ui.AboutToolButton,
+    connect(m_ui.AboutToolButton,
         SIGNAL(clicked()),
         SLOT(showAboutForm()));
 
-    QObject::connect(m_ui.RewindToolButton,
+    connect(m_ui.RewindToolButton,
         SIGNAL(clicked()),
         SLOT(transportRewind()));
-    QObject::connect(m_ui.BackwardToolButton,
+    connect(m_ui.BackwardToolButton,
         SIGNAL(clicked()),
         SLOT(transportBackward()));
-    QObject::connect(m_ui.PlayToolButton,
+    connect(m_ui.PlayToolButton,
         SIGNAL(toggled(bool)),
         SLOT(transportPlay(bool)));
-    QObject::connect(m_ui.PauseToolButton,
+    connect(m_ui.PauseToolButton,
         SIGNAL(clicked()),
         SLOT(transportStop()));
-    QObject::connect(m_ui.ForwardToolButton,
+    connect(m_ui.ForwardToolButton,
         SIGNAL(clicked()),
         SLOT(transportForward()));
 }
@@ -420,11 +419,11 @@ MainWidget::~MainWidget ()
     if (m_pAlsaNotifier)
         delete m_pAlsaNotifier;
 #ifdef CONFIG_ALSA_SEQ
-    if (m_pAlsaSeq)
-        snd_seq_close(m_pAlsaSeq);
+//    if (m_pAlsaSeq)
+//        snd_seq_close(m_pAlsaSeq);
 #endif
     m_pAlsaNotifier = NULL;
-    m_pAlsaSeq = NULL;
+    //m_pAlsaSeq = NULL;
 
     // Finally drop any popup widgets around...
 //    if (m_pMessagesStatusForm)
@@ -482,7 +481,7 @@ bool MainWidget::setup ( Setup *pSetup )
     // All forms are to be created right now.
     //m_pMessagesStatusForm = new StatusWidget (pParent, wflags);
     m_pSessionForm     = new SessionWidget     (pParent, wflags);
-    m_pConnectionsForm = new ConnectionsWidget (pParent, wflags);
+    //m_pConnectionsForm = new ConnectionsWidget (pParent, wflags);
     m_pPatchbayForm    = new PatchbayWidget    (pParent, wflags);
     // Setup appropriately...
     m_pSessionForm->setup(m_pSetup);
@@ -491,7 +490,7 @@ bool MainWidget::setup ( Setup *pSetup )
     m_pPatchbayForm->setup(m_pSetup);
 
     // Set the patchbay cable connection notification signal/slot.
-    QObject::connect(m_pPatchbayRack, SIGNAL(cableConnected(const QString&, const QString&, unsigned int)),
+    connect(m_pPatchbayRack, SIGNAL(cableConnected(const QString&, const QString&, unsigned int)),
         this, SLOT(cableConnectSlot(const QString&, const QString&, unsigned int)));
 
     // Try to restore old window positioning and appearence.
@@ -527,53 +526,53 @@ bool MainWidget::setup ( Setup *pSetup )
         ::dup2(g_fdStdout[QJACKCTL_FDWRITE], STDOUT_FILENO);
         ::dup2(g_fdStdout[QJACKCTL_FDWRITE], STDERR_FILENO);
         m_pStdoutNotifier = new QSocketNotifier(g_fdStdout[QJACKCTL_FDREAD], QSocketNotifier::Read, this);
-        QObject::connect(m_pStdoutNotifier, SIGNAL(activated(int)), this, SLOT(stdoutNotifySlot(int)));
+        connect(m_pStdoutNotifier, SIGNAL(activated(int)), this, SLOT(stdoutNotifySlot(int)));
     }
 #endif
 #ifdef CONFIG_ALSA_SEQ
-    if (m_pSetup->bAlsaSeqEnabled) {
-        // Start our ALSA sequencer interface.
-        if (snd_seq_open(&m_pAlsaSeq, "hw", SND_SEQ_OPEN_DUPLEX, 0) < 0)
-            m_pAlsaSeq = NULL;
-        if (m_pAlsaSeq) {
-            snd_seq_port_subscribe_t *pAlsaSubs;
-            snd_seq_addr_t seq_addr;
-            struct pollfd pfd[1];
-            int iPort = snd_seq_create_simple_port(
-                m_pAlsaSeq,	"qjackctl",
-                SND_SEQ_PORT_CAP_WRITE
-                | SND_SEQ_PORT_CAP_SUBS_WRITE
-                | SND_SEQ_PORT_CAP_NO_EXPORT,
-                SND_SEQ_PORT_TYPE_APPLICATION
-            );
-            if (iPort >= 0) {
-                snd_seq_port_subscribe_alloca(&pAlsaSubs);
-                seq_addr.client = SND_SEQ_CLIENT_SYSTEM;
-                seq_addr.port   = SND_SEQ_PORT_SYSTEM_ANNOUNCE;
-                snd_seq_port_subscribe_set_sender(pAlsaSubs, &seq_addr);
-                seq_addr.client = snd_seq_client_id(m_pAlsaSeq);
-                seq_addr.port   = iPort;
-                snd_seq_port_subscribe_set_dest(pAlsaSubs, &seq_addr);
-                snd_seq_subscribe_port(m_pAlsaSeq, pAlsaSubs);
-                snd_seq_poll_descriptors(m_pAlsaSeq, pfd, 1, POLLIN);
-                m_pAlsaNotifier
-                    = new QSocketNotifier(pfd[0].fd, QSocketNotifier::Read);
-                QObject::connect(m_pAlsaNotifier,
-                    SIGNAL(activated(int)),
-                    SLOT(alsaNotifySlot(int)));
-            }
-        }
-        // Could we start without it?
-        if (m_pAlsaSeq) {
-            // Rather obvious setup.
-            if (m_pConnectionsForm)
-                m_pConnectionsForm->stabilizeAlsa(true);
-        } else {
-//			appendMessagesError(
-//				tr("Could not open ALSA sequencer as a client.\n\n"
-//				"ALSA MIDI patchbay will be not available."));
-        }
-    }
+//    if (m_pSetup->bAlsaSeqEnabled) {
+//        // Start our ALSA sequencer interface.
+//        if (snd_seq_open(&m_pAlsaSeq, "hw", SND_SEQ_OPEN_DUPLEX, 0) < 0)
+//            m_pAlsaSeq = NULL;
+//        if (m_pAlsaSeq) {
+//            snd_seq_port_subscribe_t *pAlsaSubs;
+//            snd_seq_addr_t seq_addr;
+//            struct pollfd pfd[1];
+//            int iPort = snd_seq_create_simple_port(
+//                m_pAlsaSeq,	"qjackctl",
+//                SND_SEQ_PORT_CAP_WRITE
+//                | SND_SEQ_PORT_CAP_SUBS_WRITE
+//                | SND_SEQ_PORT_CAP_NO_EXPORT,
+//                SND_SEQ_PORT_TYPE_APPLICATION
+//            );
+//            if (iPort >= 0) {
+//                snd_seq_port_subscribe_alloca(&pAlsaSubs);
+//                seq_addr.client = SND_SEQ_CLIENT_SYSTEM;
+//                seq_addr.port   = SND_SEQ_PORT_SYSTEM_ANNOUNCE;
+//                snd_seq_port_subscribe_set_sender(pAlsaSubs, &seq_addr);
+//                seq_addr.client = snd_seq_client_id(m_pAlsaSeq);
+//                seq_addr.port   = iPort;
+//                snd_seq_port_subscribe_set_dest(pAlsaSubs, &seq_addr);
+//                snd_seq_subscribe_port(m_pAlsaSeq, pAlsaSubs);
+//                snd_seq_poll_descriptors(m_pAlsaSeq, pfd, 1, POLLIN);
+//                m_pAlsaNotifier
+//                    = new QSocketNotifier(pfd[0].fd, QSocketNotifier::Read);
+//                connect(m_pAlsaNotifier,
+//                    SIGNAL(activated(int)),
+//                    SLOT(alsaNotifySlot(int)));
+//            }
+//        }
+//        // Could we start without it?
+//        if (m_pAlsaSeq) {
+//            // Rather obvious setup.
+//            if (m_pConnectionsForm)
+//                m_pConnectionsForm->stabilizeAlsa(true);
+//        } else {
+////			appendMessagesError(
+////				tr("Could not open ALSA sequencer as a client.\n\n"
+////				"ALSA MIDI patchbay will be not available."));
+//        }
+//    }
 #endif
 #ifdef CONFIG_DBUS
     // Register D-Bus service...
@@ -936,7 +935,7 @@ void MainWidget::startJack ()
 
     // Override server name now...
     if (m_pSetup->sServerName.isEmpty())
-        m_pSetup->sServerName = m_preset.sServerName;
+        m_pSetup->sServerName = m_preset.serverName;
 
 #if 0 // defined(__GNUC__) && defined(Q_OS_LINUX)
     // Take care for the environment as well...
@@ -965,7 +964,7 @@ void MainWidget::startJack ()
     }
 
     // Split the server path into arguments...
-    QStringList args = m_preset.sServerPrefix.split(' ');
+    QStringList args = m_preset.serverPrefix.split(' ');
 
     // Look for the executable in the search path;
     // this enforces the server command to be an
@@ -996,93 +995,93 @@ void MainWidget::startJack ()
     args.removeAt(0);
 
     // Build process arguments...
-    bool bDummy     = (m_preset.sDriver == "dummy");
-    bool bSun       = (m_preset.sDriver == "sun");
-    bool bOss       = (m_preset.sDriver == "oss");
-    bool bAlsa      = (m_preset.sDriver == "alsa");
-    bool bPortaudio = (m_preset.sDriver == "portaudio");
-    bool bCoreaudio = (m_preset.sDriver == "coreaudio");
-    bool bFreebob   = (m_preset.sDriver == "freebob");
-    bool bFirewire  = (m_preset.sDriver == "firewire");
-    bool bNet       = (m_preset.sDriver == "net" || m_preset.sDriver == "netone");
+    bool bDummy     = (m_preset.driver == "dummy");
+    bool bSun       = (m_preset.driver == "sun");
+    bool bOss       = (m_preset.driver == "oss");
+    bool bAlsa      = (m_preset.driver == "alsa");
+    bool bPortaudio = (m_preset.driver == "portaudio");
+    bool bCoreaudio = (m_preset.driver == "coreaudio");
+    bool bFreebob   = (m_preset.driver == "freebob");
+    bool bFirewire  = (m_preset.driver == "firewire");
+    bool bNet       = (m_preset.driver == "net" || m_preset.driver == "netone");
 
     if (!m_pSetup->sServerName.isEmpty())
         args.append("-n" + m_pSetup->sServerName);
-    if (m_preset.bVerbose)
+    if (m_preset.verbose)
         args.append("-v");
-    if (m_preset.bRealtime) {
+    if (m_preset.realtime) {
     //	args.append("-R");
-        if (m_preset.iPriority > 0 && !bCoreaudio)
-            args.append("-P" + QString::number(m_preset.iPriority));
+        if (m_preset.priority > 0 && !bCoreaudio)
+            args.append("-P" + QString::number(m_preset.priority));
     }
     else args.append("-r");
-    if (m_preset.iPortMax > 0 && m_preset.iPortMax != 256)
-        args.append("-p" + QString::number(m_preset.iPortMax));
-    if (m_preset.iTimeout > 0 && m_preset.iTimeout != 500)
-        args.append("-t" + QString::number(m_preset.iTimeout));
-    if (m_preset.bNoMemLock)
+    if (m_preset.maximumNumberOfPorts > 0 && m_preset.maximumNumberOfPorts != 256)
+        args.append("-p" + QString::number(m_preset.maximumNumberOfPorts));
+    if (m_preset.timeout > 0 && m_preset.timeout != 500)
+        args.append("-t" + QString::number(m_preset.timeout));
+    if (m_preset.noMemoryLock)
         args.append("-m");
-    else if (m_preset.bUnlockMem)
+    else if (m_preset.unlockMemory)
         args.append("-u");
-    args.append("-d" + m_preset.sDriver);
-    if ((bAlsa || bPortaudio) && (m_preset.iAudio != QJACKCTL_DUPLEX ||
-        m_preset.sInDevice.isEmpty() || m_preset.sOutDevice.isEmpty())) {
-        QString sInterface = m_preset.sInterface;
+    args.append("-d" + m_preset.driver);
+    if ((bAlsa || bPortaudio) && (m_preset.audio != QJACKCTL_DUPLEX ||
+        m_preset.inputDevice.isEmpty() || m_preset.outputDevice.isEmpty())) {
+        QString sInterface = m_preset.interface;
         if (bAlsa && sInterface.isEmpty())
             sInterface = "hw:0";
         if (!sInterface.isEmpty())
             args.append("-d" + formatQuoted(sInterface));
     }
-    if (bPortaudio && m_preset.iChan > 0)
-        args.append("-c" + QString::number(m_preset.iChan));
-    if ((bCoreaudio || bFreebob || bFirewire) && !m_preset.sInterface.isEmpty())
-        args.append("-d" + formatQuoted(m_preset.sInterface));
-    if (m_preset.iSampleRate > 0 && !bNet)
-        args.append("-r" + QString::number(m_preset.iSampleRate));
-    if (m_preset.iFrames > 0 && !bNet)
-        args.append("-p" + QString::number(m_preset.iFrames));
+    if (bPortaudio && m_preset.channels > 0)
+        args.append("-c" + QString::number(m_preset.channels));
+    if ((bCoreaudio || bFreebob || bFirewire) && !m_preset.interface.isEmpty())
+        args.append("-d" + formatQuoted(m_preset.interface));
+    if (m_preset.sampleRate > 0 && !bNet)
+        args.append("-r" + QString::number(m_preset.sampleRate));
+    if (m_preset.frames > 0 && !bNet)
+        args.append("-p" + QString::number(m_preset.frames));
     if (bAlsa || bSun || bOss || bFreebob || bFirewire) {
-        if (m_preset.iPeriods > 0)
-            args.append("-n" + QString::number(m_preset.iPeriods));
+        if (m_preset.periods > 0)
+            args.append("-n" + QString::number(m_preset.periods));
     }
     if (bAlsa) {
-        if (m_preset.bSoftMode)
+        if (m_preset.softMode)
             args.append("-s");
-        if (m_preset.bMonitor)
+        if (m_preset.monitor)
             args.append("-m");
-        if (m_preset.bShorts)
+        if (m_preset.shorts)
             args.append("-S");
-        if (m_preset.bHWMon)
+        if (m_preset.HWMonitor)
             args.append("-H");
-        if (m_preset.bHWMeter)
+        if (m_preset.HWMeter)
             args.append("-M");
     #ifdef CONFIG_JACK_MIDI
-        if (!m_preset.sMidiDriver.isEmpty())
-            args.append("-X" + formatQuoted(m_preset.sMidiDriver));
+        if (!m_preset.midiDriver.isEmpty())
+            args.append("-X" + formatQuoted(m_preset.midiDriver));
     #endif
     }
     if (bAlsa || bPortaudio) {
-        switch (m_preset.iAudio) {
+        switch (m_preset.audio) {
         case QJACKCTL_DUPLEX:
-            if (!m_preset.sInDevice.isEmpty() || !m_preset.sOutDevice.isEmpty())
+            if (!m_preset.inputDevice.isEmpty() || !m_preset.outputDevice.isEmpty())
                 args.append("-D");
-            if (!m_preset.sInDevice.isEmpty())
-                args.append("-C" + formatQuoted(m_preset.sInDevice));
-            if (!m_preset.sOutDevice.isEmpty())
-                args.append("-P" + formatQuoted(m_preset.sOutDevice));
+            if (!m_preset.inputDevice.isEmpty())
+                args.append("-C" + formatQuoted(m_preset.inputDevice));
+            if (!m_preset.outputDevice.isEmpty())
+                args.append("-P" + formatQuoted(m_preset.outputDevice));
             break;
         case QJACKCTL_CAPTURE:
-            args.append("-C" + formatQuoted(m_preset.sInDevice));
+            args.append("-C" + formatQuoted(m_preset.inputDevice));
             break;
         case QJACKCTL_PLAYBACK:
-            args.append("-P" + formatQuoted(m_preset.sOutDevice));
+            args.append("-P" + formatQuoted(m_preset.outputDevice));
             break;
         }
-        if (m_preset.iInChannels > 0  && m_preset.iAudio != QJACKCTL_PLAYBACK)
-            args.append("-i" + QString::number(m_preset.iInChannels));
-        if (m_preset.iOutChannels > 0 && m_preset.iAudio != QJACKCTL_CAPTURE)
-            args.append("-o" + QString::number(m_preset.iOutChannels));
-        switch (m_preset.iDither) {
+        if (m_preset.inputChannels > 0  && m_preset.audio != QJACKCTL_PLAYBACK)
+            args.append("-i" + QString::number(m_preset.inputChannels));
+        if (m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE)
+            args.append("-o" + QString::number(m_preset.outputChannels));
+        switch (m_preset.dither) {
         case 0:
         //	args.append("-z-");
             break;
@@ -1098,31 +1097,31 @@ void MainWidget::startJack ()
         }
     }
     else if (bOss || bSun) {
-        if (m_preset.bIgnoreHW)
+        if (m_preset.ignoreHW)
             args.append("-b");
-        if (m_preset.iWordLength > 0)
-            args.append("-w" + QString::number(m_preset.iWordLength));
-        if (!m_preset.sInDevice.isEmpty()  && m_preset.iAudio != QJACKCTL_PLAYBACK)
-            args.append("-C" + formatQuoted(m_preset.sInDevice));
-        if (!m_preset.sOutDevice.isEmpty() && m_preset.iAudio != QJACKCTL_CAPTURE)
-            args.append("-P" + formatQuoted(m_preset.sOutDevice));
-        if (m_preset.iAudio == QJACKCTL_PLAYBACK)
+        if (m_preset.wordLength > 0)
+            args.append("-w" + QString::number(m_preset.wordLength));
+        if (!m_preset.inputDevice.isEmpty()  && m_preset.audio != QJACKCTL_PLAYBACK)
+            args.append("-C" + formatQuoted(m_preset.inputDevice));
+        if (!m_preset.outputDevice.isEmpty() && m_preset.audio != QJACKCTL_CAPTURE)
+            args.append("-P" + formatQuoted(m_preset.outputDevice));
+        if (m_preset.audio == QJACKCTL_PLAYBACK)
             args.append("-i0");
-        else if (m_preset.iInChannels > 0)
-            args.append("-i" + QString::number(m_preset.iInChannels));
-        if (m_preset.iAudio == QJACKCTL_CAPTURE)
+        else if (m_preset.inputChannels > 0)
+            args.append("-i" + QString::number(m_preset.inputChannels));
+        if (m_preset.audio == QJACKCTL_CAPTURE)
             args.append("-o0");
-        else if (m_preset.iOutChannels > 0)
-            args.append("-o" + QString::number(m_preset.iOutChannels));
+        else if (m_preset.outputChannels > 0)
+            args.append("-o" + QString::number(m_preset.outputChannels));
     }
     else if (bCoreaudio || bFirewire || bNet) {
-        if (m_preset.iInChannels > 0  && m_preset.iAudio != QJACKCTL_PLAYBACK)
-            args.append("-i" + QString::number(m_preset.iInChannels));
-        if (m_preset.iOutChannels > 0 && m_preset.iAudio != QJACKCTL_CAPTURE)
-            args.append("-o" + QString::number(m_preset.iOutChannels));
+        if (m_preset.inputChannels > 0  && m_preset.audio != QJACKCTL_PLAYBACK)
+            args.append("-i" + QString::number(m_preset.inputChannels));
+        if (m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE)
+            args.append("-o" + QString::number(m_preset.outputChannels));
     }
     else if (bFreebob) {
-        switch (m_preset.iAudio) {
+        switch (m_preset.audio) {
         case QJACKCTL_DUPLEX:
             args.append("-D");
             break;
@@ -1136,18 +1135,18 @@ void MainWidget::startJack ()
             break;
         }
     }
-    if (bDummy && m_preset.iWait > 0 && m_preset.iWait != 21333)
-        args.append("-w" + QString::number(m_preset.iWait));
+    if (bDummy && m_preset.wait > 0 && m_preset.wait != 21333)
+        args.append("-w" + QString::number(m_preset.wait));
     if (bAlsa || bSun || bOss || bCoreaudio || bPortaudio || bFreebob || bFirewire) {
-        if (m_preset.iInLatency > 0)
-            args.append("-I" + QString::number(m_preset.iInLatency));
-        if (m_preset.iOutLatency > 0)
-            args.append("-O" + QString::number(m_preset.iOutLatency));
+        if (m_preset.inputLatency > 0)
+            args.append("-I" + QString::number(m_preset.inputLatency));
+        if (m_preset.outputLatency > 0)
+            args.append("-O" + QString::number(m_preset.outputLatency));
     }
 
     // Split the server path into arguments...
-    if (!m_preset.sServerSuffix.isEmpty())
-        args.append(m_preset.sServerSuffix.split(' '));
+    if (!m_preset.serverSuffix.isEmpty())
+        args.append(m_preset.serverSuffix.split(' '));
 	
     // This is emulated jackd command line, for future reference purposes...
     m_sJackCmdLine = sCommand + ' ' + args.join(" ").trimmed();
@@ -1182,22 +1181,22 @@ void MainWidget::startJack ()
         // Setup stdout/stderr capture...
         if (m_pSetup->bStdoutCapture) {
             m_pJack->setProcessChannelMode(QProcess::ForwardedChannels);
-            QObject::connect(m_pJack,
+            connect(m_pJack,
                 SIGNAL(readyReadStandardOutput()),
                 SLOT(readStdout()));
-            QObject::connect(m_pJack,
+            connect(m_pJack,
                 SIGNAL(readyReadStandardError()),
                 SLOT(readStdout()));
         }
 
         // The unforgiveable signal communication...
-        QObject::connect(m_pJack,
+        connect(m_pJack,
             SIGNAL(started()),
             SLOT(jackStarted()));
-        QObject::connect(m_pJack,
+        connect(m_pJack,
             SIGNAL(error(QProcess::ProcessError)),
             SLOT(jackError(QProcess::ProcessError)));
-        QObject::connect(m_pJack,
+        connect(m_pJack,
             SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(jackFinished()));
 
@@ -1760,8 +1759,8 @@ void MainWidget::updateActivePatchbay ()
             // If we're up and running, make it dirty :)
             if (m_pJackClient)
                 m_iJackDirty++;
-            if (m_pAlsaSeq)
-                m_iAlsaDirty++;
+//            if (m_pAlsaSeq)
+//                m_iAlsaDirty++;
         }
     } /*  // We're sure there's no active patchbay...
     else appendMessages(tr("Patchbay deactivated."));*/
@@ -2095,9 +2094,9 @@ void MainWidget::exitNotifyEvent ()
 void MainWidget::alsaNotifySlot ( int /*fd*/ )
 {
 #ifdef CONFIG_ALSA_SEQ
-    snd_seq_event_t *pAlsaEvent;
-    snd_seq_event_input(m_pAlsaSeq, &pAlsaEvent);
-    snd_seq_free_event(pAlsaEvent);
+//    snd_seq_event_t *pAlsaEvent;
+//    snd_seq_event_input(m_pAlsaSeq, &pAlsaEvent);
+//    snd_seq_free_event(pAlsaEvent);
 #endif
     // Log some message here, if new.
     if (m_iAlsaRefresh == 0)
@@ -2144,7 +2143,7 @@ void MainWidget::timerSlot ()
             if (m_pSetup->bActivePatchbay) {
 //				appendMessagesColor(
 //					tr("ALSA active patchbay scan") + sEllipsis, "#99cc66");
-                m_pPatchbayRack->connectAlsaScan(m_pAlsaSeq);
+                //m_pPatchbayRack->connectAlsaScan(m_pAlsaSeq);
             }
             refreshAlsaConnections();
         }
@@ -2164,10 +2163,10 @@ void MainWidget::timerSlot ()
             m_pConnectionsForm->refreshAudio(true);
             m_pConnectionsForm->refreshMidi(true);
         }
-        if (m_iAlsaRefresh > 0 && m_pAlsaSeq != NULL) {
-            m_iAlsaRefresh = 0;
-            m_pConnectionsForm->refreshAlsa(true);
-        }
+//        if (m_iAlsaRefresh > 0 && m_pAlsaSeq != NULL) {
+//            m_iAlsaRefresh = 0;
+//            m_pConnectionsForm->refreshAlsa(true);
+//        }
     }
 
     // Is the patchbay dirty enough?
@@ -2277,7 +2276,7 @@ void MainWidget::startJackClientDelay ()
     m_iStatusBlink = 0;
 
     // Reset (yet again) the timer counters...
-    m_iStartDelay  = 1 + (m_preset.iStartDelay * 1000);
+    m_iStartDelay  = 1 + (m_preset.startDelay * 1000);
     m_iTimerDelay  = 0;
     m_iJackRefresh = 0;
 }
@@ -2504,11 +2503,11 @@ jack_client_t *MainWidget::jackClient () const
 }
 
 
-// ALSA sequencer client accessor.
-snd_seq_t *MainWidget::alsaSeq () const
-{
-    return m_pAlsaSeq;
-}
+//// ALSA sequencer client accessor.
+//snd_seq_t *MainWidget::alsaSeq () const
+//{
+//    return m_pAlsaSeq;
+//}
 
 
 // Rebuild all patchbay items.
@@ -2633,7 +2632,7 @@ void MainWidget::toggleConnectionsForm ()
         m_pSetup->saveWidgetGeometry(m_pConnectionsForm);
         m_pConnectionsForm->stabilizeAudio(m_pJackClient != NULL);
         m_pConnectionsForm->stabilizeMidi(m_pJackClient != NULL);
-        m_pConnectionsForm->stabilizeAlsa(m_pAlsaSeq != NULL);
+        //m_pConnectionsForm->stabilizeAlsa(m_pAlsaSeq != NULL);
         if (m_pConnectionsForm->isVisible()) {
             m_pConnectionsForm->hide();
         } else {
@@ -2664,120 +2663,120 @@ void MainWidget::togglePatchbayForm ()
 // Setup dialog requester slot.
 void MainWidget::showSetupForm ()
 {
-    SetupDialog *pSetupForm = new SetupDialog(this);
-    if (pSetupForm) {
-        // Check out some initial nullities(tm)...
-//		if (m_pSetup->sMessagesFont.isEmpty() && m_pMessagesStatusForm)
-//			m_pSetup->sMessagesFont = m_pMessagesStatusForm->messagesFont().toString();
-        if (m_pSetup->sDisplayFont1.isEmpty())
-            m_pSetup->sDisplayFont1 = m_ui.TimeDisplayTextLabel->font().toString();
-        if (m_pSetup->sDisplayFont2.isEmpty())
-            m_pSetup->sDisplayFont2 = m_ui.ServerStateTextLabel->font().toString();
-        if (m_pSetup->sConnectionsFont.isEmpty() && m_pConnectionsForm)
-            m_pSetup->sConnectionsFont = m_pConnectionsForm->connectionsFont().toString();
-        // To track down deferred or immediate changes.
-        bool    bOldMessagesLog         = m_pSetup->bMessagesLog;
-        QString sOldMessagesLogPath     = m_pSetup->sMessagesLogPath;
-        QString sOldMessagesFont        = m_pSetup->sMessagesFont;
-        QString sOldDisplayFont1        = m_pSetup->sDisplayFont1;
-        QString sOldDisplayFont2        = m_pSetup->sDisplayFont2;
-        QString sOldConnectionsFont     = m_pSetup->sConnectionsFont;
-        int     iOldConnectionsIconSize = m_pSetup->iConnectionsIconSize;
-        int     iOldJackClientPortAlias = m_pSetup->iJackClientPortAlias;
-        int     iOldTimeDisplay         = m_pSetup->iTimeDisplay;
-        int     iOldTimeFormat          = m_pSetup->iTimeFormat;
-        bool    bOldDisplayEffect       = m_pSetup->bDisplayEffect;
-        bool    bOldActivePatchbay      = m_pSetup->bActivePatchbay;
-        QString sOldActivePatchbayPath  = m_pSetup->sActivePatchbayPath;
-        bool    bOldStdoutCapture       = m_pSetup->bStdoutCapture;
-        bool    bOldKeepOnTop           = m_pSetup->bKeepOnTop;
-        bool    bOldSystemTray          = m_pSetup->bSystemTray;
-        bool    bOldDelayedSetup        = m_pSetup->bDelayedSetup;
-        int     bOldMessagesLimit       = m_pSetup->bMessagesLimit;
-        int     iOldMessagesLimitLines  = m_pSetup->iMessagesLimitLines;
-        bool    bOldBezierLines         = m_pSetup->bBezierLines;
-        bool    bOldAlsaSeqEnabled      = m_pSetup->bAlsaSeqEnabled;
-        bool    bOldDBusEnabled         = m_pSetup->bDBusEnabled;
-        bool    bOldAliasesEnabled      = m_pSetup->bAliasesEnabled;
-        bool    bOldAliasesEditing      = m_pSetup->bAliasesEditing;
-        bool    bOldLeftButtons         = m_pSetup->bLeftButtons;
-        bool    bOldRightButtons        = m_pSetup->bRightButtons;
-        bool    bOldTransportButtons    = m_pSetup->bTransportButtons;
-        bool    bOldTextLabels          = m_pSetup->bTextLabels;
-        int     iOldBaseFontSize        = m_pSetup->iBaseFontSize;
-        // Load the current setup settings.
-        pSetupForm->setup(m_pSetup);
-        // Show the setup dialog...
-        if (pSetupForm->exec()) {
-            // Check wheather something immediate has changed.
-//			if (( bOldMessagesLog && !m_pSetup->bMessagesLog) ||
-//				(!bOldMessagesLog &&  m_pSetup->bMessagesLog) ||
-//				(sOldMessagesLogPath != m_pSetup->sMessagesLogPath))
-//				m_pMessagesStatusForm->setLogging(
-//					m_pSetup->bMessagesLog, m_pSetup->sMessagesLogPath);
-            if (( bOldBezierLines && !m_pSetup->bBezierLines) ||
-                (!bOldBezierLines &&  m_pSetup->bBezierLines))
-                updateBezierLines();
-            if (( bOldDisplayEffect && !m_pSetup->bDisplayEffect) ||
-                (!bOldDisplayEffect &&  m_pSetup->bDisplayEffect))
-                updateDisplayEffect();
-            if (iOldJackClientPortAlias != m_pSetup->iJackClientPortAlias)
-                updateJackClientPortAlias();
-            if (iOldConnectionsIconSize != m_pSetup->iConnectionsIconSize)
-                updateConnectionsIconSize();
-            if (sOldConnectionsFont != m_pSetup->sConnectionsFont)
-                updateConnectionsFont();
-//			if (sOldMessagesFont != m_pSetup->sMessagesFont)
-//				updateMessagesFont();
-//			if (( bOldMessagesLimit && !m_pSetup->bMessagesLimit) ||
-//				(!bOldMessagesLimit &&  m_pSetup->bMessagesLimit) ||
-//				(iOldMessagesLimitLines !=  m_pSetup->iMessagesLimitLines))
-//				updateMessagesLimit();
-            if (sOldDisplayFont1 != m_pSetup->sDisplayFont1 ||
-                sOldDisplayFont2 != m_pSetup->sDisplayFont2)
-                updateTimeDisplayFonts();
-            if (iOldTimeDisplay |= m_pSetup->iTimeDisplay)
-                updateTimeDisplayToolTips();
-            if (iOldTimeFormat |= m_pSetup->iTimeFormat)
-                updateTimeFormat();
-            if ((!bOldActivePatchbay && m_pSetup->bActivePatchbay) ||
-                (sOldActivePatchbayPath != m_pSetup->sActivePatchbayPath))
-                updateActivePatchbay();
-            if (( bOldSystemTray && !m_pSetup->bSystemTray) ||
-                (!bOldSystemTray &&  m_pSetup->bSystemTray))
-                updateSystemTray();
-            if (( bOldAliasesEnabled && !m_pSetup->bAliasesEnabled) ||
-                (!bOldAliasesEnabled &&  m_pSetup->bAliasesEnabled) ||
-                ( bOldAliasesEditing && !m_pSetup->bAliasesEditing) ||
-                (!bOldAliasesEditing &&  m_pSetup->bAliasesEditing))
-                updateAliases();
-            if (( bOldLeftButtons  && !m_pSetup->bLeftButtons)  ||
-                (!bOldLeftButtons  &&  m_pSetup->bLeftButtons)  ||
-                ( bOldRightButtons && !m_pSetup->bRightButtons) ||
-                (!bOldRightButtons &&  m_pSetup->bRightButtons) ||
-                ( bOldTransportButtons && !m_pSetup->bTransportButtons) ||
-                (!bOldTransportButtons &&  m_pSetup->bTransportButtons) ||
-                ( bOldTextLabels && !m_pSetup->bTextLabels) ||
-                (!bOldTextLabels &&  m_pSetup->bTextLabels))
-                updateButtons();
-            // Warn if something will be only effective on next run.
-            if (( bOldStdoutCapture  && !m_pSetup->bStdoutCapture)  ||
-                (!bOldStdoutCapture  &&  m_pSetup->bStdoutCapture)  ||
-                ( bOldKeepOnTop      && !m_pSetup->bKeepOnTop)      ||
-                (!bOldKeepOnTop      &&  m_pSetup->bKeepOnTop)      ||
-                ( bOldDelayedSetup   && !m_pSetup->bDelayedSetup)   ||
-                (!bOldDelayedSetup   &&  m_pSetup->bDelayedSetup)   ||
-                ( bOldAlsaSeqEnabled && !m_pSetup->bAlsaSeqEnabled) ||
-                (!bOldAlsaSeqEnabled &&  m_pSetup->bAlsaSeqEnabled) ||
-                ( bOldDBusEnabled    && !m_pSetup->bDBusEnabled)    ||
-                (!bOldDBusEnabled    &&  m_pSetup->bDBusEnabled)    ||
-                (iOldBaseFontSize    !=  m_pSetup->iBaseFontSize))
-                showDirtySetupWarning();
-            // If server is currently running, warn user...
-            showDirtySettingsWarning();
-        }
-        delete pSetupForm;
-    }
+//    SetupDialog *pSetupForm = new SetupDialog(this);
+//    if (pSetupForm) {
+//        // Check out some initial nullities(tm)...
+////		if (m_pSetup->sMessagesFont.isEmpty() && m_pMessagesStatusForm)
+////			m_pSetup->sMessagesFont = m_pMessagesStatusForm->messagesFont().toString();
+//        if (m_pSetup->sDisplayFont1.isEmpty())
+//            m_pSetup->sDisplayFont1 = m_ui.TimeDisplayTextLabel->font().toString();
+//        if (m_pSetup->sDisplayFont2.isEmpty())
+//            m_pSetup->sDisplayFont2 = m_ui.ServerStateTextLabel->font().toString();
+//        if (m_pSetup->sConnectionsFont.isEmpty() && m_pConnectionsForm)
+//            m_pSetup->sConnectionsFont = m_pConnectionsForm->connectionsFont().toString();
+//        // To track down deferred or immediate changes.
+//        bool    bOldMessagesLog         = m_pSetup->bMessagesLog;
+//        QString sOldMessagesLogPath     = m_pSetup->sMessagesLogPath;
+//        QString sOldMessagesFont        = m_pSetup->sMessagesFont;
+//        QString sOldDisplayFont1        = m_pSetup->sDisplayFont1;
+//        QString sOldDisplayFont2        = m_pSetup->sDisplayFont2;
+//        QString sOldConnectionsFont     = m_pSetup->sConnectionsFont;
+//        int     iOldConnectionsIconSize = m_pSetup->iConnectionsIconSize;
+//        int     iOldJackClientPortAlias = m_pSetup->iJackClientPortAlias;
+//        int     iOldTimeDisplay         = m_pSetup->iTimeDisplay;
+//        int     iOldTimeFormat          = m_pSetup->iTimeFormat;
+//        bool    bOldDisplayEffect       = m_pSetup->bDisplayEffect;
+//        bool    bOldActivePatchbay      = m_pSetup->bActivePatchbay;
+//        QString sOldActivePatchbayPath  = m_pSetup->sActivePatchbayPath;
+//        bool    bOldStdoutCapture       = m_pSetup->bStdoutCapture;
+//        bool    bOldKeepOnTop           = m_pSetup->bKeepOnTop;
+//        bool    bOldSystemTray          = m_pSetup->bSystemTray;
+//        bool    bOldDelayedSetup        = m_pSetup->bDelayedSetup;
+//        int     bOldMessagesLimit       = m_pSetup->bMessagesLimit;
+//        int     iOldMessagesLimitLines  = m_pSetup->iMessagesLimitLines;
+//        bool    bOldBezierLines         = m_pSetup->bBezierLines;
+//        bool    bOldAlsaSeqEnabled      = m_pSetup->bAlsaSeqEnabled;
+//        bool    bOldDBusEnabled         = m_pSetup->bDBusEnabled;
+//        bool    bOldAliasesEnabled      = m_pSetup->bAliasesEnabled;
+//        bool    bOldAliasesEditing      = m_pSetup->bAliasesEditing;
+//        bool    bOldLeftButtons         = m_pSetup->bLeftButtons;
+//        bool    bOldRightButtons        = m_pSetup->bRightButtons;
+//        bool    bOldTransportButtons    = m_pSetup->bTransportButtons;
+//        bool    bOldTextLabels          = m_pSetup->bTextLabels;
+//        int     iOldBaseFontSize        = m_pSetup->iBaseFontSize;
+//        // Load the current setup settings.
+//        pSetupForm->setup(m_pSetup);
+//        // Show the setup dialog...
+//        if (pSetupForm->exec()) {
+//            // Check wheather something immediate has changed.
+////			if (( bOldMessagesLog && !m_pSetup->bMessagesLog) ||
+////				(!bOldMessagesLog &&  m_pSetup->bMessagesLog) ||
+////				(sOldMessagesLogPath != m_pSetup->sMessagesLogPath))
+////				m_pMessagesStatusForm->setLogging(
+////					m_pSetup->bMessagesLog, m_pSetup->sMessagesLogPath);
+//            if (( bOldBezierLines && !m_pSetup->bBezierLines) ||
+//                (!bOldBezierLines &&  m_pSetup->bBezierLines))
+//                updateBezierLines();
+//            if (( bOldDisplayEffect && !m_pSetup->bDisplayEffect) ||
+//                (!bOldDisplayEffect &&  m_pSetup->bDisplayEffect))
+//                updateDisplayEffect();
+//            if (iOldJackClientPortAlias != m_pSetup->iJackClientPortAlias)
+//                updateJackClientPortAlias();
+//            if (iOldConnectionsIconSize != m_pSetup->iConnectionsIconSize)
+//                updateConnectionsIconSize();
+//            if (sOldConnectionsFont != m_pSetup->sConnectionsFont)
+//                updateConnectionsFont();
+////			if (sOldMessagesFont != m_pSetup->sMessagesFont)
+////				updateMessagesFont();
+////			if (( bOldMessagesLimit && !m_pSetup->bMessagesLimit) ||
+////				(!bOldMessagesLimit &&  m_pSetup->bMessagesLimit) ||
+////				(iOldMessagesLimitLines !=  m_pSetup->iMessagesLimitLines))
+////				updateMessagesLimit();
+//            if (sOldDisplayFont1 != m_pSetup->sDisplayFont1 ||
+//                sOldDisplayFont2 != m_pSetup->sDisplayFont2)
+//                updateTimeDisplayFonts();
+//            if (iOldTimeDisplay |= m_pSetup->iTimeDisplay)
+//                updateTimeDisplayToolTips();
+//            if (iOldTimeFormat |= m_pSetup->iTimeFormat)
+//                updateTimeFormat();
+//            if ((!bOldActivePatchbay && m_pSetup->bActivePatchbay) ||
+//                (sOldActivePatchbayPath != m_pSetup->sActivePatchbayPath))
+//                updateActivePatchbay();
+//            if (( bOldSystemTray && !m_pSetup->bSystemTray) ||
+//                (!bOldSystemTray &&  m_pSetup->bSystemTray))
+//                updateSystemTray();
+//            if (( bOldAliasesEnabled && !m_pSetup->bAliasesEnabled) ||
+//                (!bOldAliasesEnabled &&  m_pSetup->bAliasesEnabled) ||
+//                ( bOldAliasesEditing && !m_pSetup->bAliasesEditing) ||
+//                (!bOldAliasesEditing &&  m_pSetup->bAliasesEditing))
+//                updateAliases();
+//            if (( bOldLeftButtons  && !m_pSetup->bLeftButtons)  ||
+//                (!bOldLeftButtons  &&  m_pSetup->bLeftButtons)  ||
+//                ( bOldRightButtons && !m_pSetup->bRightButtons) ||
+//                (!bOldRightButtons &&  m_pSetup->bRightButtons) ||
+//                ( bOldTransportButtons && !m_pSetup->bTransportButtons) ||
+//                (!bOldTransportButtons &&  m_pSetup->bTransportButtons) ||
+//                ( bOldTextLabels && !m_pSetup->bTextLabels) ||
+//                (!bOldTextLabels &&  m_pSetup->bTextLabels))
+//                updateButtons();
+//            // Warn if something will be only effective on next run.
+//            if (( bOldStdoutCapture  && !m_pSetup->bStdoutCapture)  ||
+//                (!bOldStdoutCapture  &&  m_pSetup->bStdoutCapture)  ||
+//                ( bOldKeepOnTop      && !m_pSetup->bKeepOnTop)      ||
+//                (!bOldKeepOnTop      &&  m_pSetup->bKeepOnTop)      ||
+//                ( bOldDelayedSetup   && !m_pSetup->bDelayedSetup)   ||
+//                (!bOldDelayedSetup   &&  m_pSetup->bDelayedSetup)   ||
+//                ( bOldAlsaSeqEnabled && !m_pSetup->bAlsaSeqEnabled) ||
+//                (!bOldAlsaSeqEnabled &&  m_pSetup->bAlsaSeqEnabled) ||
+//                ( bOldDBusEnabled    && !m_pSetup->bDBusEnabled)    ||
+//                (!bOldDBusEnabled    &&  m_pSetup->bDBusEnabled)    ||
+//                (iOldBaseFontSize    !=  m_pSetup->iBaseFontSize))
+//                showDirtySetupWarning();
+//            // If server is currently running, warn user...
+//            showDirtySettingsWarning();
+//        }
+//        delete pSetupForm;
+//    }
 }
 
 
@@ -3197,13 +3196,13 @@ void MainWidget::updateSystemTray ()
     }
     if (m_pSetup->bSystemTray && m_pSystemTray == NULL) {
         m_pSystemTray = new SystemTrayIcon(this);
-        QObject::connect(m_pSystemTray,
+        connect(m_pSystemTray,
             SIGNAL(clicked()),
             SLOT(toggleMainForm()));
-        QObject::connect(m_pSystemTray,
+        connect(m_pSystemTray,
             SIGNAL(middleClicked()),
             SLOT(resetXrunStats()));
-        QObject::connect(m_pSystemTray,
+        connect(m_pSystemTray,
             SIGNAL(contextMenuRequested(const QPoint &)),
             SLOT(systemTrayContextMenu(const QPoint &)));
         m_pSystemTray->show();
@@ -3265,7 +3264,7 @@ void MainWidget::systemTrayContextMenu ( const QPoint& pos )
     pAction->setCheckable(true);
     pAction->setChecked(m_pSetup->sDefPresetName == m_pSetup->sDefPreset);
     pAction->setData(-1);
-    QObject::connect(pPresetsMenu,
+    connect(pPresetsMenu,
         SIGNAL(triggered(QAction*)),
         SLOT(activatePresetsMenu(QAction*)));
     menu.addSeparator();
@@ -3478,87 +3477,87 @@ void MainWidget::mousePressEvent(QMouseEvent *pMouseEvent)
 void MainWidget::setDBusParameters ()
 {
     // Set configuration parameters...
-    bool bDummy     = (m_preset.sDriver == "dummy");
-    bool bSun       = (m_preset.sDriver == "sun");
-    bool bOss       = (m_preset.sDriver == "oss");
-    bool bAlsa      = (m_preset.sDriver == "alsa");
-    bool bPortaudio = (m_preset.sDriver == "portaudio");
-    bool bCoreaudio = (m_preset.sDriver == "coreaudio");
-    bool bFreebob   = (m_preset.sDriver == "freebob");
-    bool bFirewire  = (m_preset.sDriver == "firewire");
-    bool bNet       = (m_preset.sDriver == "net" || m_preset.sDriver == "netone");
+    bool bDummy     = (m_preset.driver == "dummy");
+    bool bSun       = (m_preset.driver == "sun");
+    bool bOss       = (m_preset.driver == "oss");
+    bool bAlsa      = (m_preset.driver == "alsa");
+    bool bPortaudio = (m_preset.driver == "portaudio");
+    bool bCoreaudio = (m_preset.driver == "coreaudio");
+    bool bFreebob   = (m_preset.driver == "freebob");
+    bool bFirewire  = (m_preset.driver == "firewire");
+    bool bNet       = (m_preset.driver == "net" || m_preset.driver == "netone");
     setDBusEngineParameter("name",
         m_pSetup->sServerName,
         !m_pSetup->sServerName.isEmpty());
-    setDBusEngineParameter("verbose", m_preset.bVerbose);
-    setDBusEngineParameter("realtime", m_preset.bRealtime);
+    setDBusEngineParameter("verbose", m_preset.verbose);
+    setDBusEngineParameter("realtime", m_preset.realtime);
     setDBusEngineParameter("realtime-priority",
-        m_preset.iPriority,
-        m_preset.bRealtime && m_preset.iPriority > 0);
+        m_preset.priority,
+        m_preset.realtime && m_preset.priority > 0);
 //	setDBusEngineParameter("port-max",
 //		m_preset.iPortMax,
 //		m_preset.iPortMax > 0);
     setDBusEngineParameter("client-timeout",
-        m_preset.iTimeout,
-        m_preset.iTimeout > 0);
+        m_preset.timeout,
+        m_preset.timeout > 0);
 //	setDBusEngineParameter("no-memlock", m_preset.bNoMemLock);
 //	setDBusEngineParameter("unlock-mem",
 //		m_preset.bUnlockMem,
 //		!m_preset.bNoMemLock);
-    setDBusEngineParameter("driver", m_preset.sDriver);
-    if ((bAlsa || bPortaudio) && (m_preset.iAudio != QJACKCTL_DUPLEX ||
-        m_preset.sInDevice.isEmpty() || m_preset.sOutDevice.isEmpty())) {
-        QString sInterface = m_preset.sInterface;
+    setDBusEngineParameter("driver", m_preset.driver);
+    if ((bAlsa || bPortaudio) && (m_preset.audio != QJACKCTL_DUPLEX ||
+        m_preset.inputDevice.isEmpty() || m_preset.outputDevice.isEmpty())) {
+        QString sInterface = m_preset.interface;
         if (bAlsa && sInterface.isEmpty())
             sInterface = "hw:0";
         setDBusDriverParameter("device", sInterface);
     }
     if (bPortaudio) {
         setDBusDriverParameter("channel",
-            (unsigned int) m_preset.iChan,
-            m_preset.iChan > 0);
+            (unsigned int) m_preset.channels,
+            m_preset.channels > 0);
     }
     if (bCoreaudio || bFreebob || bFirewire) {
         setDBusDriverParameter("device",
-            m_preset.sInterface,
-            !m_preset.sInterface.isEmpty());
+            m_preset.interface,
+            !m_preset.interface.isEmpty());
     }
     if (!bNet) {
         setDBusDriverParameter("rate",
-            (unsigned int) m_preset.iSampleRate,
-            m_preset.iSampleRate > 0);
+            (unsigned int) m_preset.sampleRate,
+            m_preset.sampleRate > 0);
         setDBusDriverParameter("period",
-            (unsigned int) m_preset.iFrames,
-            m_preset.iFrames > 0);
+            (unsigned int) m_preset.frames,
+            m_preset.frames > 0);
     }
     if (bAlsa || bSun || bOss || bFreebob || bFirewire) {
         setDBusDriverParameter("nperiods",
-            (unsigned int) m_preset.iPeriods,
-            m_preset.iPeriods > 0);
+            (unsigned int) m_preset.periods,
+            m_preset.periods > 0);
     }
     if (bAlsa) {
-        setDBusDriverParameter("softmode", m_preset.bSoftMode);
-        setDBusDriverParameter("monitor", m_preset.bMonitor);
-        setDBusDriverParameter("shorts", m_preset.bShorts);
-        setDBusDriverParameter("hwmon", m_preset.bHWMon);
-        setDBusDriverParameter("hwmeter", m_preset.bHWMeter);
+        setDBusDriverParameter("softmode", m_preset.softMode);
+        setDBusDriverParameter("monitor", m_preset.monitor);
+        setDBusDriverParameter("shorts", m_preset.shorts);
+        setDBusDriverParameter("hwmon", m_preset.HWMonitor);
+        setDBusDriverParameter("hwmeter", m_preset.HWMeter);
     #ifdef CONFIG_JACK_MIDI
         setDBusDriverParameter("midi-driver",
-            m_preset.sMidiDriver,
-            !m_preset.sMidiDriver.isEmpty());
+            m_preset.midiDriver,
+            !m_preset.midiDriver.isEmpty());
     #endif
     }
     if (bAlsa || bPortaudio) {
-        QString sInterface = m_preset.sInterface;
+        QString sInterface = m_preset.interface;
         if (bAlsa && sInterface.isEmpty())
             sInterface = "hw:0";
-        QString sInDevice = m_preset.sInDevice;
+        QString sInDevice = m_preset.inputDevice;
         if (sInDevice.isEmpty())
             sInDevice = sInterface;
-        QString sOutDevice = m_preset.sOutDevice;
+        QString sOutDevice = m_preset.outputDevice;
         if (sOutDevice.isEmpty())
             sOutDevice = sInterface;
-        switch (m_preset.iAudio) {
+        switch (m_preset.audio) {
         case QJACKCTL_DUPLEX:
             setDBusDriverParameter("duplex", true);
             setDBusDriverParameter("capture", sInDevice);
@@ -3576,13 +3575,13 @@ void MainWidget::setDBusParameters ()
             break;
         }
         setDBusDriverParameter("inchannels",
-            (unsigned int) m_preset.iInChannels,
-            m_preset.iInChannels > 0 && m_preset.iAudio != QJACKCTL_PLAYBACK);
+            (unsigned int) m_preset.inputChannels,
+            m_preset.inputChannels > 0 && m_preset.audio != QJACKCTL_PLAYBACK);
         setDBusDriverParameter("outchannels",
-            (unsigned int) m_preset.iOutChannels,
-            m_preset.iOutChannels > 0 && m_preset.iAudio != QJACKCTL_CAPTURE);
+            (unsigned int) m_preset.outputChannels,
+            m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE);
         unsigned char dither = 0;
-        switch (m_preset.iDither) {
+        switch (m_preset.dither) {
         case 0: dither = 'n'; break;
         case 1: dither = 'r'; break;
         case 2: dither = 's'; break;
@@ -3592,40 +3591,40 @@ void MainWidget::setDBusParameters ()
             dither > 0);
     }
     else if (bOss || bSun) {
-        setDBusDriverParameter("ignorehw", m_preset.bIgnoreHW);
+        setDBusDriverParameter("ignorehw", m_preset.ignoreHW);
         setDBusDriverParameter("wordlength",
-            (unsigned int) m_preset.iWordLength,
-            m_preset.iWordLength > 0);
-        QString sInDevice = m_preset.sInDevice;
-        if (sInDevice.isEmpty() && m_preset.iAudio == QJACKCTL_CAPTURE)
-            sInDevice = m_preset.sInterface;
+            (unsigned int) m_preset.wordLength,
+            m_preset.wordLength > 0);
+        QString sInDevice = m_preset.inputDevice;
+        if (sInDevice.isEmpty() && m_preset.audio == QJACKCTL_CAPTURE)
+            sInDevice = m_preset.interface;
         setDBusDriverParameter("capture",
             sInDevice,
-            !sInDevice.isEmpty() && m_preset.iAudio != QJACKCTL_PLAYBACK);
-        QString sOutDevice = m_preset.sOutDevice;
-        if (sOutDevice.isEmpty() && m_preset.iAudio == QJACKCTL_PLAYBACK)
-            sOutDevice = m_preset.sInterface;
+            !sInDevice.isEmpty() && m_preset.audio != QJACKCTL_PLAYBACK);
+        QString sOutDevice = m_preset.outputDevice;
+        if (sOutDevice.isEmpty() && m_preset.audio == QJACKCTL_PLAYBACK)
+            sOutDevice = m_preset.interface;
         setDBusDriverParameter("playback",
             sOutDevice,
-            !sOutDevice.isEmpty() && m_preset.iAudio != QJACKCTL_CAPTURE);
+            !sOutDevice.isEmpty() && m_preset.audio != QJACKCTL_CAPTURE);
         setDBusDriverParameter("inchannels",
-            (unsigned int) m_preset.iInChannels,
-            m_preset.iInChannels > 0  && m_preset.iAudio != QJACKCTL_PLAYBACK);
+            (unsigned int) m_preset.inputChannels,
+            m_preset.inputChannels > 0  && m_preset.audio != QJACKCTL_PLAYBACK);
         setDBusDriverParameter("outchannels",
-            (unsigned int) m_preset.iOutChannels,
-            m_preset.iOutChannels > 0 && m_preset.iAudio != QJACKCTL_CAPTURE);
+            (unsigned int) m_preset.outputChannels,
+            m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE);
     }
     else if (bCoreaudio || bFirewire || bNet) {
         setDBusDriverParameter("inchannels",
-            (unsigned int) m_preset.iInChannels,
-            m_preset.iInChannels > 0  && m_preset.iAudio != QJACKCTL_PLAYBACK);
+            (unsigned int) m_preset.inputChannels,
+            m_preset.inputChannels > 0  && m_preset.audio != QJACKCTL_PLAYBACK);
         setDBusDriverParameter("outchannels",
-            (unsigned int) m_preset.iOutChannels,
-            m_preset.iOutChannels > 0 && m_preset.iAudio != QJACKCTL_CAPTURE);
+            (unsigned int) m_preset.outputChannels,
+            m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE);
     }
     else if (bFreebob) {
         setDBusDriverParameter("duplex",
-            bool(m_preset.iAudio == QJACKCTL_DUPLEX));
+            bool(m_preset.audio == QJACKCTL_DUPLEX));
         resetDBusDriverParameter("capture");
         resetDBusDriverParameter("playback");
         resetDBusDriverParameter("outchannels");
@@ -3633,17 +3632,17 @@ void MainWidget::setDBusParameters ()
     }
     if (bDummy) {
         setDBusDriverParameter("wait",
-            (unsigned int) m_preset.iWait,
-            m_preset.iWait > 0);
+            (unsigned int) m_preset.wait,
+            m_preset.wait > 0);
     }
     else
     if (!bNet) {
         setDBusDriverParameter("input-latency",
-            (unsigned int) m_preset.iInLatency,
-            m_preset.iInLatency > 0);
+            (unsigned int) m_preset.inputLatency,
+            m_preset.inputLatency > 0);
         setDBusDriverParameter("output-latency",
-            (unsigned int) m_preset.iOutLatency,
-            m_preset.iOutLatency > 0);
+            (unsigned int) m_preset.outputLatency,
+            m_preset.outputLatency > 0);
     }
 }
 

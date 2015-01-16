@@ -20,20 +20,16 @@
 
 #pragma once
 
+#include "patchbaysplitter.h"
+
 #include "ui_PatchbayWidget.h"
 
-// Forward declarations.
 class Patchbay;
 class Setup;
 
 
-//----------------------------------------------------------------------------
-// qjackctlPatchbayForm -- UI wrapper form.
-
-class PatchbayWidget : public QWidget
-{
+class PatchbayWidget : public QWidget {
 	Q_OBJECT
-
 public:
 
 	// Constructor.

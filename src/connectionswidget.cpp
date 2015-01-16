@@ -22,8 +22,8 @@
 
 // Own includes
 #include "About.h"
-#include "ConnectionsWidget.h"
-#include "Setup.h"
+#include "connectionswidget.h"
+#include "settings.h"
 #include "MainWidget.h"
 #include "Patchbay.h"
 
@@ -32,120 +32,117 @@
 #include <QShowEvent>
 #include <QHideEvent>
 
-ConnectionsWidget::ConnectionsWidget (
-	QWidget *pParent, Qt::WindowFlags wflags )
-	: QWidget(pParent, wflags)
-{
-	// Setup UI struct...
-	m_ui.setupUi(this);
+ConnectionsWidget::ConnectionsWidget(QWidget *parent)
+    : QWidget(parent) {
+    ui.setupUi(this);
 
     m_pAudioConnect = new JackConnectionsModel(
-		m_ui.AudioConnectView, QJACKCTL_JACK_AUDIO);
+        ui.AudioConnectView, QJACKCTL_JACK_AUDIO);
 #ifdef CONFIG_JACK_MIDI
     m_pMidiConnect = new JackConnectionsModel(
-		m_ui.MidiConnectView, QJACKCTL_JACK_MIDI);
+        ui.MidiConnectView, QJACKCTL_JACK_MIDI);
 #else
 	m_pMidiConnect = NULL;
 #endif
 
 #ifdef CONFIG_ALSA_SEQ
-	m_pAlsaConnect = new qjackctlAlsaConnect(m_ui.AlsaConnectView);
+    m_pAlsaConnect = new qjackctlAlsaConnect(ui.AlsaConnectView);
 #else
 	m_pAlsaConnect = NULL;
 #endif
 
     m_pSetup = NULL;
 
-	QObject::connect(m_ui.AudioConnectPushButton,
+    connect(ui.AudioConnectPushButton,
 		SIGNAL(clicked()),
 		SLOT(audioConnectSelected()));
-	QObject::connect(m_ui.AudioDisconnectPushButton,
+    connect(ui.AudioDisconnectPushButton,
 		SIGNAL(clicked()),
 		SLOT(audioDisconnectSelected()));
-	QObject::connect(m_ui.AudioDisconnectAllPushButton,
+    connect(ui.AudioDisconnectAllPushButton,
 		SIGNAL(clicked()),
 		SLOT(audioDisconnectAll()));
-	QObject::connect(m_ui.AudioExpandAllPushButton,
+    connect(ui.AudioExpandAllPushButton,
 		SIGNAL(clicked()),
 		SLOT(audioExpandAll()));
-	QObject::connect(m_ui.AudioRefreshPushButton,
+    connect(ui.AudioRefreshPushButton,
 		SIGNAL(clicked()),
 		SLOT(audioRefreshClear()));
 
-	QObject::connect(m_ui.MidiConnectPushButton,
+    connect(ui.MidiConnectPushButton,
 		SIGNAL(clicked()),
 		SLOT(midiConnectSelected()));
-	QObject::connect(m_ui.MidiDisconnectPushButton,
+    connect(ui.MidiDisconnectPushButton,
 		SIGNAL(clicked()),
 		SLOT(midiDisconnectSelected()));
-	QObject::connect(m_ui.MidiDisconnectAllPushButton,
+    connect(ui.MidiDisconnectAllPushButton,
 		SIGNAL(clicked()),
 		SLOT(midiDisconnectAll()));
-	QObject::connect(m_ui.MidiExpandAllPushButton,
+    connect(ui.MidiExpandAllPushButton,
 		SIGNAL(clicked()),
 		SLOT(midiExpandAll()));
-	QObject::connect(m_ui.MidiRefreshPushButton,
+    connect(ui.MidiRefreshPushButton,
 		SIGNAL(clicked()),
 		SLOT(midiRefreshClear()));
 
-	QObject::connect(m_ui.AlsaConnectPushButton,
+    connect(ui.AlsaConnectPushButton,
 		SIGNAL(clicked()),
 		SLOT(alsaConnectSelected()));
-	QObject::connect(m_ui.AlsaDisconnectPushButton,
+    connect(ui.AlsaDisconnectPushButton,
 		SIGNAL(clicked()),
 		SLOT(alsaDisconnectSelected()));
-	QObject::connect(m_ui.AlsaDisconnectAllPushButton,
+    connect(ui.AlsaDisconnectAllPushButton,
 		SIGNAL(clicked()),
 		SLOT(alsaDisconnectAll()));
-	QObject::connect(m_ui.AlsaExpandAllPushButton,
+    connect(ui.AlsaExpandAllPushButton,
 		SIGNAL(clicked()),
 		SLOT(alsaExpandAll()));
-	QObject::connect(m_ui.AlsaRefreshPushButton,
+    connect(ui.AlsaRefreshPushButton,
 		SIGNAL(clicked()),
 		SLOT(alsaRefreshClear()));
 
 	// Connect it to some UI feedback slots.
-	QObject::connect(m_ui.AudioConnectView->OListView(),
+    connect(ui.AudioConnectView->OListView(),
 		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
 		SLOT(audioStabilize()));
-	QObject::connect(m_ui.AudioConnectView->IListView(),
+    connect(ui.AudioConnectView->IListView(),
 		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
 		SLOT(audioStabilize()));
-	QObject::connect(m_ui.MidiConnectView->OListView(),
+    connect(ui.MidiConnectView->OListView(),
 		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
 		SLOT(midiStabilize()));
-	QObject::connect(m_ui.MidiConnectView->IListView(),
+    connect(ui.MidiConnectView->IListView(),
 		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
 		SLOT(midiStabilize()));
-	QObject::connect(m_ui.AlsaConnectView->OListView(),
+    connect(ui.AlsaConnectView->OListView(),
 		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
 		SLOT(alsaStabilize()));
-	QObject::connect(m_ui.AlsaConnectView->IListView(),
+    connect(ui.AlsaConnectView->IListView(),
 		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
 		SLOT(alsaStabilize()));
 
 	// Dirty dispatcher (refresh deferral).
-	QObject::connect(m_ui.AudioConnectView,
+    connect(ui.AudioConnectView,
 		SIGNAL(contentsChanged()),
 		SLOT(audioRefresh()));
-	QObject::connect(m_ui.MidiConnectView,
+    connect(ui.MidiConnectView,
 		SIGNAL(contentsChanged()),
 		SLOT(midiRefresh()));
-	QObject::connect(m_ui.AlsaConnectView,
+    connect(ui.AlsaConnectView,
 		SIGNAL(contentsChanged()),
 		SLOT(alsaRefresh()));
 
 	// Actual connections...
-	QObject::connect(m_pAudioConnect,
+	connect(m_pAudioConnect,
         SIGNAL(disconnecting(JackPortTreeWidgetItem *, JackPortTreeWidgetItem *)),
         SLOT(audioDisconnecting(JackPortTreeWidgetItem *, JackPortTreeWidgetItem *)));
 #ifdef CONFIG_JACK_MIDI
-	QObject::connect(m_pMidiConnect,
+	connect(m_pMidiConnect,
         SIGNAL(disconnecting(JackPortTreeWidgetItem *, JackPortTreeWidgetItem *)),
         SLOT(midiDisconnecting(JackPortTreeWidgetItem *, JackPortTreeWidgetItem *)));
 #endif
 #ifdef CONFIG_ALSA_SEQ
-	QObject::connect(m_pAlsaConnect,
+	connect(m_pAlsaConnect,
         SIGNAL(disconnecting(JackPortTreeWidgetItem *, JackPortTreeWidgetItem *)),
         SLOT(alsaDisconnecting(JackPortTreeWidgetItem *, JackPortTreeWidgetItem *)));
 #endif
@@ -217,14 +214,14 @@ void ConnectionsWidget::setup ( Setup *pSetup )
 
     MainWidget *pMainForm = MainWidget::getInstance();
 	if (pMainForm) {
-		QObject::connect(m_pAudioConnect, SIGNAL(connectChanged()),
+		connect(m_pAudioConnect, SIGNAL(connectChanged()),
 			pMainForm, SLOT(jackConnectChanged()));
 	#ifdef CONFIG_JACK_MIDI
-		QObject::connect(m_pMidiConnect, SIGNAL(connectChanged()),
+		connect(m_pMidiConnect, SIGNAL(connectChanged()),
 			pMainForm, SLOT(jackConnectChanged()));
 	#endif
 	#ifdef CONFIG_ALSA_SEQ
-		QObject::connect(m_pAlsaConnect, SIGNAL(connectChanged()),
+		connect(m_pAlsaConnect, SIGNAL(connectChanged()),
 			pMainForm, SLOT(alsaConnectChanged()));
 	#endif
 	}
@@ -235,13 +232,13 @@ void ConnectionsWidget::setup ( Setup *pSetup )
 		sizes.append(180);
 		sizes.append(60);
 		sizes.append(180);
-		m_pSetup->loadSplitterSizes(m_ui.AudioConnectView, sizes);
-		m_pSetup->loadSplitterSizes(m_ui.MidiConnectView, sizes);
-		m_pSetup->loadSplitterSizes(m_ui.AlsaConnectView, sizes);
+        m_pSetup->loadSplitterSizes(ui.AudioConnectView, sizes);
+        m_pSetup->loadSplitterSizes(ui.MidiConnectView, sizes);
+        m_pSetup->loadSplitterSizes(ui.AlsaConnectView, sizes);
 	#ifdef CONFIG_ALSA_SEQ
 		if (!m_pSetup->bAlsaSeqEnabled) {
 		//	m_ui.ConnectionsTabWidget->setTabEnabled(2, false);
-			m_ui.ConnectionsTabWidget->removeTab(2);
+            ui.ConnectionsTabWidget->removeTab(2);
 		}
 	#endif
 	}
@@ -252,17 +249,17 @@ void ConnectionsWidget::setup ( Setup *pSetup )
 
 ConnectionsViewSplitter *ConnectionsWidget::audioConnectView () const
 {
-	return m_ui.AudioConnectView;
+    return ui.AudioConnectView;
 }
 
 ConnectionsViewSplitter *ConnectionsWidget::midiConnectView () const
 {
-	return m_ui.MidiConnectView;
+    return ui.MidiConnectView;
 }
 
 ConnectionsViewSplitter *ConnectionsWidget::alsaConnectView () const
 {
-	return m_ui.AlsaConnectView;
+    return ui.AlsaConnectView;
 }
 
 bool ConnectionsWidget::queryClose ()
@@ -270,9 +267,9 @@ bool ConnectionsWidget::queryClose ()
 	bool bQueryClose = true;
 
 	if (m_pSetup
-		&& (m_ui.AudioConnectView->isDirty() ||
-			m_ui.MidiConnectView->isDirty()  ||
-			m_ui.AlsaConnectView->isDirty())) {
+        && (ui.AudioConnectView->isDirty() ||
+            ui.MidiConnectView->isDirty()  ||
+            ui.AlsaConnectView->isDirty())) {
 		switch (QMessageBox::warning(this,
 			tr("Warning") + " - " QJACKCTL_SUBTITLE1,
 			tr("The preset aliases have been changed:\n\n"
@@ -293,9 +290,9 @@ bool ConnectionsWidget::queryClose ()
 
 	// Save some splitter sizes...
 	if (m_pSetup && bQueryClose) {
-		m_pSetup->saveSplitterSizes(m_ui.AudioConnectView);
-		m_pSetup->saveSplitterSizes(m_ui.MidiConnectView);
-		m_pSetup->saveSplitterSizes(m_ui.AlsaConnectView);
+        m_pSetup->saveSplitterSizes(ui.AudioConnectView);
+        m_pSetup->saveSplitterSizes(ui.MidiConnectView);
+        m_pSetup->saveSplitterSizes(ui.AlsaConnectView);
 	}
 
 	return bQueryClose;
@@ -309,9 +306,9 @@ bool ConnectionsWidget::loadAliases ()
 		m_sPreset = m_pSetup->sDefPreset;
 		bResult = m_pSetup->loadAliases(m_sPreset);
 		if (bResult) {
-			m_ui.AudioConnectView->setDirty(false);
-			m_ui.MidiConnectView->setDirty(false);
-			m_ui.AlsaConnectView->setDirty(false);
+            ui.AudioConnectView->setDirty(false);
+            ui.MidiConnectView->setDirty(false);
+            ui.AlsaConnectView->setDirty(false);
 		}
 	}
 
@@ -325,9 +322,9 @@ bool ConnectionsWidget::saveAliases ()
 	if (m_pSetup) {
 		bResult = m_pSetup->saveAliases(m_sPreset);
 		if (bResult) {
-			m_ui.AudioConnectView->setDirty(false);
-			m_ui.MidiConnectView->setDirty(false);
-			m_ui.AlsaConnectView->setDirty(false);
+            ui.AudioConnectView->setDirty(false);
+            ui.MidiConnectView->setDirty(false);
+            ui.AlsaConnectView->setDirty(false);
 		}
 	}
 
@@ -336,37 +333,37 @@ bool ConnectionsWidget::saveAliases ()
 
 void ConnectionsWidget::setTabPage ( int iTabPage )
 {
-	m_ui.ConnectionsTabWidget->setCurrentIndex(iTabPage);
+    ui.ConnectionsTabWidget->setCurrentIndex(iTabPage);
 }
 
 int ConnectionsWidget::tabPage () const
 {
-	return m_ui.ConnectionsTabWidget->currentIndex();
+    return ui.ConnectionsTabWidget->currentIndex();
 }
 
 QFont ConnectionsWidget::connectionsFont () const
 {
 	// Elect one list view to retrieve current font.
-	return m_ui.AudioConnectView->OListView()->font();
+    return ui.AudioConnectView->OListView()->font();
 }
 
 void ConnectionsWidget::setConnectionsFont ( const QFont & font )
 {
 	// Set fonts of all listviews...
-	m_ui.AudioConnectView->OListView()->setFont(font);
-	m_ui.AudioConnectView->IListView()->setFont(font);
-	m_ui.MidiConnectView->OListView()->setFont(font);
-	m_ui.MidiConnectView->IListView()->setFont(font);
-	m_ui.AlsaConnectView->OListView()->setFont(font);
-	m_ui.AlsaConnectView->IListView()->setFont(font);
+    ui.AudioConnectView->OListView()->setFont(font);
+    ui.AudioConnectView->IListView()->setFont(font);
+    ui.MidiConnectView->OListView()->setFont(font);
+    ui.MidiConnectView->IListView()->setFont(font);
+    ui.AlsaConnectView->OListView()->setFont(font);
+    ui.AlsaConnectView->IListView()->setFont(font);
 }
 
 void ConnectionsWidget::setConnectionsIconSize ( int iIconSize )
 {
 	// Set icon sizes of all views...
-	m_ui.AudioConnectView->setIconSize(iIconSize);
-	m_ui.MidiConnectView->setIconSize(iIconSize);
-	m_ui.AlsaConnectView->setIconSize(iIconSize);
+    ui.AudioConnectView->setIconSize(iIconSize);
+    ui.MidiConnectView->setIconSize(iIconSize);
+    ui.AlsaConnectView->setIconSize(iIconSize);
 }
 
 bool ConnectionsWidget::isAudioConnected () const
@@ -615,20 +612,20 @@ void ConnectionsWidget::stabilizeAudio ( bool bEnabled, bool bClear )
 		m_pAudioConnect->updateContents(!bEnabled || bClear);
 
 	if (m_pAudioConnect && bEnabled) {
-		m_ui.AudioConnectPushButton->setEnabled(
+        ui.AudioConnectPushButton->setEnabled(
 			m_pAudioConnect->canConnectSelected());
-		m_ui.AudioDisconnectPushButton->setEnabled(
+        ui.AudioDisconnectPushButton->setEnabled(
 			m_pAudioConnect->canDisconnectSelected());
-		m_ui.AudioDisconnectAllPushButton->setEnabled(
+        ui.AudioDisconnectAllPushButton->setEnabled(
 			m_pAudioConnect->canDisconnectAll());
-		m_ui.AudioExpandAllPushButton->setEnabled(true);
-		m_ui.AudioRefreshPushButton->setEnabled(true);
+        ui.AudioExpandAllPushButton->setEnabled(true);
+        ui.AudioRefreshPushButton->setEnabled(true);
 	} else {
-		m_ui.AudioConnectPushButton->setEnabled(false);
-		m_ui.AudioDisconnectPushButton->setEnabled(false);
-		m_ui.AudioDisconnectAllPushButton->setEnabled(false);
-		m_ui.AudioExpandAllPushButton->setEnabled(false);
-		m_ui.AudioRefreshPushButton->setEnabled(false);
+        ui.AudioConnectPushButton->setEnabled(false);
+        ui.AudioDisconnectPushButton->setEnabled(false);
+        ui.AudioDisconnectAllPushButton->setEnabled(false);
+        ui.AudioExpandAllPushButton->setEnabled(false);
+        ui.AudioRefreshPushButton->setEnabled(false);
 	}
 }
 
@@ -638,20 +635,20 @@ void ConnectionsWidget::stabilizeMidi ( bool bEnabled, bool bClear )
 		m_pMidiConnect->updateContents(!bEnabled || bClear);
 
 	if (m_pMidiConnect && bEnabled) {
-		m_ui.MidiConnectPushButton->setEnabled(
+        ui.MidiConnectPushButton->setEnabled(
 			m_pMidiConnect->canConnectSelected());
-		m_ui.MidiDisconnectPushButton->setEnabled(
+        ui.MidiDisconnectPushButton->setEnabled(
 			m_pMidiConnect->canDisconnectSelected());
-		m_ui.MidiDisconnectAllPushButton->setEnabled(
+        ui.MidiDisconnectAllPushButton->setEnabled(
 			m_pMidiConnect->canDisconnectAll());
-		m_ui.MidiExpandAllPushButton->setEnabled(true);
-		m_ui.MidiRefreshPushButton->setEnabled(true);
+        ui.MidiExpandAllPushButton->setEnabled(true);
+        ui.MidiRefreshPushButton->setEnabled(true);
 	} else {
-		m_ui.MidiConnectPushButton->setEnabled(false);
-		m_ui.MidiDisconnectPushButton->setEnabled(false);
-		m_ui.MidiDisconnectAllPushButton->setEnabled(false);
-		m_ui.MidiExpandAllPushButton->setEnabled(false);
-		m_ui.MidiRefreshPushButton->setEnabled(false);
+        ui.MidiConnectPushButton->setEnabled(false);
+        ui.MidiDisconnectPushButton->setEnabled(false);
+        ui.MidiDisconnectAllPushButton->setEnabled(false);
+        ui.MidiExpandAllPushButton->setEnabled(false);
+        ui.MidiRefreshPushButton->setEnabled(false);
 	}
 }
 
@@ -661,20 +658,20 @@ void ConnectionsWidget::stabilizeAlsa ( bool bEnabled, bool bClear )
 		m_pAlsaConnect->updateContents(!bEnabled || bClear);
 
 	if (m_pAlsaConnect && bEnabled) {
-		m_ui.AlsaConnectPushButton->setEnabled(
+        ui.AlsaConnectPushButton->setEnabled(
 			m_pAlsaConnect->canConnectSelected());
-		m_ui.AlsaDisconnectPushButton->setEnabled(
+        ui.AlsaDisconnectPushButton->setEnabled(
 			m_pAlsaConnect->canDisconnectSelected());
-		m_ui.AlsaDisconnectAllPushButton->setEnabled(
+        ui.AlsaDisconnectAllPushButton->setEnabled(
 			m_pAlsaConnect->canDisconnectAll());
-		m_ui.AlsaExpandAllPushButton->setEnabled(true);
-		m_ui.AlsaRefreshPushButton->setEnabled(true);
+        ui.AlsaExpandAllPushButton->setEnabled(true);
+        ui.AlsaRefreshPushButton->setEnabled(true);
 	} else {
-		m_ui.AlsaConnectPushButton->setEnabled(false);
-		m_ui.AlsaDisconnectPushButton->setEnabled(false);
-		m_ui.AlsaDisconnectAllPushButton->setEnabled(false);
-		m_ui.AlsaExpandAllPushButton->setEnabled(false);
-		m_ui.AlsaRefreshPushButton->setEnabled(false);
+        ui.AlsaConnectPushButton->setEnabled(false);
+        ui.AlsaDisconnectPushButton->setEnabled(false);
+        ui.AlsaDisconnectAllPushButton->setEnabled(false);
+        ui.AlsaExpandAllPushButton->setEnabled(false);
+        ui.AlsaRefreshPushButton->setEnabled(false);
 	}
 }
 
@@ -683,25 +680,25 @@ void ConnectionsWidget::updateAliases ()
 	// Set alias maps for all listviews...
 	if (m_pSetup && m_pSetup->bAliasesEnabled) {
 		bool bRenameEnabled = m_pSetup->bAliasesEditing;
-		m_ui.AudioConnectView->OListView()->setAliases(
+        ui.AudioConnectView->OListView()->setAliases(
 			&(m_pSetup->aliasAudioOutputs), bRenameEnabled);
-		m_ui.AudioConnectView->IListView()->setAliases(
+        ui.AudioConnectView->IListView()->setAliases(
 			&(m_pSetup->aliasAudioInputs),  bRenameEnabled);
-		m_ui.MidiConnectView->OListView()->setAliases(
+        ui.MidiConnectView->OListView()->setAliases(
 			&(m_pSetup->aliasMidiOutputs), bRenameEnabled);
-		m_ui.MidiConnectView->IListView()->setAliases(
+        ui.MidiConnectView->IListView()->setAliases(
 			&(m_pSetup->aliasMidiInputs),  bRenameEnabled);
-		m_ui.AlsaConnectView->OListView()->setAliases(
+        ui.AlsaConnectView->OListView()->setAliases(
 			&(m_pSetup->aliasAlsaOutputs), bRenameEnabled);
-		m_ui.AlsaConnectView->IListView()->setAliases(
+        ui.AlsaConnectView->IListView()->setAliases(
 			&(m_pSetup->aliasAlsaInputs),  bRenameEnabled);
 	} else {
-		m_ui.AudioConnectView->OListView()->setAliases(NULL, false);
-		m_ui.AudioConnectView->IListView()->setAliases(NULL, false);
-		m_ui.MidiConnectView->OListView()->setAliases(NULL, false);
-		m_ui.MidiConnectView->IListView()->setAliases(NULL, false);
-		m_ui.AlsaConnectView->OListView()->setAliases(NULL, false);
-		m_ui.AlsaConnectView->IListView()->setAliases(NULL, false);
+        ui.AudioConnectView->OListView()->setAliases(NULL, false);
+        ui.AudioConnectView->IListView()->setAliases(NULL, false);
+        ui.MidiConnectView->OListView()->setAliases(NULL, false);
+        ui.MidiConnectView->IListView()->setAliases(NULL, false);
+        ui.AlsaConnectView->OListView()->setAliases(NULL, false);
+        ui.AlsaConnectView->IListView()->setAliases(NULL, false);
 	}
 }
 

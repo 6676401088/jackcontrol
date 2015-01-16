@@ -13,60 +13,88 @@ include(src.pri)
 HEADERS += \
     InterfaceComboBox.h \
     About.h \
-    AboutDialog.h \
     MainWidget.h \
-    Setup.h \
-    SetupDialog.h \
     SystemTrayIcon.h \
     AlsaConnect.h \
-    ConnectAlias.h \
-    ConnectionsWidget.h \
     JackConnect.h \
     SocketDialog.h \
     PatchbayFile.h \
     Patchbay.h \
     PatchbayRack.h \
     Session.h \
-    SessionWidget.h \
     Status.h \
     ConnectViewSplitter.h \
-    PatchbayWidget.h \
-    MainWindow.h \
-    statuswidget.h
+    statuswidget.h \
+    patchbaywidget.h \
+    connectionswidget.h \
+    mainwindow.h \
+    sessionwidget.h \
+    setupwidget.h \
+    aboutdialog.h \
+    settings.h \
+    jackservice.h \
+    connectionsmodel.h \
+    jackportconnectorwidget.h \
+    clientlisttreewidget.h \
+    jackporttreewidgetitem.h \
+    jackclienttreewidgetitem.h \
+    jackclientlist.h \
+    plugtreewidgetitem.h \
+    sockettreewidgetitem.h \
+    socketlist.h \
+    sockettreewidget.h \
+    patchworkwidget.h \
+    patchbaysplitter.h \
+    clientalias.h \
+    connectalias.h
 
 SOURCES += \
-    AboutDialog.cpp \
-    Setup.cpp \
-    SetupDialog.cpp \
     SystemTrayIcon.cpp \
-    ConnectionsWidget.cpp \
     AlsaConnect.cpp \
-    ConnectAlias.cpp \
     InterfaceComboBox.cpp \
     JackConnect.cpp \
     SocketDialog.cpp \
     Patchbay.cpp \
     MainWidget.cpp \
     PatchbayFile.cpp \
-    PatchbayForm.cpp \
     PatchbayRack.cpp \
-    SessionWidget.cpp \
     Session.cpp \
     ConnectViewSplitter.cpp \
-    MainWindow.cpp \
-    Application.cpp \
-    statuswidget.cpp
+    statuswidget.cpp \
+    patchbaywidget.cpp \
+    connectionswidget.cpp \
+    mainwindow.cpp \
+    sessionwidget.cpp \
+    setupwidget.cpp \
+    aboutdialog.cpp \
+    settings.cpp \
+    jackservice.cpp \
+    application.cpp \
+    connectionsmodel.cpp \
+    jackportconnectorwidget.cpp \
+    clientlisttreewidget.cpp \
+    jackporttreewidgetitem.cpp \
+    jackclienttreewidgetitem.cpp \
+    jackclientlist.cpp \
+    plugtreewidgetitem.cpp \
+    sockettreewidgetitem.cpp \
+    socketlist.cpp \
+    sockettreewidget.cpp \
+    patchworkwidget.cpp \
+    patchbaysplitter.cpp \
+    clientalias.cpp \
+    connectalias.cpp
 
 FORMS += \
-    AboutDialog.ui \
-    ConnectionsWidget.ui \
-    MainWidget.ui \
-    PatchbayWidget.ui \
-    SessionWidget.ui \
-    SetupDialog.ui \
     SocketDialog.ui \
-    MainWindow.ui \
-    statuswidget.ui
+    statuswidget.ui \
+    patchbaywidget.ui \
+    connectionswidget.ui \
+    mainwidget.ui \
+    mainwindow.ui \
+    sessionwidget.ui \
+    setupwidget.ui \
+    aboutdialog.ui
 
 RESOURCES += \
 	qjackctl.qrc

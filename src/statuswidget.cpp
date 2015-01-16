@@ -22,7 +22,7 @@
 #include "About.h"
 #include "statuswidget.h"
 #include "Status.h"
-#include "Setup.h"
+#include "settings.h"
 #include "MainWidget.h"
 
 // Qt includes

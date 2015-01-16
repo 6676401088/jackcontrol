@@ -24,13 +24,60 @@
     <normaloff>:/images/aportlni_64x64.png</normaloff>:/images/aportlni_64x64.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QTabWidget" name="mainTabWidget">
-      <property name="currentIndex">
-       <number>2</number>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="currentIndex">
+       <number>4</number>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>false</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="setupTab">
+       <attribute name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/setup1.png</normaloff>:/images/setup1.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Setup</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="SetupWidget" name="setupWidget" native="true"/>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="connectionsTab">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <attribute name="icon">
         <iconset resource="qjackctl.qrc">
          <normaloff>:/images/aportlni_64x64.png</normaloff>:/images/aportlni_64x64.png</iconset>
@@ -39,35 +86,85 @@
         <string>Connections</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
         <item>
-         <widget class="QGraphicsView" name="graphicsView"/>
+         <widget class="ConnectionsWidget" name="connectionsWidget" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="patchbayTab">
+       <attribute name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/patchbay1.png</normaloff>:/images/patchbay1.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Patchbay</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="PatchbayWidget" name="patchbayWidget" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="sessionTab">
+       <attribute name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/session1.png</normaloff>:/images/session1.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Session</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="SessionWidget" name="sessionWidget" native="true"/>
         </item>
        </layout>
       </widget>
       <widget class="QWidget" name="messagesTab">
-       <attribute name="icon">
-        <iconset resource="qjackctl.qrc">
-         <normaloff>:/images/messages1.png</normaloff>:/images/messages1.png</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Messages</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QTextEdit" name="messagesTextEdit">
-          <property name="font">
-           <font>
-            <family>Ubuntu Mono</family>
-           </font>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="statusTab">
        <attribute name="icon">
         <iconset resource="qjackctl.qrc">
          <normaloff>:/images/status1.png</normaloff>:/images/status1.png</iconset>
@@ -75,9 +172,73 @@
        <attribute name="title">
         <string>Status</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
         <item>
-         <widget class="StatusWidget" name="statusWidget" native="true"/>
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="tabPosition">
+           <enum>QTabWidget::South</enum>
+          </property>
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <widget class="QWidget" name="tab">
+           <attribute name="title">
+            <string>Messages</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QTextEdit" name="messagesTextEdit">
+              <property name="font">
+               <font>
+                <family>Ubuntu Mono</family>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="title">
+            <string>Status</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="StatusWidget" name="statusWidget" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -129,7 +290,6 @@
    </attribute>
    <addaction name="actionStartJackServer"/>
    <addaction name="actionStopJackServer"/>
-   <addaction name="actionSetup"/>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -162,27 +322,11 @@
     </property>
     <addaction name="actionStartJackServer"/>
     <addaction name="actionStopJackServer"/>
-    <addaction name="actionSetup"/>
    </widget>
    <addaction name="menuJACK"/>
    <addaction name="menuTransport"/>
    <addaction name="menuMisc"/>
   </widget>
-  <action name="actionSetup">
-   <property name="icon">
-    <iconset resource="qjackctl.qrc">
-     <normaloff>:/images/setup1.png</normaloff>:/images/setup1.png</iconset>
-   </property>
-   <property name="text">
-    <string>Setup</string>
-   </property>
-   <property name="statusTip">
-    <string>Setup</string>
-   </property>
-   <property name="whatsThis">
-    <string>Setup</string>
-   </property>
-  </action>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
@@ -344,6 +488,30 @@
    <class>StatusWidget</class>
    <extends>QWidget</extends>
    <header>statuswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PatchbayWidget</class>
+   <extends>QWidget</extends>
+   <header>patchbaywidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ConnectionsWidget</class>
+   <extends>QWidget</extends>
+   <header>connectionswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SessionWidget</class>
+   <extends>QWidget</extends>
+   <header>sessionwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SetupWidget</class>
+   <extends>QWidget</extends>
+   <header>setupwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

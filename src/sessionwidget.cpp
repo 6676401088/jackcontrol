@@ -22,9 +22,9 @@
 
 // Own includes
 #include "About.h"
-#include "SessionWidget.h"
+#include "sessionwidget.h"
 #include "Session.h"
-#include "Setup.h"
+#include "settings.h"
 #include "MainWidget.h"
 
 // Qt includes
@@ -101,16 +101,16 @@ qjackctlSessionInfraClientItemEditor::qjackctlSessionInfraClientItemEditor (
 	QWidget::setFocusPolicy(Qt::StrongFocus);
 	QWidget::setFocusProxy(m_pItemEdit);
 
-	QObject::connect(m_pItemEdit,
+	connect(m_pItemEdit,
 		SIGNAL(editingFinished()),
 		SLOT(finishSlot()));
 
 	if (m_pBrowseButton)
-		QObject::connect(m_pBrowseButton,
+		connect(m_pBrowseButton,
 			SIGNAL(clicked()),
 			SLOT(browseSlot()));
 
-	QObject::connect(m_pResetButton,
+	connect(m_pResetButton,
 		SIGNAL(clicked()),
 		SLOT(resetSlot()));
 }
@@ -181,7 +181,7 @@ QWidget *qjackctlSessionInfraClientItemDelegate::createEditor (
 		= new qjackctlSessionInfraClientItemEditor(pParent, index);
 	pItemEditor->setDefaultText(
 		index.model()->data(index, Qt::DisplayRole).toString());
-	QObject::connect(pItemEditor,
+	connect(pItemEditor,
 		SIGNAL(finishSignal()),
 		SLOT(commitEditor()));
 	return pItemEditor;
@@ -288,33 +288,33 @@ SessionWidget::SessionWidget (
 	m_ui.InfraClientListView->sortItems(0, Qt::AscendingOrder);
 
 	// UI connections...
-	QObject::connect(m_ui.LoadSessionPushButton,
+	connect(m_ui.LoadSessionPushButton,
 		SIGNAL(clicked()),
 		SLOT(loadSession()));
-	QObject::connect(m_ui.UpdateSessionPushButton,
+	connect(m_ui.UpdateSessionPushButton,
 		SIGNAL(clicked()),
 		SLOT(updateSession()));
 
-	QObject::connect(m_ui.SessionTreeView,
+	connect(m_ui.SessionTreeView,
 		SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(sessionViewContextMenu(const QPoint&)));
 
-	QObject::connect(m_ui.InfraClientListView,
+	connect(m_ui.InfraClientListView,
 		SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
 		SLOT(selectInfraClient()));
-	QObject::connect(m_ui.AddInfraClientPushButton,
+	connect(m_ui.AddInfraClientPushButton,
 		SIGNAL(clicked()),
 		SLOT(addInfraClient()));
-	QObject::connect(m_ui.EditInfraClientPushButton,
+	connect(m_ui.EditInfraClientPushButton,
 		SIGNAL(clicked()),
 		SLOT(editInfraClient()));
-	QObject::connect(m_ui.RemoveInfraClientPushButton,
+	connect(m_ui.RemoveInfraClientPushButton,
 		SIGNAL(clicked()),
 		SLOT(removeInfraClient()));
-	QObject::connect(m_ui.InfraClientListView->itemDelegate(),
+	connect(m_ui.InfraClientListView->itemDelegate(),
 		SIGNAL(commitData(QWidget *)),
 		SLOT(editInfraClientCommit()));
-	QObject::connect(m_ui.InfraClientListView,
+	connect(m_ui.InfraClientListView,
 		SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(infraClientContextMenu(const QPoint&)));
 

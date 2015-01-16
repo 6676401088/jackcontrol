@@ -18,21 +18,18 @@
 
 *****************************************************************************/
 
-// Own includes
-#include "PatchbayRack.h"
-#include "ConnectAlias.h"
-
 // Standard includes
 #include <stdlib.h>
 
 // Qt includes
 #include <QHash>
 
-class qjackctlPatchbaySnapshot
-{
-public:
+// Own includes
+#include "PatchbayRack.h"
+#include "connectalias.h"
 
-	// Constructor.
+class qjackctlPatchbaySnapshot {
+public:
 	qjackctlPatchbaySnapshot() {};
 
 	// Cleanup.
@@ -91,12 +88,12 @@ public:
 			= find_socket(socketlist, sClientName, iSocketType);
 		if (pSocket == NULL) {
 			pSocket = new qjackctlPatchbaySocket(sClientName,
-				qjackctlClientAlias::escapeRegExpDigits(sClientName),
+				ClientAlias::escapeRegExpDigits(sClientName),
 				iSocketType);
 			socketlist.append(pSocket);
 		}
 		pSocket->addPlug(
-			qjackctlClientAlias::escapeRegExpDigits(sPortName));
+			ClientAlias::escapeRegExpDigits(sPortName));
 	}
 
 	// Get client socket into rack (socket list).
@@ -132,12 +129,12 @@ public:
 			sSocketName += ' ' + QString::number(iSocket + 1);
 
 		pSocket = new qjackctlPatchbaySocket(sSocketName,
-			qjackctlClientAlias::escapeRegExpDigits(sClientName),
+			ClientAlias::escapeRegExpDigits(sClientName),
 			iSocketType);
 		QStringListIterator port_iter(ports);
 		while (port_iter.hasNext()) {
 			pSocket->addPlug(
-				qjackctlClientAlias::escapeRegExpDigits(port_iter.next()));
+				ClientAlias::escapeRegExpDigits(port_iter.next()));
 		}
 
 		socketlist.append(pSocket);

@@ -20,66 +20,23 @@
 
 #pragma once
 
+// Qt includes
 #include <QRegExp>
 #include <QMap>
 #include <QSettings>
 
-class qjackctlClientAlias
-{
-public:
-
-	// Constructor.
-	qjackctlClientAlias (const QString& sClientName,
-		const QString& sClientAlias = QString::null);
-	
-	// Default destructor.
-	~qjackctlClientAlias();
-
-	// Client name accessor.
-	QString clientName() const;
-
-	// Client name matcher.
-	bool matchClientName(const QString& sClientName);
-
-	// Client aliasing methods.
-	const QString& clientAlias() const;
-	void setClientAlias(const QString& sClientAlias);
-
-	// Port aliasing methods.
-	QString portAlias (const QString& sPortName) const;
-	void setPortAlias (const QString& sPortName,
-		const QString& sPortAlias);
-
-	// Save client/port aliases definitions.
-	void saveSettings(QSettings& settings, const QString& sClientKey);
-
-	// Need for generid sort.
-	bool operator< (const qjackctlClientAlias& other);
-
-	// Escape and format a string as a regular expresion.
-	static QString escapeRegExpDigits(const QString& s, int iThreshold = 3);
-
-private:
-
-	// Client name regexp.
-	QRegExp m_rxClientName;
-	// Client alias.
-	QString m_sClientAlias;
-
-	// Port aliases map.
-	QMap<QString, QString> m_ports;
-};
-
+// Own includes
+#include "clientalias.h"
 
 // Client list alias map.
-class qjackctlConnectAlias : public QList<qjackctlClientAlias *>
+class ConnectAlias : public QList<ClientAlias *>
 {
 public:
 
 	// Constructor.
-	qjackctlConnectAlias ();
+	ConnectAlias ();
 	// Default destructor.
-	~qjackctlConnectAlias ();
+	~ConnectAlias ();
 
 	// Client aliasing methods.
 	QString clientAlias (const QString& sClientName);
@@ -99,5 +56,5 @@ public:
 private:
 
 	// Client item finder.
-	qjackctlClientAlias *findClientName (const QString& sClientName);
+	ClientAlias *findClientName (const QString& sClientName);
 };

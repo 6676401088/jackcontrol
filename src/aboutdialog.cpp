@@ -19,7 +19,7 @@
 *****************************************************************************/
 
 // Own includes
-#include "AboutDialog.h"
+#include "aboutdialog.h"
 #include "About.h"
 
 // Qt includes
@@ -118,10 +118,10 @@ AboutDialog::AboutDialog (
 	sText += "</p>\n";
 	m_ui.AboutTextView->setText(sText);
 	// UI connections...
-	QObject::connect(m_ui.AboutQtButton,
+	connect(m_ui.AboutQtButton,
 		SIGNAL(clicked()),
 		SLOT(aboutQt()));
-	QObject::connect(m_ui.ClosePushButton,
+	connect(m_ui.ClosePushButton,
 		SIGNAL(clicked()),
 		SLOT(close()));
 }
