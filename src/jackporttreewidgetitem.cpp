@@ -36,11 +36,11 @@ JackPortTreeWidgetItem::JackPortTreeWidgetItem ( JackClientTreeWidgetItem *pClie
 
     // Check aliasing...
     ConnectAlias *pAliases
-        = ((pClient->clientList())->listView())->aliases();
+        = ((pClient->clientList())->listTreeWidget())->aliases();
     if (pAliases) {
         QTreeWidgetItem::setText(0,
             pAliases->portAlias(pClient->clientName(), sPortName));
-        if (((pClient->clientList())->listView())->renameEnabled()) {
+        if (((pClient->clientList())->listTreeWidget())->renameEnabled()) {
             QTreeWidgetItem::setFlags(QTreeWidgetItem::flags()
                 | Qt::ItemIsEditable);
         }

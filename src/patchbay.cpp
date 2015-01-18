@@ -21,8 +21,8 @@
 #include <Qt>
 
 // Own includes
-#include "Patchbay.h"
-#include "MainWidget.h"
+#include "patchbay.h"
+#include "mainwidget.h"
 #include "patchbaysplitter.h"
 
 // Qt includes

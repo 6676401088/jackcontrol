@@ -19,7 +19,7 @@
 
 // Qt includes
 #include "sockettreewidgetitem.h"
-#include "Patchbay.h"
+#include "patchbay.h"
 
 // Own includes
 #include "plugtreewidgetitem.h"

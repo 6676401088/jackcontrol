@@ -24,7 +24,7 @@
 
 JackClientTreeWidgetItem::JackClientTreeWidgetItem ( JackClientList *pClientList,
     const QString& sClientName )
-    : QTreeWidgetItem(pClientList->listView(), QJACKCTL_CLIENTITEM) {
+    : QTreeWidgetItem(pClientList->listTreeWidget(), QJACKCTL_CLIENTITEM) {
     m_pClientList = pClientList;
     m_sClientName = sClientName;
     m_iClientMark = 0;
@@ -34,11 +34,11 @@ JackClientTreeWidgetItem::JackClientTreeWidgetItem ( JackClientList *pClientList
 
     // Check aliasing...
     ConnectAlias *pAliases
-        = (pClientList->listView())->aliases();
+        = (pClientList->listTreeWidget())->aliases();
     if (pAliases) {
         QTreeWidgetItem::setText(0,
             pAliases->clientAlias(sClientName));
-        if ((pClientList->listView())->renameEnabled()) {
+        if ((pClientList->listTreeWidget())->renameEnabled()) {
             QTreeWidgetItem::setFlags(QTreeWidgetItem::flags()
                 | Qt::ItemIsEditable);
         }

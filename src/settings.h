@@ -27,11 +27,7 @@ class QSplitter;
 
 // Own includes
 #include "connectalias.h"
-
-// Audio mode combobox item indexes.
-#define QJACKCTL_DUPLEX     0
-#define QJACKCTL_CAPTURE    1
-#define QJACKCTL_PLAYBACK   2
+#include "connectionssplitter.h"
 
 // Icon size combobox item indexes.
 #define QJACKCTL_ICON_16X16 0
@@ -77,11 +73,16 @@ struct Preset {
 };
 
 // Common settings profile class.
-class Setup
-{
+class Settings {
 public:
-    Setup();
-    ~Setup();
+    enum AudioMode {
+        AudioModeDuplex = 0,
+        AudioModeCaptureOnly = 1,
+        AudioModePlaybackOnly = 2
+    };
+
+    Settings();
+    ~Settings();
 
 	// The settings object accessor.
 	QSettings& settings();
@@ -146,7 +147,7 @@ public:
 	bool    bDisplayEffect;
 	bool    bDisplayBlink;
 	int     iJackClientPortAlias;
-	int     iConnectionsIconSize;
+    ConnectionsSplitter::IconSize iConnectionsIconSize;
 	QString sConnectionsFont;
 	bool    bQueryClose;
 	bool    bKeepOnTop;
@@ -193,6 +194,7 @@ public:
 	// Aliases preset management methods.
 	bool loadAliases(const QString& sPreset);
 	bool saveAliases(const QString& sPreset);
+
 	// Preset management methods.
 	bool loadPreset(Preset& preset, const QString& sPreset);
 	bool savePreset(Preset& preset, const QString& sPreset);
@@ -214,28 +216,4 @@ private:
 
 	// Our proper settings profile.
     QSettings _settings;
-};
-
-
-// Delayed widget setup helper class.
-class qjackctlDelayedSetup : public QObject
-{
-	Q_OBJECT
-
-public:
-
-	// Constructor.
-	qjackctlDelayedSetup(QWidget *pWidget,
-		const QPoint& pos, const QSize& size, bool bVisible, int iDelay = 0);
-
-protected slots:
-
-	void setup();
-
-private:
-
-	QWidget *m_pWidget;
-	QPoint   m_pos;
-	QSize    m_size;
-	bool     m_bVisible;
 };

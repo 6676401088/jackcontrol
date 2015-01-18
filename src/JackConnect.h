@@ -21,7 +21,7 @@
 #pragma once
 
 #include "About.h"
-#include "ConnectViewSplitter.h"
+#include "connectionssplitter.h"
 
 #include <jack/jack.h>
 
@@ -113,44 +113,3 @@ private:
 	// Jack client port aliases mode.
 	static int g_iJackClientPortAlias;
 };
-
-class JackConnectionsModel : public ConnectionsModel
-{
-public:
-
-	// Constructor.
-    JackConnectionsModel(ConnectionsViewSplitter *pConnectView, int iJackType);
-	// Default destructor.
-    ~JackConnectionsModel();
-
-	// Connection type accessors.
-	int jackType() const;
-
-	// Common pixmap accessor.
-	const QPixmap& pixmap (int iPixmap) const;
-
-protected:
-
-	// Virtual Connect/Disconnection primitives.
-    bool connectPorts    (JackPortTreeWidgetItem *pOPort, JackPortTreeWidgetItem *pIPort);
-    bool disconnectPorts (JackPortTreeWidgetItem *pOPort, JackPortTreeWidgetItem *pIPort);
-
-	// Update port connection references.
-	void updateConnections();
-
-	// Update icon size implementation.
-	void updateIconPixmaps();
-
-private:
-
-	// Local pixmap-set janitor methods.
-	void createIconPixmaps();
-	void deleteIconPixmaps();
-
-	// Local variables.
-	int m_iJackType;
-
-	// Local pixmap-set array.
-	QPixmap *m_apPixmaps[QJACKCTL_JACK_PIXMAPS];
-};
-

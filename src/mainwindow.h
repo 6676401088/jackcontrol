@@ -57,7 +57,7 @@ public slots:
 
 protected:
     Ui::MainWindow *ui;
-    Setup *_setup;
+    Settings *_setup;
 };
 
 #endif // MAINWINDOW_H

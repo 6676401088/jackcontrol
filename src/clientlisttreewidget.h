@@ -23,15 +23,14 @@
 #include <QTreeWidget>
 
 // Own includes
-class ConnectionsViewSplitter;
-#include "connectionsmodel.h"
+class ConnectionsSplitter;
 #include "connectalias.h"
 
 class ClientListTreeWidget : public QTreeWidget {
     Q_OBJECT
 
 public:
-    ClientListTreeWidget(ConnectionsViewSplitter *pConnectView, bool bReadable);
+    ClientListTreeWidget(ConnectionsSplitter *pConnectView, bool bReadable);
     ~ClientListTreeWidget();
 
     // Auto-open timer methods.
@@ -42,9 +41,6 @@ public:
     void setAliases(ConnectAlias *pAliases, bool bRenameEnabled);
     ConnectAlias *aliases() const;
     bool renameEnabled() const;
-
-    // Binding indirect accessor.
-    ConnectionsModel *binding() const;
 
 protected slots:
 
@@ -78,7 +74,7 @@ protected:
 private:
 
     // Bindings.
-    ConnectionsViewSplitter *m_pConnectView;
+    ConnectionsSplitter *m_pConnectView;
 
     // Auto-open timer.
     int     m_iAutoOpenTimeout;

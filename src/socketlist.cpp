@@ -25,7 +25,7 @@
 // Own includes
 #include "socketlist.h"
 #include "sockettreewidget.h"
-#include "Patchbay.h"
+#include "patchbay.h"
 #include "SocketDialog.h"
 
 SocketList::SocketList (

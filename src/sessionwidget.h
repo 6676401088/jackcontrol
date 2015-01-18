@@ -21,29 +21,24 @@
 #pragma once
 
 // uic includes
-#include "ui_SessionWidget.h"
+#include "ui_sessionwidget.h"
 
 // Qt includes
 #include <QItemDelegate>
 #include <QFileInfo>
-
-// Forward declarations.
-class Session;
-class Setup;
-
 class QMenu;
 class QIcon;
 class QLineEdit;
 class QToolButton;
 
-class qjackctlSessionInfraClientItemEditor : public QWidget
-{
+// Own includes
+class Session;
+class Settings;
+
+class qjackctlSessionInfraClientItemEditor : public QWidget {
 	Q_OBJECT
-
 public:
-
-	// Constructor.
-	qjackctlSessionInfraClientItemEditor(
+    qjackctlSessionInfraClientItemEditor(
 		QWidget *pParent, const QModelIndex& index);
 
 	// Shortcut text accessors.
@@ -124,7 +119,7 @@ public:
     ~SessionWidget();
 
 	// Global setup method.
-    void setup(Setup *pSetup);
+    void setup(Settings *pSetup);
 
 	// Maybe ask whether we can close.
 	bool queryClose();
@@ -202,7 +197,7 @@ private:
 	QMenu *m_pSaveMenu;
 
 	// Setup options.
-    Setup *m_pSetup;
+    Settings *m_pSetup;
 
 	// Session directory history.
 	QStringList m_sessionDirs;

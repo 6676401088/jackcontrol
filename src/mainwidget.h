@@ -21,7 +21,7 @@
 #pragma once
 
 // uic includes
-#include "ui_MainWidget.h"
+#include "ui_mainwidget.h"
 
 // Own includes
 #include "settings.h"
@@ -41,7 +41,7 @@
 
 
 // Forward declarations.
-class Setup;
+class Settings;
 class StatusWidget;
 class SessionWidget;
 class ConnectionsWidget;
@@ -66,7 +66,7 @@ public:
 
     static MainWidget *getInstance();
 
-    bool setup(Setup * pSetup);
+    bool setup(Settings * pSetup);
 
 	jack_client_t *jackClient() const;
     //snd_seq_t *alsaSeq() const;
@@ -240,7 +240,7 @@ protected:
 private:
     Ui::MainWidget m_ui;
 
-    Setup *m_pSetup;
+    Settings *m_pSetup;
 
 	QProcess *m_pJack;
 

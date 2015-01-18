@@ -28,51 +28,52 @@ class ClientListTreeWidget;
 
 class JackClientList : public QObject {
 public:
-    JackClientList(ClientListTreeWidget *pListView, bool bReadable);
+    JackClientList(ClientListTreeWidget *listTreeWidget, bool readable);
     ~JackClientList();
 
-    // Do proper contents cleanup.
+    /** Do proper contents cleanup. */
     void clear();
 
-    // Client list primitive methods.
+    /** Client list primitive methods. */
     void addClient(JackClientTreeWidgetItem *pClient);
     void removeClient(JackClientTreeWidgetItem *pClient);
 
-    // Client finder.
-    JackClientTreeWidgetItem *findClient(const QString& sClientName);
-    // Client:port finder.
-    JackPortTreeWidgetItem *findClientPort(const QString& sClientPort);
+    /** Client finder. */
+    JackClientTreeWidgetItem *findClient(const QString& clientName);
 
-    // List view accessor.
-    ClientListTreeWidget *listView() const;
+    /** Client:port finder. */
+    JackPortTreeWidgetItem *findClientPort(const QString& clientPortName);
 
-    // Readable flag accessor.
+    /** List view accessor. */
+    ClientListTreeWidget *listTreeWidget() const;
+
+    /** Readable flag accessor. */
     bool isReadable() const;
 
-    // Client list accessor.
+    /** Client list accessor. */
     QList<JackClientTreeWidgetItem *>& clients();
 
-    // Client ports cleanup marker.
+    /** Client ports cleanup marker. */
     void markClientPorts(int iMark);
     int cleanClientPorts(int iMark);
 
-    // Client:port refreshner (return newest item count).
+    /** Client:port refreshner (return newest item count) */
     virtual int updateClientPorts() = 0;
 
-    // Client:port hilite update stabilization.
+    /** Client:port hilite update stabilization. */
     void hiliteClientPorts ();
 
-    // Do proper contents refresh/update.
-    void refresh();
+    /** Do proper contents refresh/update. */
+    void update();
 
-    // Natural decimal sorting comparator.
+    /** Natural decimal sorting comparator. */
     static bool lessThan(const QTreeWidgetItem& i1, const QTreeWidgetItem& i2);
 
 private:
-    ClientListTreeWidget *m_pListView;
-    bool m_bReadable;
+    ClientListTreeWidget *_listTreeWidget;
+    bool _readable;
 
-    QList<JackClientTreeWidgetItem *> m_clients;
+    QList<JackClientTreeWidgetItem *> _clients;
 
     QTreeWidgetItem *m_pHiliteItem;
 };

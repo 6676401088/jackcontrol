@@ -29,7 +29,7 @@
 #include <QTimer>
 #include <QTextStream>
 
-Setup::Setup()
+Settings::Settings()
     : _settings(QJACKCTL_DOMAIN, QJACKCTL_TITLE)
 {
 	bStartJackCmd = false;
@@ -38,17 +38,17 @@ Setup::Setup()
 	loadSetup();
 }
 
-Setup::~Setup()
+Settings::~Settings()
 {
 	saveSetup();
 }
 
-QSettings& Setup::settings ()
+QSettings& Settings::settings ()
 {
     return _settings;
 }
 
-void Setup::loadSetup ()
+void Settings::loadSetup ()
 {
     _settings.beginGroup("/Presets");
     sDefPreset = _settings.value("/DefPreset", sDefPresetName).toString();
@@ -97,7 +97,7 @@ void Setup::loadSetup ()
     bDisplayEffect           = _settings.value("/DisplayEffect", true).toBool();
     bDisplayBlink            = _settings.value("/DisplayBlink", true).toBool();
     iJackClientPortAlias     = _settings.value("/JackClientPortAlias", 0).toInt();
-    iConnectionsIconSize     = _settings.value("/ConnectionsIconSize", QJACKCTL_ICON_16X16).toInt();
+    iConnectionsIconSize     = (ConnectionsSplitter::IconSize)_settings.value("/ConnectionsIconSize", QJACKCTL_ICON_16X16).toInt();
     sConnectionsFont         = _settings.value("/ConnectionsFont").toString();
     bQueryClose              = _settings.value("/QueryClose", true).toBool();
     bKeepOnTop               = _settings.value("/KeepOnTop", false).toBool();
@@ -153,7 +153,7 @@ void Setup::loadSetup ()
 
 
 // Explicit save method.
-void Setup::saveSetup ()
+void Settings::saveSetup ()
 {
 	// Save all settings and options...
     _settings.beginGroup("/Program");
@@ -269,7 +269,7 @@ void Setup::saveSetup ()
 //---------------------------------------------------------------------------
 // Aliases preset management methods.
 
-bool Setup::loadAliases ( const QString& sPreset )
+bool Settings::loadAliases ( const QString& sPreset )
 {
 	QString sSuffix;
 	if (sPreset != sDefPresetName && !sPreset.isEmpty()) {
@@ -299,7 +299,7 @@ bool Setup::loadAliases ( const QString& sPreset )
 	return true;
 }
 
-bool Setup::saveAliases ( const QString& sPreset )
+bool Settings::saveAliases ( const QString& sPreset )
 {
 	QString sSuffix;
 	if (sPreset != sDefPresetName && !sPreset.isEmpty()) {
@@ -334,7 +334,7 @@ bool Setup::saveAliases ( const QString& sPreset )
 //---------------------------------------------------------------------------
 // Preset management methods.
 
-bool Setup::loadPreset ( Preset& preset, const QString& sPreset )
+bool Settings::loadPreset ( Preset& preset, const QString& sPreset )
 {
 	QString sSuffix;
 	if (sPreset != sDefPresetName && !sPreset.isEmpty()) {
@@ -391,7 +391,7 @@ bool Setup::loadPreset ( Preset& preset, const QString& sPreset )
 	return true;
 }
 
-bool Setup::savePreset ( Preset& preset, const QString& sPreset )
+bool Settings::savePreset ( Preset& preset, const QString& sPreset )
 {
 	QString sSuffix;
 	if (sPreset != sDefPresetName && !sPreset.isEmpty()) {
@@ -441,7 +441,7 @@ bool Setup::savePreset ( Preset& preset, const QString& sPreset )
 	return true;
 }
 
-bool Setup::deletePreset ( const QString& sPreset )
+bool Settings::deletePreset ( const QString& sPreset )
 {
 	QString sSuffix;
 	if (sPreset != sDefPresetName && !sPreset.isEmpty()) {
@@ -462,7 +462,7 @@ bool Setup::deletePreset ( const QString& sPreset )
 //
 
 // Help about command line options.
-void Setup::print_usage ( const QString& arg0 )
+void Settings::print_usage ( const QString& arg0 )
 {
 	QTextStream out(stderr);
 	const QString sEot = "\n\t";
@@ -488,7 +488,7 @@ void Setup::print_usage ( const QString& arg0 )
 
 
 // Parse command line arguments into m_settings.
-bool Setup::parse_args ( const QStringList& args )
+bool Settings::parse_args ( const QStringList& args )
 {
 	QTextStream out(stderr);
 	const QString sEol = "\n\n";
@@ -573,7 +573,7 @@ bool Setup::parse_args ( const QStringList& args )
 //---------------------------------------------------------------------------
 // Combo box history persistence helper implementation.
 
-void Setup::loadComboBoxHistory ( QComboBox *pComboBox, int iLimit )
+void Settings::loadComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 {
 	// Load combobox list from configuration settings file...
     _settings.beginGroup("/History/" + pComboBox->objectName());
@@ -596,7 +596,7 @@ void Setup::loadComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 }
 
 
-void Setup::saveComboBoxHistory ( QComboBox *pComboBox, int iLimit )
+void Settings::saveComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 {
 	// Add current text as latest item...
 	const QString& sCurrentText = pComboBox->currentText();
@@ -629,7 +629,7 @@ void Setup::saveComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 //---------------------------------------------------------------------------
 // Splitter widget sizes persistence helper methods.
 
-void Setup::loadSplitterSizes ( QSplitter *pSplitter,
+void Settings::loadSplitterSizes ( QSplitter *pSplitter,
 	QList<int>& sizes )
 {
 	// Try to restore old splitter sizes...
@@ -648,7 +648,7 @@ void Setup::loadSplitterSizes ( QSplitter *pSplitter,
 }
 
 
-void Setup::saveSplitterSizes ( QSplitter *pSplitter )
+void Settings::saveSplitterSizes ( QSplitter *pSplitter )
 {
 	// Try to save current splitter sizes...
 	if (pSplitter) {
@@ -668,7 +668,7 @@ void Setup::saveSplitterSizes ( QSplitter *pSplitter )
 //---------------------------------------------------------------------------
 // Widget geometry persistence helper methods.
 
-void Setup::loadWidgetGeometry ( QWidget *pWidget, bool bVisible )
+void Settings::loadWidgetGeometry ( QWidget *pWidget, bool bVisible )
 {
 	// Try to restore old form window positioning.
 	if (pWidget) {
@@ -681,14 +681,13 @@ void Setup::loadWidgetGeometry ( QWidget *pWidget, bool bVisible )
         wsize.setHeight(_settings.value("/height", -1).toInt());
         if (!bVisible) bVisible = _settings.value("/visible", false).toBool();
         _settings.endGroup();
-		new qjackctlDelayedSetup(pWidget, wpos, wsize,
-			bVisible && !bStartMinimized, (bDelayedSetup ? 1000 : 0));
+//		new qjackctlDelayedSetup(pWidget, wpos, wsize,
+//			bVisible && !bStartMinimized, (bDelayedSetup ? 1000 : 0));
 	}
 }
 
 
-void Setup::saveWidgetGeometry ( QWidget *pWidget, bool bVisible )
-{
+void Settings::saveWidgetGeometry(QWidget *pWidget, bool bVisible) {
 	// Try to save form window position...
 	// (due to X11 window managers ideossincrasies, we better
 	// only save the form geometry while its up and visible)
@@ -706,41 +705,3 @@ void Setup::saveWidgetGeometry ( QWidget *pWidget, bool bVisible )
 	}
 }
 
-
-//---------------------------------------------------------------------------
-// Delayed setup option.
-
-// Delayed widget setup helper class.
-qjackctlDelayedSetup::qjackctlDelayedSetup ( QWidget *pWidget,
-	const QPoint& pos, const QSize& size, bool bVisible, int iDelay )
-	: m_pos(pos), m_size(size)
-{
-	m_pWidget  = pWidget;
-	m_bVisible = bVisible;
-
-	if (iDelay > 0) {
-		QTimer::singleShot(iDelay, this, SLOT(setup()));
-	} else {
-		setup();
-	}
-}
-
-
-void qjackctlDelayedSetup::setup ()
-{
-	if (m_pWidget) {
-		if (m_pos.x() > 0 && m_pos.y() > 0)
-			m_pWidget->move(m_pos);
-		if (m_size.width() > 0 && m_size.height() > 0)
-			m_pWidget->resize(m_size);
-		else
-			m_pWidget->adjustSize();
-		if (m_bVisible)
-			m_pWidget->show();
-	}
-
-	deleteLater();
-}
-
-
-// end of qjackctlSetup.cpp

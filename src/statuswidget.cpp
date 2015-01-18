@@ -23,7 +23,7 @@
 #include "statuswidget.h"
 #include "Status.h"
 #include "settings.h"
-#include "MainWidget.h"
+#include "mainwidget.h"
 
 // Qt includes
 #include <QFile>

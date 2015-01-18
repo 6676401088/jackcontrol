@@ -25,7 +25,7 @@
 #include "sessionwidget.h"
 #include "Session.h"
 #include "settings.h"
-#include "MainWidget.h"
+#include "mainwidget.h"
 
 // Qt includes
 #include <QMenu>
@@ -334,7 +334,7 @@ SessionWidget::~SessionWidget ()
 
 // Set reference to global options, mostly needed for
 // the initial session save type and directories.
-void SessionWidget::setup ( Setup *pSetup )
+void SessionWidget::setup ( Settings *pSetup )
 {
 	m_pSetup = pSetup;
 

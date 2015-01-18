@@ -20,7 +20,7 @@
 #pragma once
 
 // Own includes
-class ConnectionsViewSplitter;
+class ConnectionsSplitter;
 
 // Qt includes
 #include <QWidget>
@@ -29,7 +29,7 @@ class ConnectionsViewSplitter;
 class JackPortConnectorWidget : public QWidget {
     Q_OBJECT
 public:
-    JackPortConnectorWidget(ConnectionsViewSplitter *pConnectView);
+    JackPortConnectorWidget(ConnectionsSplitter *pConnectView);
     ~JackPortConnectorWidget();
 
 public slots:
@@ -55,5 +55,5 @@ private:
         int x1, int y1, int x2, int y2, int h1, int h2);
 
     // Local instance variables.
-    ConnectionsViewSplitter *m_pConnectView;
+    ConnectionsSplitter *m_pConnectView;
 };

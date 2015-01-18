@@ -21,7 +21,7 @@
 
 // Own includes
 #include "jackportconnectorwidget.h"
-#include "ConnectViewSplitter.h"
+#include "connectionssplitter.h"
 
 // Qt includes
 #include <QPainter>
@@ -31,7 +31,7 @@
 #include <QContextMenuEvent>
 
 JackPortConnectorWidget::JackPortConnectorWidget (
-    ConnectionsViewSplitter *pConnectView )
+    ConnectionsSplitter *pConnectView )
     : QWidget(pConnectView)
 {
     m_pConnectView = pConnectView;
@@ -74,7 +74,7 @@ void JackPortConnectorWidget::drawConnectionLine ( QPainter *pPainter,
         pPainter->drawLine(x1, y1, x1 + 4, y1);
 
     // How do we'll draw it?
-    if (m_pConnectView->isBezierLines()) {
+    if (m_pConnectView->isDrawingBezierLines()) {
         // Setup control points
         QPolygon spline(4);
         int cp = int(float(x2 - x1 - 8) * 0.4f);
@@ -98,12 +98,12 @@ void JackPortConnectorWidget::paintEvent ( QPaintEvent * )
 {
     if (m_pConnectView == NULL)
         return;
-    if (m_pConnectView->OListView() == NULL ||
-        m_pConnectView->IListView() == NULL)
+    if (m_pConnectView->outputTreeWidget() == NULL ||
+        m_pConnectView->inputTreeWidget() == NULL)
         return;
 
-    ClientListTreeWidget *pOListView = m_pConnectView->OListView();
-    ClientListTreeWidget *pIListView = m_pConnectView->IListView();
+    ClientListTreeWidget *pOListView = m_pConnectView->outputTreeWidget();
+    ClientListTreeWidget *pIListView = m_pConnectView->inputTreeWidget();
 
     int yc = QWidget::pos().y();
     int yo = pOListView->pos().y();
@@ -166,32 +166,32 @@ void JackPortConnectorWidget::paintEvent ( QPaintEvent * )
 void JackPortConnectorWidget::contextMenuEvent (
     QContextMenuEvent *pContextMenuEvent )
 {
-    ConnectionsModel *pConnect = m_pConnectView->binding();
-    if (pConnect == 0)
-        return;
+//    ConnectionsModel *pConnect = m_pConnectView->binding();
+//    if (pConnect == 0)
+//        return;
 
-    QMenu menu(this);
-    QAction *pAction;
+//    QMenu menu(this);
+//    QAction *pAction;
 
-    pAction = menu.addAction(QIcon(":/images/connect1.png"),
-        tr("&Connect"), pConnect, SLOT(connectSelected()),
-        tr("Alt+C", "Connect"));
-    pAction->setEnabled(pConnect->canConnectSelected());
-    pAction = menu.addAction(QIcon(":/images/disconnect1.png"),
-        tr("&Disconnect"), pConnect, SLOT(disconnectSelected()),
-        tr("Alt+D", "Disconnect"));
-    pAction->setEnabled(pConnect->canDisconnectSelected());
-    pAction = menu.addAction(QIcon(":/images/disconnectall1.png"),
-        tr("Disconnect &All"), pConnect, SLOT(disconnectAll()),
-        tr("Alt+A", "Disconect All"));
-    pAction->setEnabled(pConnect->canDisconnectAll());
+//    pAction = menu.addAction(QIcon(":/images/connect1.png"),
+//        tr("&Connect"), pConnect, SLOT(connectSelected()),
+//        tr("Alt+C", "Connect"));
+//    pAction->setEnabled(pConnect->canConnectSelected());
+//    pAction = menu.addAction(QIcon(":/images/disconnect1.png"),
+//        tr("&Disconnect"), pConnect, SLOT(disconnectSelected()),
+//        tr("Alt+D", "Disconnect"));
+//    pAction->setEnabled(pConnect->canDisconnectSelected());
+//    pAction = menu.addAction(QIcon(":/images/disconnectall1.png"),
+//        tr("Disconnect &All"), pConnect, SLOT(disconnectAll()),
+//        tr("Alt+A", "Disconect All"));
+//    pAction->setEnabled(pConnect->canDisconnectAll());
 
-    menu.addSeparator();
-    pAction = menu.addAction(QIcon(":/images/refresh1.png"),
-        tr("&Refresh"), pConnect, SLOT(refresh()),
-        tr("Alt+R", "Refresh"));
+//    menu.addSeparator();
+//    pAction = menu.addAction(QIcon(":/images/refresh1.png"),
+//        tr("&Refresh"), pConnect, SLOT(refresh()),
+//        tr("Alt+R", "Refresh"));
 
-    menu.exec(pContextMenuEvent->globalPos());
+//    menu.exec(pContextMenuEvent->globalPos());
 }
 
 void JackPortConnectorWidget::contentsChanged ()

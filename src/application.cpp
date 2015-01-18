@@ -111,7 +111,7 @@ int main(int argc, char **argv) {
     Application app(argc, argv);
 
 	// Construct default settings; override with command line arguments.
-    Setup settings;
+    Settings settings;
 	if (!settings.parse_args(app.arguments())) {
 		app.quit();
 		return 1;

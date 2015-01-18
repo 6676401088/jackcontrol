@@ -495,11 +495,11 @@ SetupWidget::~SetupWidget()
 //	m_pSetup->loadComboBoxHistory(m_ui.ServerConfigNameComboBox);
 
 //    m_ui.interfaceComboBox->setup(
-//		m_ui.DriverComboBox, QJACKCTL_DUPLEX, m_pSetup->sDefPresetName);
+//		m_ui.DriverComboBox, Settings::AudioModeDuplex, m_pSetup->sDefPresetName);
 //	m_ui.InDeviceComboBox->setup(
-//		m_ui.DriverComboBox, QJACKCTL_CAPTURE, m_pSetup->sDefPresetName);
+//		m_ui.DriverComboBox, Settings::AudioModeCaptureOnly, m_pSetup->sDefPresetName);
 //	m_ui.OutDeviceComboBox->setup(
-//		m_ui.DriverComboBox, QJACKCTL_PLAYBACK, m_pSetup->sDefPresetName);
+//		m_ui.DriverComboBox, Settings::AudioModePlaybackOnly, m_pSetup->sDefPresetName);
 
 //	// Load Options...
 //	m_ui.StartupScriptCheckBox->setChecked(m_pSetup->bStartupScript);
@@ -925,14 +925,14 @@ SetupWidget::~SetupWidget()
 //	bool bEnabled;
 
 //	switch (iAudio) {
-//	case QJACKCTL_DUPLEX:
+//	case Settings::AudioModeDuplex:
 //		bInEnabled  = (bSun || bOss || bAlsa || bCoreaudio || bPortaudio || bNet);
 //		bOutEnabled = (bSun || bOss || bAlsa || bCoreaudio || bPortaudio || bNet);
 //		break;
-//	case QJACKCTL_CAPTURE:
+//	case Settings::AudioModeCaptureOnly:
 //		bInEnabled  = (bSun || bOss || bCoreaudio || bPortaudio || bNet);
 //		break;
-//	case QJACKCTL_PLAYBACK:
+//	case Settings::AudioModePlaybackOnly:
 //		bOutEnabled = (bSun || bOss || bCoreaudio || bPortaudio || bNet);
 //		break;
 //	}
@@ -951,16 +951,16 @@ SetupWidget::~SetupWidget()
 
 //	m_ui.InOutChannelsTextLabel->setEnabled(bInEnabled || (bAlsa || bFirewire));
 //	m_ui.InChannelsSpinBox->setEnabled(bInEnabled
-//		|| ((bAlsa || bFirewire) && iAudio != QJACKCTL_PLAYBACK));
+//		|| ((bAlsa || bFirewire) && iAudio != Settings::AudioModePlaybackOnly));
 //	m_ui.OutChannelsSpinBox->setEnabled(bOutEnabled
-//		|| ((bAlsa || bFirewire) && iAudio != QJACKCTL_CAPTURE));
+//		|| ((bAlsa || bFirewire) && iAudio != Settings::AudioModeCaptureOnly));
 
 //	m_ui.InOutLatencyTextLabel->setEnabled((bInEnabled && !bNet)
 //		|| (bAlsa || bFreebob || bFirewire));
 //	m_ui.InLatencySpinBox->setEnabled((bInEnabled && !bNet)
-//		|| ((bAlsa || bFreebob || bFirewire) && iAudio != QJACKCTL_PLAYBACK));
+//		|| ((bAlsa || bFreebob || bFirewire) && iAudio != Settings::AudioModePlaybackOnly));
 //	m_ui.OutLatencySpinBox->setEnabled((bOutEnabled && !bNet)
-//		|| ((bAlsa || bFreebob || bFirewire) && iAudio != QJACKCTL_CAPTURE));
+//		|| ((bAlsa || bFreebob || bFirewire) && iAudio != Settings::AudioModeCaptureOnly));
 
 //	computeLatency();
 //}
@@ -1034,7 +1034,7 @@ SetupWidget::~SetupWidget()
 
 //	int  iAudio   = m_ui.AudioComboBox->currentIndex();
 //	bool bEnabled = (bAlsa || bPortaudio);
-//	if (bEnabled && iAudio == QJACKCTL_DUPLEX) {
+//	if (bEnabled && iAudio == Settings::AudioModeDuplex) {
 //		const QString& sInDevice  = m_ui.InDeviceComboBox->currentText();
 //		const QString& sOutDevice = m_ui.OutDeviceComboBox->currentText();
 //		bEnabled = (sInDevice.isEmpty()  || sInDevice  == m_pSetup->sDefPresetName ||

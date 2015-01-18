@@ -20,13 +20,13 @@
 
 #pragma once
 
+// Own includes
 #include "patchbaysplitter.h"
-
-#include "ui_PatchbayWidget.h"
-
 class Patchbay;
-class Setup;
+class Settings;
 
+// uic includes
+#include "ui_patchbaywidget.h"
 
 class PatchbayWidget : public QWidget {
 	Q_OBJECT
@@ -37,7 +37,7 @@ public:
 	// Destructor.
     ~PatchbayWidget();
 
-    void setup(Setup *pSetup);
+    void setup(Settings *pSetup);
 
     PatchbaySplitter *patchbaySplitter() const;
 
@@ -97,7 +97,7 @@ protected:
 
 private:
     Ui::PatchbayWidget m_ui;
-    Setup    *m_pSetup;
+    Settings    *m_pSetup;
 
 	int               m_iUntitled;
     Patchbay *m_pPatchbay;

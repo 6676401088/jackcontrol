@@ -24,10 +24,9 @@
 // Qt includes
 #include <QHeaderView>
 
-JackClientList::JackClientList (
-    ClientListTreeWidget *pListView, bool bReadable ) {
-    m_pListView = pListView;
-    m_bReadable = bReadable;
+JackClientList::JackClientList(ClientListTreeWidget *listTreeWidget, bool readable) {
+    _listTreeWidget = listTreeWidget;
+    _readable = readable;
 
     m_pHiliteItem = 0;
 }
@@ -36,56 +35,55 @@ JackClientList::~JackClientList () {
     clear();
 }
 
-void JackClientList::clear () {
-    qDeleteAll(m_clients);
-    m_clients.clear();
+void JackClientList::clear() {
+    qDeleteAll(_clients);
+    _clients.clear();
 
-    if (m_pListView)
-        m_pListView->clear();
+    if(_listTreeWidget) {
+        _listTreeWidget->clear();
+    }
 }
 
-JackClientTreeWidgetItem *JackClientList::findClient (
-    const QString& sClientName ) {
-    QListIterator<JackClientTreeWidgetItem *> iter(m_clients);
+JackClientTreeWidgetItem *JackClientList::findClient(const QString& clientName) {
+    QListIterator<JackClientTreeWidgetItem *> iter(_clients);
     while (iter.hasNext()) {
         JackClientTreeWidgetItem *pClient = iter.next();
-        if (sClientName == pClient->clientName())
+        if (clientName == pClient->clientName())
             return pClient;
     }
 
     return NULL;
 }
 
-JackPortTreeWidgetItem *JackClientList::findClientPort (
-    const QString& sClientPort ) {
+JackPortTreeWidgetItem *JackClientList::findClientPort(const QString& clientPortName) {
     JackPortTreeWidgetItem *pPort = 0;
-    int iColon = sClientPort.indexOf(':');
+    int iColon = clientPortName.indexOf(':');
     if (iColon >= 0) {
-        JackClientTreeWidgetItem *pClient = findClient(sClientPort.left(iColon));
+        JackClientTreeWidgetItem *pClient = findClient(clientPortName.left(iColon));
         if (pClient) {
             pPort = pClient->findPort(
-                sClientPort.right(sClientPort.length() - iColon - 1));
+                clientPortName.right(clientPortName.length() - iColon - 1));
         }
     }
     return pPort;
 }
 
 QList<JackClientTreeWidgetItem *>& JackClientList::clients() {
-    return m_clients;
+    return _clients;
 }
 
-ClientListTreeWidget *JackClientList::listView() const {
-    return m_pListView;
+ClientListTreeWidget *JackClientList::listTreeWidget() const {
+    return _listTreeWidget;
 }
 
 bool JackClientList::isReadable() const {
-    return m_bReadable;
+    return _readable;
 }
 
 void JackClientList::markClientPorts(int iMark) {
     m_pHiliteItem = 0;
 
-    QListIterator<JackClientTreeWidgetItem *> iter(m_clients);
+    QListIterator<JackClientTreeWidgetItem *> iter(_clients);
     while (iter.hasNext())
         (iter.next())->markClientPorts(iMark);
 }
@@ -93,7 +91,7 @@ void JackClientList::markClientPorts(int iMark) {
 int JackClientList::cleanClientPorts(int iMark) {
     int iDirtyCount = 0;
 
-    QMutableListIterator<JackClientTreeWidgetItem *> iter(m_clients);
+    QMutableListIterator<JackClientTreeWidgetItem *> iter(_clients);
     while (iter.hasNext()) {
         JackClientTreeWidgetItem *pClient = iter.next();
         if (pClient->clientMark() == iMark) {
@@ -112,7 +110,7 @@ void JackClientList::hiliteClientPorts() {
     JackClientTreeWidgetItem *pClient;
     JackPortTreeWidgetItem *pPort;
 
-    QTreeWidgetItem *pItem = m_pListView->currentItem();
+    QTreeWidgetItem *pItem = _listTreeWidget->currentItem();
 
     // Dehilite the previous selected items.
     if (m_pHiliteItem && pItem != m_pHiliteItem) {
@@ -207,9 +205,9 @@ bool JackClientList::lessThan(const QTreeWidgetItem& i1, const QTreeWidgetItem& 
     return false;
 }
 
-void JackClientList::refresh () {
-    QHeaderView *pHeader = m_pListView->header();
-    m_pListView->sortItems(
+void JackClientList::update() {
+    QHeaderView *pHeader = _listTreeWidget->header();
+    _listTreeWidget->sortItems(
         pHeader->sortIndicatorSection(),
         pHeader->sortIndicatorOrder());
 }

@@ -13,17 +13,14 @@ include(src.pri)
 HEADERS += \
     InterfaceComboBox.h \
     About.h \
-    MainWidget.h \
     SystemTrayIcon.h \
     AlsaConnect.h \
     JackConnect.h \
     SocketDialog.h \
     PatchbayFile.h \
-    Patchbay.h \
     PatchbayRack.h \
     Session.h \
     Status.h \
-    ConnectViewSplitter.h \
     statuswidget.h \
     patchbaywidget.h \
     connectionswidget.h \
@@ -33,7 +30,6 @@ HEADERS += \
     aboutdialog.h \
     settings.h \
     jackservice.h \
-    connectionsmodel.h \
     jackportconnectorwidget.h \
     clientlisttreewidget.h \
     jackporttreewidgetitem.h \
@@ -46,7 +42,10 @@ HEADERS += \
     patchworkwidget.h \
     patchbaysplitter.h \
     clientalias.h \
-    connectalias.h
+    connectalias.h \
+    patchbay.h \
+    mainwidget.h \
+    connectionssplitter.h
 
 SOURCES += \
     SystemTrayIcon.cpp \
@@ -54,12 +53,9 @@ SOURCES += \
     InterfaceComboBox.cpp \
     JackConnect.cpp \
     SocketDialog.cpp \
-    Patchbay.cpp \
-    MainWidget.cpp \
     PatchbayFile.cpp \
     PatchbayRack.cpp \
     Session.cpp \
-    ConnectViewSplitter.cpp \
     statuswidget.cpp \
     patchbaywidget.cpp \
     connectionswidget.cpp \
@@ -70,7 +66,6 @@ SOURCES += \
     settings.cpp \
     jackservice.cpp \
     application.cpp \
-    connectionsmodel.cpp \
     jackportconnectorwidget.cpp \
     clientlisttreewidget.cpp \
     jackporttreewidgetitem.cpp \
@@ -83,7 +78,10 @@ SOURCES += \
     patchworkwidget.cpp \
     patchbaysplitter.cpp \
     clientalias.cpp \
-    connectalias.cpp
+    connectalias.cpp \
+    patchbay.cpp \
+    mainwidget.cpp \
+    connectionssplitter.cpp
 
 FORMS += \
     SocketDialog.ui \

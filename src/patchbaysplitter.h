@@ -22,7 +22,7 @@
 // Own includes
 #include "sockettreewidget.h"
 #include "patchworkwidget.h"
-#include "Patchbay.h"
+#include "patchbay.h"
 
 // Qt includes
 #include <QSplitter>

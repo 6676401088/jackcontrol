@@ -24,7 +24,7 @@
 #include "sockettreewidgetitem.h"
 #include "sockettreewidget.h"
 #include "socketlist.h"
-#include "Patchbay.h"
+#include "patchbay.h"
 
 SocketTreeWidgetItem::SocketTreeWidgetItem ( SocketList *pSocketList,
     const QString& sSocketName, const QString& sClientName,

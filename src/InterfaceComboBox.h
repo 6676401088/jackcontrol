@@ -24,7 +24,7 @@
 // Qt includes
 #include <QComboBox>
 
-class Setup;
+class Settings;
 class QStandardItemModel;
 
 class InterfaceComboBox : public QComboBox

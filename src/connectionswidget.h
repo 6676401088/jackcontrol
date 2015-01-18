@@ -26,9 +26,7 @@
 // Own includes
 #include "JackConnect.h"
 #include "AlsaConnect.h"
-
-// Forward declarations.
-class Setup;
+class Settings;
 
 class ConnectionsWidget : public QWidget {
 	Q_OBJECT
@@ -36,11 +34,11 @@ public:
     ConnectionsWidget(QWidget *parent = 0);
     ~ConnectionsWidget();
 
-    void setup(Setup *pSetup);
+    void setSettings(Settings *pSetup);
 
-    ConnectionsViewSplitter *audioConnectView() const;
-    ConnectionsViewSplitter *midiConnectView() const;
-    ConnectionsViewSplitter *alsaConnectView() const;
+    ConnectionsSplitter *audioConnectView() const;
+    ConnectionsSplitter *midiConnectView() const;
+    ConnectionsSplitter *alsaConnectView() const;
 
 	bool queryClose();
 
@@ -52,7 +50,7 @@ public:
 	QFont connectionsFont() const;
 	void setConnectionsFont(const QFont& font);
 
-	void setConnectionsIconSize(int iIconSize);
+    void setConnectionsIconSize(ConnectionsSplitter::IconSize iconSize);
 
 	bool isAudioConnected() const;
 	bool isMidiConnected() const;
@@ -66,7 +64,7 @@ public:
 	void stabilizeMidi(bool bEnabled, bool bClear = false);
 	void stabilizeAlsa(bool bEnabled, bool bClear = false);
 
-    void setupAliases(Setup *pSetup);
+    void setupAliases(Settings *pSetup);
 	void updateAliases();
 	bool loadAliases();
 	bool saveAliases();
@@ -114,10 +112,6 @@ protected:
 private:
     Ui::ConnectionsWidget ui;
 
-	// Instance variables.
-	JackConnectionsModel *m_pAudioConnect;
-	JackConnectionsModel *m_pMidiConnect;
-	qjackctlAlsaConnect *m_pAlsaConnect;
-    Setup               *m_pSetup;
-	QString              m_sPreset;
+    Settings *  _settings;
+    QString     _preset;
 };

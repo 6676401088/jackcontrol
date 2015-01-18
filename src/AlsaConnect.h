@@ -21,7 +21,7 @@
 #pragma once
 
 #include "About.h"
-#include "ConnectViewSplitter.h"
+#include "connectionssplitter.h"
 
 #ifdef CONFIG_ALSA_SEQ
 #include <alsa/asoundlib.h>
@@ -108,40 +108,3 @@ public:
 	int updateClientPorts();
 };
 
-
-//----------------------------------------------------------------------------
-// qjackctlAlsaConnect -- Connections model integrated object.
-
-class qjackctlAlsaConnect : public ConnectionsModel
-{
-public:
-
-	// Constructor.
-    qjackctlAlsaConnect(ConnectionsViewSplitter *pConnectView);
-	// Default destructor.
-	~qjackctlAlsaConnect();
-
-	// Common pixmap accessor.
-	const QPixmap& pixmap(int iPixmap) const;
-
-protected:
-
-	// Virtual Connect/Disconnection primitives.
-    bool connectPorts    (JackPortTreeWidgetItem *pOPort, JackPortTreeWidgetItem *pIPort);
-    bool disconnectPorts (JackPortTreeWidgetItem *pOPort, JackPortTreeWidgetItem *pIPort);
-
-	// Update port connection references.
-	void updateConnections();
-
-	// Update icon size implementation.
-	void updateIconPixmaps();
-
-private:
-
-	// Local pixmap-set janitor methods.
-	void createIconPixmaps();
-	void deleteIconPixmaps();
-
-	// Local pixmap-set array.
-	QPixmap *m_apPixmaps[QJACKCTL_ALSA_PIXMAPS];
-};

@@ -128,6 +128,12 @@
        </item>
        <item>
         <widget class="QScrollArea" name="scrollArea_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -139,6 +145,12 @@
             <width>965</width>
             <height>483</height>
            </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
            <item>
@@ -1760,7 +1772,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>910</width>
+            <width>836</width>
             <height>700</height>
            </rect>
           </property>

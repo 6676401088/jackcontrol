@@ -170,8 +170,8 @@ void InterfaceComboBox::populateModel ()
 					&& iDevice >= 0) {
 					// Capture devices..
 					bCapture = false;
-					if (m_iAudio == QJACKCTL_CAPTURE ||
-						m_iAudio == QJACKCTL_DUPLEX) {
+					if (m_iAudio == Settings::AudioModeCaptureOnly ||
+						m_iAudio == Settings::AudioModeDuplex) {
 						snd_pcm_info_set_device(pcminfo, iDevice);
 						snd_pcm_info_set_subdevice(pcminfo, 0);
 						snd_pcm_info_set_stream(pcminfo, SND_PCM_STREAM_CAPTURE);
@@ -179,17 +179,17 @@ void InterfaceComboBox::populateModel ()
 					}
 					// Playback devices..
 					bPlayback = false;
-					if (m_iAudio == QJACKCTL_PLAYBACK ||
-						m_iAudio == QJACKCTL_DUPLEX) {
+					if (m_iAudio == Settings::AudioModePlaybackOnly ||
+						m_iAudio == Settings::AudioModeDuplex) {
 						snd_pcm_info_set_device(pcminfo, iDevice);
 						snd_pcm_info_set_subdevice(pcminfo, 0);
 						snd_pcm_info_set_stream(pcminfo, SND_PCM_STREAM_PLAYBACK);
 						bPlayback = (snd_ctl_pcm_info(handle, pcminfo) >= 0);
 					}
 					// List iif compliant with the audio mode criteria...
-					if ((m_iAudio == QJACKCTL_CAPTURE && bCapture && !bPlayback) ||
-						(m_iAudio == QJACKCTL_PLAYBACK && !bCapture && bPlayback) ||
-						(m_iAudio == QJACKCTL_DUPLEX && bCapture && bPlayback)) {
+					if ((m_iAudio == Settings::AudioModeCaptureOnly && bCapture && !bPlayback) ||
+						(m_iAudio == Settings::AudioModePlaybackOnly && !bCapture && bPlayback) ||
+						(m_iAudio == Settings::AudioModeDuplex && bCapture && bPlayback)) {
 						sSubName  = sSubSuffix.arg(sName).arg(iDevice);
 						sSubName2 = sSubSuffix.arg(sName2).arg(iDevice);
 						addCard(sSubName2, snd_pcm_info_get_name(pcminfo) + sSuffix.arg(sSubName));

@@ -21,7 +21,7 @@
 // Own includes
 #include "Session.h"
 #include "aboutdialog.h"
-#include "MainWidget.h"
+#include "mainwidget.h"
 
 #include <errno.h>
 

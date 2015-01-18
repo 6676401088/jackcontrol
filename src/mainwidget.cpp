@@ -22,9 +22,9 @@
 
 // Own includes
 #include "About.h"
-#include "MainWidget.h"
+#include "mainwidget.h"
 #include "Status.h"
-#include "Patchbay.h"
+#include "patchbay.h"
 #include "PatchbayFile.h"
 #include "statuswidget.h"
 #include "sessionwidget.h"
@@ -455,7 +455,7 @@ MainWidget *MainWidget::getInstance ()
     return g_pMainForm;
 }
 
-bool MainWidget::setup ( Setup *pSetup )
+bool MainWidget::setup ( Settings *pSetup )
 {
     // Finally, fix settings descriptor
     // and stabilize the form.
@@ -486,7 +486,7 @@ bool MainWidget::setup ( Setup *pSetup )
     // Setup appropriately...
     m_pSessionForm->setup(m_pSetup);
     m_pConnectionsForm->setTabPage(m_pSetup->iConnectionsTabPage);
-    m_pConnectionsForm->setup(m_pSetup);
+    m_pConnectionsForm->setSettings(m_pSetup);
     m_pPatchbayForm->setup(m_pSetup);
 
     // Set the patchbay cable connection notification signal/slot.
@@ -1024,7 +1024,7 @@ void MainWidget::startJack ()
     else if (m_preset.unlockMemory)
         args.append("-u");
     args.append("-d" + m_preset.driver);
-    if ((bAlsa || bPortaudio) && (m_preset.audio != QJACKCTL_DUPLEX ||
+    if ((bAlsa || bPortaudio) && (m_preset.audio != Settings::AudioModeDuplex ||
         m_preset.inputDevice.isEmpty() || m_preset.outputDevice.isEmpty())) {
         QString sInterface = m_preset.interface;
         if (bAlsa && sInterface.isEmpty())
@@ -1062,7 +1062,7 @@ void MainWidget::startJack ()
     }
     if (bAlsa || bPortaudio) {
         switch (m_preset.audio) {
-        case QJACKCTL_DUPLEX:
+        case Settings::AudioModeDuplex:
             if (!m_preset.inputDevice.isEmpty() || !m_preset.outputDevice.isEmpty())
                 args.append("-D");
             if (!m_preset.inputDevice.isEmpty())
@@ -1070,16 +1070,16 @@ void MainWidget::startJack ()
             if (!m_preset.outputDevice.isEmpty())
                 args.append("-P" + formatQuoted(m_preset.outputDevice));
             break;
-        case QJACKCTL_CAPTURE:
+        case Settings::AudioModeCaptureOnly:
             args.append("-C" + formatQuoted(m_preset.inputDevice));
             break;
-        case QJACKCTL_PLAYBACK:
+        case Settings::AudioModePlaybackOnly:
             args.append("-P" + formatQuoted(m_preset.outputDevice));
             break;
         }
-        if (m_preset.inputChannels > 0  && m_preset.audio != QJACKCTL_PLAYBACK)
+        if (m_preset.inputChannels > 0  && m_preset.audio != Settings::AudioModePlaybackOnly)
             args.append("-i" + QString::number(m_preset.inputChannels));
-        if (m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE)
+        if (m_preset.outputChannels > 0 && m_preset.audio != Settings::AudioModeCaptureOnly)
             args.append("-o" + QString::number(m_preset.outputChannels));
         switch (m_preset.dither) {
         case 0:
@@ -1101,35 +1101,35 @@ void MainWidget::startJack ()
             args.append("-b");
         if (m_preset.wordLength > 0)
             args.append("-w" + QString::number(m_preset.wordLength));
-        if (!m_preset.inputDevice.isEmpty()  && m_preset.audio != QJACKCTL_PLAYBACK)
+        if (!m_preset.inputDevice.isEmpty()  && m_preset.audio != Settings::AudioModePlaybackOnly)
             args.append("-C" + formatQuoted(m_preset.inputDevice));
-        if (!m_preset.outputDevice.isEmpty() && m_preset.audio != QJACKCTL_CAPTURE)
+        if (!m_preset.outputDevice.isEmpty() && m_preset.audio != Settings::AudioModeCaptureOnly)
             args.append("-P" + formatQuoted(m_preset.outputDevice));
-        if (m_preset.audio == QJACKCTL_PLAYBACK)
+        if (m_preset.audio == Settings::AudioModePlaybackOnly)
             args.append("-i0");
         else if (m_preset.inputChannels > 0)
             args.append("-i" + QString::number(m_preset.inputChannels));
-        if (m_preset.audio == QJACKCTL_CAPTURE)
+        if (m_preset.audio == Settings::AudioModeCaptureOnly)
             args.append("-o0");
         else if (m_preset.outputChannels > 0)
             args.append("-o" + QString::number(m_preset.outputChannels));
     }
     else if (bCoreaudio || bFirewire || bNet) {
-        if (m_preset.inputChannels > 0  && m_preset.audio != QJACKCTL_PLAYBACK)
+        if (m_preset.inputChannels > 0  && m_preset.audio != Settings::AudioModePlaybackOnly)
             args.append("-i" + QString::number(m_preset.inputChannels));
-        if (m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE)
+        if (m_preset.outputChannels > 0 && m_preset.audio != Settings::AudioModeCaptureOnly)
             args.append("-o" + QString::number(m_preset.outputChannels));
     }
     else if (bFreebob) {
         switch (m_preset.audio) {
-        case QJACKCTL_DUPLEX:
+        case Settings::AudioModeDuplex:
             args.append("-D");
             break;
-        case QJACKCTL_CAPTURE:
+        case Settings::AudioModeCaptureOnly:
             args.append("-C");
             args.append("-o0");
             break;
-        case QJACKCTL_PLAYBACK:
+        case Settings::AudioModePlaybackOnly:
             args.append("-P");
             args.append("-i0");
             break;
@@ -1556,9 +1556,9 @@ void MainWidget::updateBezierLines ()
         return;
 
     if (m_pConnectionsForm) {
-        m_pConnectionsForm->audioConnectView()->setBezierLines(m_pSetup->bBezierLines);
-        m_pConnectionsForm->midiConnectView()->setBezierLines(m_pSetup->bBezierLines);
-        m_pConnectionsForm->alsaConnectView()->setBezierLines(m_pSetup->bBezierLines);
+        m_pConnectionsForm->audioConnectView()->setDrawingBezierLines(m_pSetup->bBezierLines);
+        m_pConnectionsForm->midiConnectView()->setDrawingBezierLines(m_pSetup->bBezierLines);
+        m_pConnectionsForm->alsaConnectView()->setDrawingBezierLines(m_pSetup->bBezierLines);
         m_pConnectionsForm->audioConnectView()->ConnectorView()->update();
         m_pConnectionsForm->midiConnectView()->ConnectorView()->update();
         m_pConnectionsForm->alsaConnectView()->ConnectorView()->update();
@@ -3505,7 +3505,7 @@ void MainWidget::setDBusParameters ()
 //		m_preset.bUnlockMem,
 //		!m_preset.bNoMemLock);
     setDBusEngineParameter("driver", m_preset.driver);
-    if ((bAlsa || bPortaudio) && (m_preset.audio != QJACKCTL_DUPLEX ||
+    if ((bAlsa || bPortaudio) && (m_preset.audio != Settings::AudioModeDuplex ||
         m_preset.inputDevice.isEmpty() || m_preset.outputDevice.isEmpty())) {
         QString sInterface = m_preset.interface;
         if (bAlsa && sInterface.isEmpty())
@@ -3558,17 +3558,17 @@ void MainWidget::setDBusParameters ()
         if (sOutDevice.isEmpty())
             sOutDevice = sInterface;
         switch (m_preset.audio) {
-        case QJACKCTL_DUPLEX:
+        case Settings::AudioModeDuplex:
             setDBusDriverParameter("duplex", true);
             setDBusDriverParameter("capture", sInDevice);
             setDBusDriverParameter("playback", sOutDevice);
             break;
-        case QJACKCTL_CAPTURE:
+        case Settings::AudioModeCaptureOnly:
             resetDBusDriverParameter("duplex");
             setDBusDriverParameter("capture", sInDevice);
             resetDBusDriverParameter("playback");
             break;
-        case QJACKCTL_PLAYBACK:
+        case Settings::AudioModePlaybackOnly:
             resetDBusDriverParameter("duplex");
             setDBusDriverParameter("playback", sOutDevice);
             resetDBusDriverParameter("capture");
@@ -3576,10 +3576,10 @@ void MainWidget::setDBusParameters ()
         }
         setDBusDriverParameter("inchannels",
             (unsigned int) m_preset.inputChannels,
-            m_preset.inputChannels > 0 && m_preset.audio != QJACKCTL_PLAYBACK);
+            m_preset.inputChannels > 0 && m_preset.audio != Settings::AudioModePlaybackOnly);
         setDBusDriverParameter("outchannels",
             (unsigned int) m_preset.outputChannels,
-            m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE);
+            m_preset.outputChannels > 0 && m_preset.audio != Settings::AudioModeCaptureOnly);
         unsigned char dither = 0;
         switch (m_preset.dither) {
         case 0: dither = 'n'; break;
@@ -3596,35 +3596,35 @@ void MainWidget::setDBusParameters ()
             (unsigned int) m_preset.wordLength,
             m_preset.wordLength > 0);
         QString sInDevice = m_preset.inputDevice;
-        if (sInDevice.isEmpty() && m_preset.audio == QJACKCTL_CAPTURE)
+        if (sInDevice.isEmpty() && m_preset.audio == Settings::AudioModeCaptureOnly)
             sInDevice = m_preset.interface;
         setDBusDriverParameter("capture",
             sInDevice,
-            !sInDevice.isEmpty() && m_preset.audio != QJACKCTL_PLAYBACK);
+            !sInDevice.isEmpty() && m_preset.audio != Settings::AudioModePlaybackOnly);
         QString sOutDevice = m_preset.outputDevice;
-        if (sOutDevice.isEmpty() && m_preset.audio == QJACKCTL_PLAYBACK)
+        if (sOutDevice.isEmpty() && m_preset.audio == Settings::AudioModePlaybackOnly)
             sOutDevice = m_preset.interface;
         setDBusDriverParameter("playback",
             sOutDevice,
-            !sOutDevice.isEmpty() && m_preset.audio != QJACKCTL_CAPTURE);
+            !sOutDevice.isEmpty() && m_preset.audio != Settings::AudioModeCaptureOnly);
         setDBusDriverParameter("inchannels",
             (unsigned int) m_preset.inputChannels,
-            m_preset.inputChannels > 0  && m_preset.audio != QJACKCTL_PLAYBACK);
+            m_preset.inputChannels > 0  && m_preset.audio != Settings::AudioModePlaybackOnly);
         setDBusDriverParameter("outchannels",
             (unsigned int) m_preset.outputChannels,
-            m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE);
+            m_preset.outputChannels > 0 && m_preset.audio != Settings::AudioModeCaptureOnly);
     }
     else if (bCoreaudio || bFirewire || bNet) {
         setDBusDriverParameter("inchannels",
             (unsigned int) m_preset.inputChannels,
-            m_preset.inputChannels > 0  && m_preset.audio != QJACKCTL_PLAYBACK);
+            m_preset.inputChannels > 0  && m_preset.audio != Settings::AudioModePlaybackOnly);
         setDBusDriverParameter("outchannels",
             (unsigned int) m_preset.outputChannels,
-            m_preset.outputChannels > 0 && m_preset.audio != QJACKCTL_CAPTURE);
+            m_preset.outputChannels > 0 && m_preset.audio != Settings::AudioModeCaptureOnly);
     }
     else if (bFreebob) {
         setDBusDriverParameter("duplex",
-            bool(m_preset.audio == QJACKCTL_DUPLEX));
+            bool(m_preset.audio == Settings::AudioModeDuplex));
         resetDBusDriverParameter("capture");
         resetDBusDriverParameter("playback");
         resetDBusDriverParameter("outchannels");

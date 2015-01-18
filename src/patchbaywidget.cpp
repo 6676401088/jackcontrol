@@ -25,7 +25,7 @@
 #include "patchbaywidget.h"
 #include "PatchbayFile.h"
 #include "settings.h"
-#include "MainWidget.h"
+#include "mainwidget.h"
 
 // Qt includes
 #include <QMessageBox>
@@ -178,7 +178,7 @@ void PatchbayWidget::closeEvent ( QCloseEvent * /*pCloseEvent*/ )
 		pMainForm->stabilizeForm();
 }
 
-void PatchbayWidget::setup ( Setup *pSetup )
+void PatchbayWidget::setup ( Settings *pSetup )
 {
 	m_pSetup = pSetup;
 

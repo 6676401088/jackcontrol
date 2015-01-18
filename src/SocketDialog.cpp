@@ -21,9 +21,8 @@
 // Own includes
 #include "About.h"
 #include "SocketDialog.h"
-#include "MainWidget.h"
-#include "Patchbay.h"
-//#include "ConnectAlias.h"
+#include "mainwidget.h"
+#include "patchbay.h"
 #include "socketlist.h"
 #include "sockettreewidgetitem.h"
 

@@ -21,7 +21,7 @@
 
 // Own includes
 #include "clientlisttreewidget.h"
-#include "ConnectViewSplitter.h"
+#include "connectionssplitter.h"
 
 // Qt includes
 #include <QHeaderView>
@@ -36,7 +36,7 @@
 #include <QAction>
 
 ClientListTreeWidget::ClientListTreeWidget (
-    ConnectionsViewSplitter *pConnectView, bool bReadable )
+    ConnectionsSplitter *pConnectView, bool bReadable )
     : QTreeWidget(pConnectView) {
     m_pConnectView = pConnectView;
 
@@ -99,11 +99,6 @@ ClientListTreeWidget::ClientListTreeWidget (
 ClientListTreeWidget::~ClientListTreeWidget ()
 {
     setAutoOpenTimeout(0);
-}
-
-ConnectionsModel *ClientListTreeWidget::binding() const
-{
-    return m_pConnectView->binding();
 }
 
 void ClientListTreeWidget::setAutoOpenTimeout ( int iAutoOpenTimeout )
@@ -227,7 +222,8 @@ void ClientListTreeWidget::renamedSlot ()
             pPortItem->setText(0, pPortItem->portName());
     }
 
-    m_pConnectView->setDirty(true);
+    // TODO: Use Qt signals here.
+    //m_pConnectView->setDirty(true);
 }
 
 void ClientListTreeWidget::timeoutSlot ()
@@ -280,22 +276,22 @@ bool ClientListTreeWidget::eventFilter ( QObject *pObject, QEvent *pEvent )
 QTreeWidgetItem *ClientListTreeWidget::dragDropItem ( const QPoint& pos )
 {
     QTreeWidgetItem *pItem = QTreeWidget::itemAt(pos);
-    if (pItem) {
-        if (m_pDropItem != pItem) {
-            QTreeWidget::setCurrentItem(pItem);
-            m_pDropItem = pItem;
-            if (m_pAutoOpenTimer)
-                m_pAutoOpenTimer->start(m_iAutoOpenTimeout);
-            ConnectionsModel *pConnect = m_pConnectView->binding();
-            if ((pItem->flags() & Qt::ItemIsDropEnabled) == 0
-                || pConnect == NULL || !pConnect->canConnectSelected())
-                pItem = NULL;
-        }
-    } else {
-        m_pDropItem = NULL;
-        if (m_pAutoOpenTimer)
-            m_pAutoOpenTimer->stop();
-    }
+//    if (pItem) {
+//        if (m_pDropItem != pItem) {
+//            QTreeWidget::setCurrentItem(pItem);
+//            m_pDropItem = pItem;
+//            if (m_pAutoOpenTimer)
+//                m_pAutoOpenTimer->start(m_iAutoOpenTimeout);
+//            ConnectionsModel *pConnect = m_pConnectView->binding();
+//            if ((pItem->flags() & Qt::ItemIsDropEnabled) == 0
+//                || pConnect == NULL || !pConnect->canConnectSelected())
+//                pItem = NULL;
+//        }
+//    } else {
+//        m_pDropItem = NULL;
+//        if (m_pAutoOpenTimer)
+//            m_pAutoOpenTimer->stop();
+//    }
 
     return pItem;
 }
@@ -334,14 +330,14 @@ void ClientListTreeWidget::dragLeaveEvent ( QDragLeaveEvent * )
 
 void ClientListTreeWidget::dropEvent( QDropEvent *pDropEvent )
 {
-    if (pDropEvent->source() != this &&
-        pDropEvent->mimeData()->hasText() &&
-        dragDropItem(pDropEvent->pos())) {
-        const QString sText = pDropEvent->mimeData()->text();
-        ConnectionsModel *pConnect = m_pConnectView->binding();
-        if (!sText.isEmpty() && pConnect)
-            pConnect->connectSelected();
-    }
+//    if (pDropEvent->source() != this &&
+//        pDropEvent->mimeData()->hasText() &&
+//        dragDropItem(pDropEvent->pos())) {
+//        const QString sText = pDropEvent->mimeData()->text();
+//        ConnectionsModel *pConnect = m_pConnectView->binding();
+//        if (!sText.isEmpty() && pConnect)
+//            pConnect->connectSelected();
+//    }
 
     dragLeaveEvent(0);
 }
@@ -379,37 +375,37 @@ void ClientListTreeWidget::mouseMoveEvent ( QMouseEvent *pMouseEvent )
 
 void ClientListTreeWidget::contextMenuEvent ( QContextMenuEvent *pContextMenuEvent )
 {
-    ConnectionsModel *pConnect = m_pConnectView->binding();
-    if (pConnect == 0)
-        return;
+//    ConnectionsModel *pConnect = m_pConnectView->binding();
+//    if (pConnect == 0)
+//        return;
 
-    QMenu menu(this);
-    QAction *pAction;
+//    QMenu menu(this);
+//    QAction *pAction;
 
-    pAction = menu.addAction(QIcon(":/images/connect1.png"),
-        tr("&Connect"), pConnect, SLOT(connectSelected()),
-        tr("Alt+C", "Connect"));
-    pAction->setEnabled(pConnect->canConnectSelected());
-    pAction = menu.addAction(QIcon(":/images/disconnect1.png"),
-        tr("&Disconnect"), pConnect, SLOT(disconnectSelected()),
-        tr("Alt+D", "Disconnect"));
-    pAction->setEnabled(pConnect->canDisconnectSelected());
-    pAction = menu.addAction(QIcon(":/images/disconnectall1.png"),
-        tr("Disconnect &All"), pConnect, SLOT(disconnectAll()),
-        tr("Alt+A", "Disconect All"));
-    pAction->setEnabled(pConnect->canDisconnectAll());
-    if (m_bRenameEnabled) {
-        menu.addSeparator();
-        pAction = menu.addAction(QIcon(":/images/edit1.png"),
-            tr("Re&name"), this, SLOT(startRenameSlot()),
-            tr("Alt+N", "Rename"));
-        QTreeWidgetItem *pItem = QTreeWidget::currentItem();
-        pAction->setEnabled(pItem && (pItem->flags() & Qt::ItemIsEditable));
-    }
-    menu.addSeparator();
-    pAction = menu.addAction(QIcon(":/images/refresh1.png"),
-        tr("&Refresh"), pConnect, SLOT(refresh()),
-        tr("Alt+R", "Refresh"));
+//    pAction = menu.addAction(QIcon(":/images/connect1.png"),
+//        tr("&Connect"), pConnect, SLOT(connectSelected()),
+//        tr("Alt+C", "Connect"));
+//    pAction->setEnabled(pConnect->canConnectSelected());
+//    pAction = menu.addAction(QIcon(":/images/disconnect1.png"),
+//        tr("&Disconnect"), pConnect, SLOT(disconnectSelected()),
+//        tr("Alt+D", "Disconnect"));
+//    pAction->setEnabled(pConnect->canDisconnectSelected());
+//    pAction = menu.addAction(QIcon(":/images/disconnectall1.png"),
+//        tr("Disconnect &All"), pConnect, SLOT(disconnectAll()),
+//        tr("Alt+A", "Disconect All"));
+//    pAction->setEnabled(pConnect->canDisconnectAll());
+//    if (m_bRenameEnabled) {
+//        menu.addSeparator();
+//        pAction = menu.addAction(QIcon(":/images/edit1.png"),
+//            tr("Re&name"), this, SLOT(startRenameSlot()),
+//            tr("Alt+N", "Rename"));
+//        QTreeWidgetItem *pItem = QTreeWidget::currentItem();
+//        pAction->setEnabled(pItem && (pItem->flags() & Qt::ItemIsEditable));
+//    }
+//    menu.addSeparator();
+//    pAction = menu.addAction(QIcon(":/images/refresh1.png"),
+//        tr("&Refresh"), pConnect, SLOT(refresh()),
+//        tr("Alt+R", "Refresh"));
 
-    menu.exec(pContextMenuEvent->globalPos());
+//    menu.exec(pContextMenuEvent->globalPos());
 }

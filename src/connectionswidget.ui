@@ -88,7 +88,7 @@
         <number>4</number>
        </property>
        <item row="0" column="0">
-        <widget class="ConnectionsViewSplitter" name="AudioConnectView" native="true">
+        <widget class="ConnectionsSplitter" name="AudioConnectView" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -259,7 +259,7 @@
         <number>4</number>
        </property>
        <item row="0" column="0">
-        <widget class="ConnectionsViewSplitter" name="MidiConnectView" native="true">
+        <widget class="ConnectionsSplitter" name="MidiConnectView" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -430,7 +430,7 @@
         <number>4</number>
        </property>
        <item row="0" column="0">
-        <widget class="ConnectionsViewSplitter" name="AlsaConnectView" native="true">
+        <widget class="ConnectionsSplitter" name="AlsaConnectView" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -587,9 +587,10 @@
  <layoutdefault spacing="4" margin="4"/>
  <customwidgets>
   <customwidget>
-   <class>ConnectionsViewSplitter</class>
+   <class>ConnectionsSplitter</class>
    <extends>QWidget</extends>
-   <header>ConnectViewSplitter.h</header>
+   <header>connectionssplitter.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
