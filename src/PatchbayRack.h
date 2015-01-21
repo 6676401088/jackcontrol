@@ -21,7 +21,7 @@
 #pragma once
 
 // Own includes
-#include "About.h"
+#include "about.h"
 
 // Qt includes
 #include <QStringList>

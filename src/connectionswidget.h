@@ -36,9 +36,9 @@ public:
 
     void setSettings(Settings *pSetup);
 
-    ConnectionsSplitter *audioConnectView() const;
-    ConnectionsSplitter *midiConnectView() const;
-    ConnectionsSplitter *alsaConnectView() const;
+    ConnectionsDrawer *audioConnectView() const;
+    ConnectionsDrawer *midiConnectView() const;
+    ConnectionsDrawer *alsaConnectView() const;
 
 	bool queryClose();
 
@@ -50,7 +50,7 @@ public:
 	QFont connectionsFont() const;
 	void setConnectionsFont(const QFont& font);
 
-    void setConnectionsIconSize(ConnectionsSplitter::IconSize iconSize);
+    void setConnectionsIconSize(ConnectionsDrawer::IconSize iconSize);
 
 	bool isAudioConnected() const;
 	bool isMidiConnected() const;
@@ -97,9 +97,9 @@ public slots:
 
 protected slots:
 
-    void audioDisconnecting(JackPortTreeWidgetItem *, JackPortTreeWidgetItem *);
-    void midiDisconnecting(JackPortTreeWidgetItem *, JackPortTreeWidgetItem *);
-    void alsaDisconnecting(JackPortTreeWidgetItem *, JackPortTreeWidgetItem *);
+    void audioDisconnecting(PortTreeWidgetItem *, PortTreeWidgetItem *);
+    void midiDisconnecting(PortTreeWidgetItem *, PortTreeWidgetItem *);
+    void alsaDisconnecting(PortTreeWidgetItem *, PortTreeWidgetItem *);
 
 protected:
 

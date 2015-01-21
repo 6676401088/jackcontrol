@@ -20,8 +20,10 @@
 
 #pragma once
 
-#include "About.h"
-#include "connectionssplitter.h"
+#include "about.h"
+#include "connectionsdrawer/connectionsdrawer.h"
+#include "connectionsdrawer/porttreewidgetitem.h"
+#include "connectionsdrawer/clienttreewidgetitem.h"
 
 #include <jack/jack.h>
 
@@ -48,13 +50,12 @@ class JackConnectionsModel;
 #define QJACKCTL_JACK_PORTLNO	9	// Logical Non-terminal Output port pixmap.
 #define QJACKCTL_JACK_PIXMAPS	10	// Number of pixmaps in array.
 
-class qjackctlJackPort : public JackPortTreeWidgetItem
+class qjackctlJackPort : public PortTreeWidgetItem
 {
 public:
 
 	// Constructor.
-	qjackctlJackPort(qjackctlJackClient *pClient,
-		const QString& sPortName, jack_port_t *pJackPort);
+    qjackctlJackPort(const QString& sPortName, jack_port_t *pJackPort);
 	// Default destructor.
 	~qjackctlJackPort();
 
@@ -70,7 +71,7 @@ private:
 
 
 // Jack client list item.
-class qjackctlJackClient : public JackClientTreeWidgetItem
+class qjackctlJackClient : public ClientTreeWidgetItem
 {
 public:
 
@@ -85,31 +86,4 @@ public:
 
 	// Jack port lookup.
 	qjackctlJackPort *findJackPort(jack_port_t *pJackPort);
-};
-
-
-// Jack client list.
-class qjackctlJackClientList : public JackClientList
-{
-public:
-
-	// Constructor.
-    qjackctlJackClientList(ClientListTreeWidget *pListView, bool bReadable);
-	// Default destructor.
-	~qjackctlJackClientList();
-
-	// Jack port lookup.
-	qjackctlJackPort *findJackClientPort(jack_port_t *pJackPort);
-
-	// Client:port refreshner (return newest item count).
-	int updateClientPorts();
-
-	// Jack client port aliases mode.
-	static void setJackClientPortAlias(int iJackClientPortAlias);
-	static int jackClientPortAlias();
-
-private:
-
-	// Jack client port aliases mode.
-	static int g_iJackClientPortAlias;
 };

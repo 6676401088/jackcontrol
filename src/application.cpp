@@ -19,7 +19,7 @@
 *****************************************************************************/
 
 // Own includes
-#include "About.h"
+#include "about.h"
 #include "settings.h"
 #include "mainwindow.h"
 

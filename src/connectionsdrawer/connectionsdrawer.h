@@ -21,14 +21,13 @@
 #pragma once
 
 // Own includes
-#include "clientlisttreewidget.h"
-#include "jackportconnectorwidget.h"
-#include "jackclientlist.h"
+class ClientTreeWidget;
+class PortConnectionsWidget;
 
 // Qt includes
 #include <QSplitter>
 
-class ConnectionsSplitter : public QSplitter {
+class ConnectionsDrawer : public QSplitter {
 	Q_OBJECT
 public:
     enum IconSize {
@@ -37,24 +36,8 @@ public:
         IconSize64x64 = 2
     };
 
-    ConnectionsSplitter(QWidget *parent = 0);
-    ~ConnectionsSplitter();
-
-    ClientListTreeWidget *outputTreeWidget() const {
-        return _outputTreeWidget;
-    }
-
-    JackPortConnectorWidget *ConnectorView() const {
-        return _connectorView;
-    }
-
-    ClientListTreeWidget *inputTreeWidget() const {
-        return _inputTreeWidget;
-    }
-
-    /** Client list accessors. */
-    JackClientList *outputClientList() const;
-    JackClientList *inputClientList() const;
+    ConnectionsDrawer(QWidget *parent = 0);
+    virtual ~ConnectionsDrawer();
 
     /** Connector line style accessors. */
     void setDrawingBezierLines(bool drawingBezierLines);
@@ -68,14 +51,13 @@ signals:
     /** Contents change signal. */
 	void contentsChanged();
 
+protected:
+    ClientTreeWidget *      _outputTreeWidget;
+    PortConnectionsWidget * _portConnectionsWidget;
+    ClientTreeWidget *      _inputTreeWidget;
+
 private:
-    ClientListTreeWidget *      _outputTreeWidget;
-    JackPortConnectorWidget  *  _connectorView;
-    ClientListTreeWidget *      _inputTreeWidget;
-
-    bool _drawingBezierLines;
-
-    IconSize _iconSize;
+    IconSize                _iconSize;
 };
 
 

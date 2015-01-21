@@ -20,14 +20,17 @@
 
 #pragma once
 
-#include "About.h"
-#include "connectionssplitter.h"
+#include "about.h"
+#include "connectionsdrawer/connectionsdrawer.h"
 
 #ifdef CONFIG_ALSA_SEQ
 #include <alsa/asoundlib.h>
 #else
 typedef void snd_seq_t;
 #endif
+
+#include "porttreewidgetitem.h"
+#include "clienttreewidgetitem.h"
 
 // Forward declarations.
 class AlsaPortTreeWidgetItem;
@@ -44,18 +47,17 @@ class qjackctlAlsaConnect;
 
 
 // Jack port list item.
-class AlsaPortTreeWidgetItem : public JackPortTreeWidgetItem
+class AlsaPortTreeWidgetItem : public PortTreeWidgetItem
 {
 public:
 
 	// Constructor.
-    AlsaPortTreeWidgetItem(qjackctlAlsaClient *pClient,
+    AlsaPortTreeWidgetItem(
 		const QString& sPortName, int iAlsaPort);
 	// Default destructor.
     ~AlsaPortTreeWidgetItem();
 
-	// Jack handles accessors.
-	int alsaClient() const;
+    // Jack handles accessors.
 	int alsaPort() const;
 
 private:
@@ -66,7 +68,7 @@ private:
 
 
 // Jack client list item.
-class qjackctlAlsaClient : public JackClientTreeWidgetItem
+class qjackctlAlsaClient : public ClientTreeWidgetItem
 {
 public:
 
@@ -86,25 +88,5 @@ private:
 
 	// Instance variables.
 	int m_iAlsaClient;
-};
-
-
-// Jack client list.
-class qjackctlAlsaClientList : public JackClientList
-{
-public:
-
-	// Constructor.
-    qjackctlAlsaClientList(ClientListTreeWidget *pListView, bool bReadable);
-	// Default destructor.
-	~qjackctlAlsaClientList();
-
-	// Client finder by id.
-	qjackctlAlsaClient *findClient(int iAlsaClient);
-	// Client port finder by id.
-    AlsaPortTreeWidgetItem *findClientPort(int iAlsaClient, int iAlsaPort);
-
-	// Client:port refreshner (return newest item count).
-	int updateClientPorts();
 };
 

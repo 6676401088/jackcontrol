@@ -21,7 +21,7 @@
 #include <Qt>
 
 // Own includes
-#include "About.h"
+#include "about.h"
 #include "sessionwidget.h"
 #include "Session.h"
 #include "settings.h"

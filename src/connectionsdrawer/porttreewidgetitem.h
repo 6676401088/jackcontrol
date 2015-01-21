@@ -19,49 +19,41 @@
 
 #pragma once
 
+// Own includes
+class ClientTreeWidgetItem;
+
 // Qt includes
-#include <QObject>
-#include <QSocketNotifier>
+#include <QTreeWidgetItem>
 
-// QJack includes
-#include <System>
-#include <Server>
-#include <Client>
+#define QJACKCTL_PORTITEM      1002
 
-class JackService : public QObject {
-    Q_OBJECT
+/**
+ * A tree widget item that represents a port of a client in the tree.
+ */
+class PortTreeWidgetItem : public QTreeWidgetItem {
 public:
-    static JackService& instance() {
-        static JackService jackService;
-        return jackService;
-    }
+    PortTreeWidgetItem(QString portName);
+    virtual ~PortTreeWidgetItem();
 
-    enum MessageType {
-        MessageTypeNormal,
-        MessageTypeError,
-        MessageTypeStdOut
-    };
+    // Instance accessors.
+    void setPortName(QString portName);
+    const QString& portName() const;
 
-    void start();
-    void stop();
+    // Client port cleanup marker.
+    void markPort(int mark);
+    int portMark() const;
 
-    QJack::Client& client();
-    QJack::Server& server();
+    // Connectiopn highlight methods.
+    bool highlighted() const;
+    void setHighlighted(bool highlighted);
 
-signals:
-    void message(QString message, JackService::MessageType messageType);
-
-private slots:
-    void stdOutActivated(int fileDescriptor);
-
+    virtual bool isConnectedTo(PortTreeWidgetItem *other);
 
 private:
-    void setupStdOutRedirect();
 
-private:
-    JackService(QObject *parent = 0);
+    // Instance variables.
+    ClientTreeWidgetItem *_clientTreeWidgetItem;
 
-    QSocketNotifier *_stdOutSocketNotifier;
-    QJack::Server _jackServer;
-    QJack::Client _jackClient;
+    int     _portMark;
+    bool    _highlight;
 };

@@ -48,7 +48,7 @@ class ConnectionsWidget;
 class PatchbayWidget;
 class PatchbayRack;
 class SystemTrayIcon;
-class JackPortTreeWidgetItem;
+class PortTreeWidgetItem;
 
 class QSocketNotifier;
 
@@ -88,7 +88,7 @@ public:
 	void refreshPatchbay();
 
 	void queryDisconnect(
-        JackPortTreeWidgetItem *pOPort, JackPortTreeWidgetItem *pIPort, int iSocketType);
+        PortTreeWidgetItem *pOPort, PortTreeWidgetItem *pIPort, int iSocketType);
 
 	void setQuitForce(bool bQuitForce);
 	bool isQuitForce() const;

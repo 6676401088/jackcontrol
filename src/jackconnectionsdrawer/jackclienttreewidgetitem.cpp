@@ -1,5 +1,4 @@
 /****************************************************************************
-   Copyright (C) 2003-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2015, Jacob Dawid <jacob@omg-it.works>
 
    This program is free software; you can redistribute it and/or
@@ -18,21 +17,13 @@
 
 *****************************************************************************/
 
-#pragma once
+// Own includes
+#include "jackclienttreewidgetitem.h"
 
-#define CONFIG_JACK_MIDI
-//#include "config.h"
+// Qt includes
+#include <QIcon>
 
-#define QJACKCTL_TITLE      ""
-#define QJACKCTL_VERSION    ""
-
-#define QJACKCTL_SUBTITLE0  "JACK"
-#define QJACKCTL_SUBTITLE1  QJACKCTL_SUBTITLE0 " Audio Connection Kit"
-#define QJACKCTL_SUBTITLE2  "Qt GUI Interface"
-
-#define QJACKCTL_SUBTITLE   QJACKCTL_SUBTITLE1 " - " QJACKCTL_SUBTITLE2
-#define QJACKCTL_WEBSITE    "http://qjackctl.sourceforge.net"
-#define QJACKCTL_COPYRIGHT  "Copyright (C) 2003-2014, rncbc aka Rui Nuno Capela. All rights reserved."
-
-#define QJACKCTL_DOMAIN     "rncbc.org"
-
+JackClientTreeWidgetItem::JackClientTreeWidgetItem(QString clientName)
+    : ClientTreeWidgetItem(clientName) {
+    setIcon(0, QIcon(":/images/aclienti_64x64.png"));
+}

@@ -35,7 +35,7 @@ SetupWidget::~SetupWidget()
 
 
 //// Own includes
-//#include "About.h"
+//#include "about.h"
 //#include "setupdialog.h"
 //#include "settings.h"
 

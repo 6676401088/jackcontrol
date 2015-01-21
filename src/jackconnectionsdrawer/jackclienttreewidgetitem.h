@@ -20,40 +20,9 @@
 #pragma once
 
 // Own includes
-class ConnectionsSplitter;
+#include "clienttreewidgetitem.h"
 
-// Qt includes
-#include <QWidget>
-#include <QTreeWidgetItem>
-
-class JackPortConnectorWidget : public QWidget {
-    Q_OBJECT
+class JackClientTreeWidgetItem : public ClientTreeWidgetItem {
 public:
-    JackPortConnectorWidget(ConnectionsSplitter *pConnectView);
-    ~JackPortConnectorWidget();
-
-public slots:
-
-    // Useful slots (should this be protected?).
-    void contentsChanged();
-
-protected:
-
-    // Draw visible port connection relation arrows.
-    void paintEvent(QPaintEvent *);
-
-    // Context menu request event handler.
-    virtual void contextMenuEvent(QContextMenuEvent *);
-
-private:
-
-    // Legal client/port item position helper.
-    int itemY(QTreeWidgetItem *pItem) const;
-
-    // Drawing methods.
-    void drawConnectionLine(QPainter *pPainter,
-        int x1, int y1, int x2, int y2, int h1, int h2);
-
-    // Local instance variables.
-    ConnectionsSplitter *m_pConnectView;
+    JackClientTreeWidgetItem(QString clientName);
 };

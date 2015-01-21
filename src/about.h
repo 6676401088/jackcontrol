@@ -1,4 +1,5 @@
 /****************************************************************************
+   Copyright (C) 2003-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2015, Jacob Dawid <jacob@omg-it.works>
 
    This program is free software; you can redistribute it and/or
@@ -19,49 +20,19 @@
 
 #pragma once
 
-// Qt includes
-#include <QObject>
-#include <QSocketNotifier>
+#define CONFIG_JACK_MIDI
+#define CONFIG_ALSA_SEQ
 
-// QJack includes
-#include <System>
-#include <Server>
-#include <Client>
+#define QJACKCTL_TITLE      ""
+#define QJACKCTL_VERSION    ""
 
-class JackService : public QObject {
-    Q_OBJECT
-public:
-    static JackService& instance() {
-        static JackService jackService;
-        return jackService;
-    }
+#define QJACKCTL_SUBTITLE0  "JACK"
+#define QJACKCTL_SUBTITLE1  QJACKCTL_SUBTITLE0 " Audio Connection Kit"
+#define QJACKCTL_SUBTITLE2  "Qt GUI Interface"
 
-    enum MessageType {
-        MessageTypeNormal,
-        MessageTypeError,
-        MessageTypeStdOut
-    };
+#define QJACKCTL_SUBTITLE   QJACKCTL_SUBTITLE1 " - " QJACKCTL_SUBTITLE2
+#define QJACKCTL_WEBSITE    "http://qjackctl.sourceforge.net"
+#define QJACKCTL_COPYRIGHT  "Copyright (C) 2003-2014, rncbc aka Rui Nuno Capela. All rights reserved."
 
-    void start();
-    void stop();
+#define QJACKCTL_DOMAIN     "rncbc.org"
 
-    QJack::Client& client();
-    QJack::Server& server();
-
-signals:
-    void message(QString message, JackService::MessageType messageType);
-
-private slots:
-    void stdOutActivated(int fileDescriptor);
-
-
-private:
-    void setupStdOutRedirect();
-
-private:
-    JackService(QObject *parent = 0);
-
-    QSocketNotifier *_stdOutSocketNotifier;
-    QJack::Server _jackServer;
-    QJack::Client _jackClient;
-};

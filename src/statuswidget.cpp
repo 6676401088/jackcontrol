@@ -19,7 +19,7 @@
 *****************************************************************************/
 
 // Own includes
-#include "About.h"
+#include "about.h"
 #include "statuswidget.h"
 #include "Status.h"
 #include "settings.h"

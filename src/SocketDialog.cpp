@@ -19,7 +19,7 @@
 *****************************************************************************/
 
 // Own includes
-#include "About.h"
+#include "about.h"
 #include "SocketDialog.h"
 #include "mainwidget.h"
 #include "patchbay.h"

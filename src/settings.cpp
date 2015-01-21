@@ -19,7 +19,7 @@
 *****************************************************************************/
 
 // Own includes
-#include "About.h"
+#include "about.h"
 #include "settings.h"
 
 // Qt includes
@@ -97,7 +97,7 @@ void Settings::loadSetup ()
     bDisplayEffect           = _settings.value("/DisplayEffect", true).toBool();
     bDisplayBlink            = _settings.value("/DisplayBlink", true).toBool();
     iJackClientPortAlias     = _settings.value("/JackClientPortAlias", 0).toInt();
-    iConnectionsIconSize     = (ConnectionsSplitter::IconSize)_settings.value("/ConnectionsIconSize", QJACKCTL_ICON_16X16).toInt();
+    iConnectionsIconSize     = (ConnectionsDrawer::IconSize)_settings.value("/ConnectionsIconSize", QJACKCTL_ICON_16X16).toInt();
     sConnectionsFont         = _settings.value("/ConnectionsFont").toString();
     bQueryClose              = _settings.value("/QueryClose", true).toBool();
     bKeepOnTop               = _settings.value("/KeepOnTop", false).toBool();

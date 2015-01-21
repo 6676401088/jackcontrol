@@ -20,8 +20,9 @@
 #include <Qt>
 
 // Own includes
-#include "jackportconnectorwidget.h"
-#include "connectionssplitter.h"
+#include "portconnectionswidget.h"
+#include "clienttreewidgetitem.h"
+#include "porttreewidgetitem.h"
 
 // Qt includes
 #include <QPainter>
@@ -30,30 +31,31 @@
 #include <QAction>
 #include <QContextMenuEvent>
 
-JackPortConnectorWidget::JackPortConnectorWidget (
-    ConnectionsSplitter *pConnectView )
-    : QWidget(pConnectView)
-{
-    m_pConnectView = pConnectView;
+PortConnectionsWidget::PortConnectionsWidget(
+    ClientTreeWidget *outputClientListTreeWidget,
+    ClientTreeWidget *inputClientListTreeWidget,
+    QWidget *parent)
+    : QWidget(parent) {
+    _outputClientListTreeWidget = outputClientListTreeWidget;
+    _inputClientListTreeWidget  = inputClientListTreeWidget;
+    _drawingBezierLines         = true;
 
-    QWidget::setMinimumWidth(20);
-//  QWidget::setMaximumWidth(120);
-    QWidget::setSizePolicy(
-        QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+    setMinimumWidth(200);
+    setMaximumWidth(200);
+    setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
+                              QSizePolicy::Expanding));
 }
 
-JackPortConnectorWidget::~JackPortConnectorWidget ()
-{
+PortConnectionsWidget::~PortConnectionsWidget() {
 }
 
-int JackPortConnectorWidget::itemY ( QTreeWidgetItem *pItem ) const
-{
+int PortConnectionsWidget::itemY(QTreeWidgetItem *pItem) const {
     QRect rect;
     QTreeWidget *pList = pItem->treeWidget();
     QTreeWidgetItem *pParent = pItem->parent();
-    JackClientTreeWidgetItem *pClientItem = NULL;
+    ClientTreeWidgetItem *pClientItem = NULL;
     if (pParent && pParent->type() == QJACKCTL_CLIENTITEM)
-        pClientItem = static_cast<JackClientTreeWidgetItem *> (pParent);
+        pClientItem = static_cast<ClientTreeWidgetItem *> (pParent);
     if (pClientItem && !pClientItem->isOpen()) {
         rect = pList->visualItemRect(pClientItem);
     } else {
@@ -62,9 +64,19 @@ int JackPortConnectorWidget::itemY ( QTreeWidgetItem *pItem ) const
     return rect.top() + rect.height() / 2;
 }
 
-void JackPortConnectorWidget::drawConnectionLine ( QPainter *pPainter,
-    int x1, int y1, int x2, int y2, int h1, int h2 )
-{
+void PortConnectionsWidget::setDrawingBezierLines(bool drawingBezierLines) {
+    _drawingBezierLines = drawingBezierLines;
+}
+
+bool PortConnectionsWidget::isDrawingBezierLines() const {
+    return _drawingBezierLines;
+}
+
+void PortConnectionsWidget::drawConnectionLine(
+    QPainter *pPainter,
+    int x1, int y1,
+    int x2, int y2,
+    int h1, int h2 ) {
     // Account for list view headers.
     y1 += h1;
     y2 += h2;
@@ -74,7 +86,7 @@ void JackPortConnectorWidget::drawConnectionLine ( QPainter *pPainter,
         pPainter->drawLine(x1, y1, x1 + 4, y1);
 
     // How do we'll draw it?
-    if (m_pConnectView->isDrawingBezierLines()) {
+    if (isDrawingBezierLines()) {
         // Setup control points
         QPolygon spline(4);
         int cp = int(float(x2 - x1 - 8) * 0.4f);
@@ -94,76 +106,38 @@ void JackPortConnectorWidget::drawConnectionLine ( QPainter *pPainter,
         pPainter->drawLine(x2 - 4, y2, x2, y2);
 }
 
-void JackPortConnectorWidget::paintEvent ( QPaintEvent * )
-{
-    if (m_pConnectView == NULL)
-        return;
-    if (m_pConnectView->outputTreeWidget() == NULL ||
-        m_pConnectView->inputTreeWidget() == NULL)
-        return;
-
-    ClientListTreeWidget *pOListView = m_pConnectView->outputTreeWidget();
-    ClientListTreeWidget *pIListView = m_pConnectView->inputTreeWidget();
-
-    int yc = QWidget::pos().y();
-    int yo = pOListView->pos().y();
-    int yi = pIListView->pos().y();
-
+void PortConnectionsWidget::paintEvent(QPaintEvent *) {
     QPainter painter(this);
-    int x1, y1, h1;
-    int x2, y2, h2;
-    int i, rgb[3] = { 0x33, 0x66, 0x99 };
+    // Window offsets and measures
+    int widgetPositionY     = pos().y();
+    int outputPositionY     = _outputClientListTreeWidget->pos().y();
+    int inputPositionY      = _inputClientListTreeWidget->pos().y();
+    int outputHeaderOffset  = _outputClientListTreeWidget->header()->sizeHint().height();
+    int inputHeaderOffset   = _inputClientListTreeWidget->header()->sizeHint().height();
 
-    // Inline adaptive to draker background themes...
-    if (QWidget::palette().window().color().value() < 0x7f)
-        for (i = 0; i < 3; ++i) rgb[i] += 0x33;
+    // Connection line measures
+    int left                = 0;
+    int right               = width();
+    int startY, endY;
 
-    // Initialize color changer.
-    i = 0;
-    // Almost constants.
-    x1 = 0;
-    x2 = QWidget::width();
-    h1 = (pOListView->header())->sizeHint().height();
-    h2 = (pIListView->header())->sizeHint().height();
-    // For each output client item...
-    int iItemCount = pOListView->topLevelItemCount();
-    for (int iItem = 0; iItem < iItemCount; ++iItem) {
-        QTreeWidgetItem *pItem = pOListView->topLevelItem(iItem);
-        if (pItem->type() != QJACKCTL_CLIENTITEM)
-            continue;
-        JackClientTreeWidgetItem *pOClient
-            = static_cast<JackClientTreeWidgetItem *> (pItem);
-        if (pOClient == NULL)
-            continue;
-        // Set new connector color.
-        ++i;
-        painter.setPen(QColor(rgb[i % 3], rgb[(i / 3) % 3], rgb[(i / 9) % 3]));
-        // For each port item
-        int iChildCount = pOClient->childCount();
-        for (int iChild = 0; iChild < iChildCount; ++iChild) {
-            QTreeWidgetItem *pChild = pOClient->child(iChild);
-            if (pChild->type() != QJACKCTL_PORTITEM)
-                continue;
-            JackPortTreeWidgetItem *pOPort
-                = static_cast<JackPortTreeWidgetItem *> (pChild);
-            if (pOPort) {
-                // Get starting connector arrow coordinates.
-                y1 = itemY(pOPort) + (yo - yc);
-                // Get port connections...
-                QListIterator<JackPortTreeWidgetItem *> iter(pOPort->connects());
-                while (iter.hasNext()) {
-                    JackPortTreeWidgetItem *pIPort = iter.next();
-                    // Obviously, should be a connection
-                    // from pOPort to pIPort items:
-                    y2 = itemY(pIPort) + (yi - yc);
-                    drawConnectionLine(&painter, x1, y1, x2, y2, h1, h2);
-                }
+    QList<PortTreeWidgetItem*> outputPorts  = _outputClientListTreeWidget->ports();
+    QList<PortTreeWidgetItem*> inputPorts   = _inputClientListTreeWidget->ports();
+
+    foreach(PortTreeWidgetItem *outputPort, outputPorts) {
+        foreach(PortTreeWidgetItem *inputPort, inputPorts) {
+            if(outputPort->isConnectedTo(inputPort)) {
+                startY  = itemY(outputPort) + outputPositionY - widgetPositionY;
+                endY    = itemY(inputPort) + inputPositionY - widgetPositionY;
+                drawConnectionLine(&painter,
+                                   left, startY,
+                                   right, endY,
+                                   outputHeaderOffset, inputHeaderOffset);
             }
         }
     }
 }
 
-void JackPortConnectorWidget::contextMenuEvent (
+void PortConnectionsWidget::contextMenuEvent (
     QContextMenuEvent *pContextMenuEvent )
 {
 //    ConnectionsModel *pConnect = m_pConnectView->binding();
@@ -194,7 +168,6 @@ void JackPortConnectorWidget::contextMenuEvent (
 //    menu.exec(pContextMenuEvent->globalPos());
 }
 
-void JackPortConnectorWidget::contentsChanged ()
-{
+void PortConnectionsWidget::contentsChanged() {
     QWidget::update();
 }

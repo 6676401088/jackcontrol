@@ -27,7 +27,7 @@ class QSplitter;
 
 // Own includes
 #include "connectalias.h"
-#include "connectionssplitter.h"
+#include "connectionsdrawer/connectionsdrawer.h"
 
 // Icon size combobox item indexes.
 #define QJACKCTL_ICON_16X16 0
@@ -147,7 +147,7 @@ public:
 	bool    bDisplayEffect;
 	bool    bDisplayBlink;
 	int     iJackClientPortAlias;
-    ConnectionsSplitter::IconSize iConnectionsIconSize;
+    ConnectionsDrawer::IconSize iConnectionsIconSize;
 	QString sConnectionsFont;
 	bool    bQueryClose;
 	bool    bKeepOnTop;

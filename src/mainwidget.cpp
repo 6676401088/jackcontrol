@@ -21,7 +21,7 @@
 #include <Qt>
 
 // Own includes
-#include "About.h"
+#include "about.h"
 #include "mainwidget.h"
 #include "Status.h"
 #include "patchbay.h"
@@ -1543,7 +1543,7 @@ void MainWidget::updateJackClientPortAlias ()
     if (m_pSetup == NULL)
         return;
 
-    qjackctlJackClientList::setJackClientPortAlias(m_pSetup->iJackClientPortAlias);
+//    qjackctlJackClientList::setJackClientPortAlias(m_pSetup->iJackClientPortAlias);
 
     refreshJackConnections();
 }
@@ -1552,22 +1552,22 @@ void MainWidget::updateJackClientPortAlias ()
 // Update the connection and patchbay line style.
 void MainWidget::updateBezierLines ()
 {
-    if (m_pSetup == NULL)
-        return;
+//    if (m_pSetup == NULL)
+//        return;
 
-    if (m_pConnectionsForm) {
-        m_pConnectionsForm->audioConnectView()->setDrawingBezierLines(m_pSetup->bBezierLines);
-        m_pConnectionsForm->midiConnectView()->setDrawingBezierLines(m_pSetup->bBezierLines);
-        m_pConnectionsForm->alsaConnectView()->setDrawingBezierLines(m_pSetup->bBezierLines);
-        m_pConnectionsForm->audioConnectView()->ConnectorView()->update();
-        m_pConnectionsForm->midiConnectView()->ConnectorView()->update();
-        m_pConnectionsForm->alsaConnectView()->ConnectorView()->update();
-    }
+//    if (m_pConnectionsForm) {
+//        m_pConnectionsForm->audioConnectView()->setDrawingBezierLines(m_pSetup->bBezierLines);
+//        m_pConnectionsForm->midiConnectView()->setDrawingBezierLines(m_pSetup->bBezierLines);
+//        m_pConnectionsForm->alsaConnectView()->setDrawingBezierLines(m_pSetup->bBezierLines);
+//        m_pConnectionsForm->audioConnectView()->ConnectorView()->update();
+//        m_pConnectionsForm->midiConnectView()->ConnectorView()->update();
+//        m_pConnectionsForm->alsaConnectView()->ConnectorView()->update();
+//    }
 
-    if (m_pPatchbayForm) {
-        m_pPatchbayForm->patchbaySplitter()->setBezierLines(m_pSetup->bBezierLines);
-        m_pPatchbayForm->patchbaySplitter()->PatchworkView()->update();
-    }
+//    if (m_pPatchbayForm) {
+//        m_pPatchbayForm->patchbaySplitter()->setBezierLines(m_pSetup->bBezierLines);
+//        m_pPatchbayForm->patchbaySplitter()->PatchworkView()->update();
+//    }
 }
 
 
@@ -2240,27 +2240,27 @@ void MainWidget::cableConnectSlot (
 
 // Patchbay (dis)connection slot.
 void MainWidget::queryDisconnect (
-    JackPortTreeWidgetItem *pOPort, JackPortTreeWidgetItem *pIPort, int iSocketType )
+    PortTreeWidgetItem *pOPort, PortTreeWidgetItem *pIPort, int iSocketType )
 {
-    if (m_pSetup->bActivePatchbay) {
-        qjackctlPatchbayCable *pCable = m_pPatchbayRack->findCable(
-            pOPort->clientName(), pOPort->portName(),
-            pIPort->clientName(), pIPort->portName(), iSocketType);
-        if (pCable && QMessageBox::warning(this,
-            tr("Warning") + " - " QJACKCTL_SUBTITLE1,
-            tr("A patchbay definition is currently active,\n"
-            "which is probable to redo this connection:\n\n"
-            "%1 -> %2\n\n"
-            "Do you want to remove the patchbay connection?")
-            .arg(pCable->outputSocket()->name())
-            .arg(pCable->inputSocket()->name()),
-            QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-            m_pPatchbayRack->removeCable(pCable);
-            if (m_pPatchbayForm
-                && isActivePatchbay(m_pPatchbayForm->patchbayPath()))
-                m_pPatchbayForm->loadPatchbayRack(m_pPatchbayRack);
-        }
-    }
+//    if (m_pSetup->bActivePatchbay) {
+//        qjackctlPatchbayCable *pCable = m_pPatchbayRack->findCable(
+//            pOPort->clientName(), pOPort->portName(),
+//            pIPort->clientName(), pIPort->portName(), iSocketType);
+//        if (pCable && QMessageBox::warning(this,
+//            tr("Warning") + " - " QJACKCTL_SUBTITLE1,
+//            tr("A patchbay definition is currently active,\n"
+//            "which is probable to redo this connection:\n\n"
+//            "%1 -> %2\n\n"
+//            "Do you want to remove the patchbay connection?")
+//            .arg(pCable->outputSocket()->name())
+//            .arg(pCable->inputSocket()->name()),
+//            QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+//            m_pPatchbayRack->removeCable(pCable);
+//            if (m_pPatchbayForm
+//                && isActivePatchbay(m_pPatchbayForm->patchbayPath()))
+//                m_pPatchbayForm->loadPatchbayRack(m_pPatchbayRack);
+//        }
+//    }
 }
 
 

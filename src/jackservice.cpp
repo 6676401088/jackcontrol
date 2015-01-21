@@ -29,12 +29,6 @@ JackService::JackService(QObject *parent)
     setupStdOutRedirect();
 
     //hw:PCH,0|hw:PCH,0|256|3|44100|0|0|nomon|swmeter|-|32bit
-
-    connect(&_jackClient, SIGNAL(connectedToServer()), this, SLOT(handleConnectedToServer()));
-    connect(&_jackClient, SIGNAL(disconnectedFromServer()), this, SLOT(handleDisconnectedFromServer()));
-
-    connect(QJack::System::instance(), SIGNAL(error(QString)), this, SLOT(handleError(QString)));
-
 }
 
 void JackService::start() {
@@ -82,19 +76,4 @@ void JackService::setupStdOutRedirect() {
         connect(_stdOutSocketNotifier, SIGNAL(activated(int)), this, SLOT(stdOutActivated(int)));
     }
 #endif
-}
-
-void JackService::handleConnectedToServer() {
-    emit connected();
-
-    _jackClient.registerAudioOutPort("test");
-    _jackClient.activate();
-}
-
-void JackService::handleDisconnectedFromServer() {
-    emit disconnected();
-}
-
-void JackService::handleError(QString errorMessage) {
-    emit message(errorMessage, MessageTypeError);
 }

@@ -19,49 +19,18 @@
 
 #pragma once
 
-// Qt includes
-#include <QObject>
-#include <QSocketNotifier>
+// Own includes
+#include "porttreewidgetitem.h"
 
 // QJack includes
-#include <System>
-#include <Server>
-#include <Client>
+#include <qjack/audioport.h>
 
-class JackService : public QObject {
-    Q_OBJECT
+class JackAudioPortTreeWidgetItem : public PortTreeWidgetItem {
 public:
-    static JackService& instance() {
-        static JackService jackService;
-        return jackService;
-    }
+    JackAudioPortTreeWidgetItem(QJack::AudioPort port);
 
-    enum MessageType {
-        MessageTypeNormal,
-        MessageTypeError,
-        MessageTypeStdOut
-    };
+    bool isConnectedTo(PortTreeWidgetItem *other);
 
-    void start();
-    void stop();
-
-    QJack::Client& client();
-    QJack::Server& server();
-
-signals:
-    void message(QString message, JackService::MessageType messageType);
-
-private slots:
-    void stdOutActivated(int fileDescriptor);
-
-
-private:
-    void setupStdOutRedirect();
-
-private:
-    JackService(QObject *parent = 0);
-
-    QSocketNotifier *_stdOutSocketNotifier;
-    QJack::Server _jackServer;
-    QJack::Client _jackClient;
+protected:
+    QJack::AudioPort _audioPort;
 };

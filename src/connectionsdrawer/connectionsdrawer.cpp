@@ -18,78 +18,64 @@
 
 *****************************************************************************/
 
-#include <Qt>
-
 // Own includes
-#include "About.h"
-#include "connectionssplitter.h"
+#include "about.h"
+#include "connectionsdrawer.h"
+#include "clienttreewidget.h"
+#include "portconnectionswidget.h"
 
 // Qt includes
-#include <QApplication>
-#include <QMessageBox>
 #include <QHeaderView>
 #include <QScrollBar>
-#include <QToolTip>
-#include <QPainter>
-#include <QPolygon>
-#include <QPainterPath>
-#include <QTimer>
-#include <QMenu>
-#include <QMimeData>
-#include <QDrag>
-#include <QHelpEvent>
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
 
-ConnectionsSplitter::ConnectionsSplitter (QWidget *parent )
+ConnectionsDrawer::ConnectionsDrawer(QWidget *parent)
     : QSplitter(Qt::Horizontal, parent) {
-    _outputTreeWidget   = new ClientListTreeWidget(this, true);
-    _connectorView      = new JackPortConnectorWidget(this);
-    _inputTreeWidget    = new ClientListTreeWidget(this, false);
+    _inputTreeWidget        = new ClientTreeWidget();
+    _outputTreeWidget       = new ClientTreeWidget();
+    _portConnectionsWidget  = new PortConnectionsWidget(_outputTreeWidget,
+                                                        _inputTreeWidget);
 
-    _drawingBezierLines        = false;
-    _iconSize           = IconSize16x16;
+    addWidget(_outputTreeWidget);
+    addWidget(_portConnectionsWidget);
+    addWidget(_inputTreeWidget);
+
+    _iconSize               = IconSize16x16;
+
+    _outputTreeWidget->setHeaderTitle("Outputs (Readable clients)");
+    _inputTreeWidget->setHeaderTitle("Inputs (Writable clients)");
 
 	connect(_outputTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
-        _connectorView, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(contentsChanged()));
 	connect(_outputTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
-        _connectorView, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(contentsChanged()));
 	connect(_outputTreeWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
-        _connectorView, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(contentsChanged()));
 	connect(_outputTreeWidget->header(), SIGNAL(sectionClicked(int)),
-        _connectorView, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(contentsChanged()));
 
 	connect(_inputTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
-        _connectorView, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(contentsChanged()));
 	connect(_inputTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
-        _connectorView, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(contentsChanged()));
 	connect(_inputTreeWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
-        _connectorView, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(contentsChanged()));
 	connect(_inputTreeWidget->header(), SIGNAL(sectionClicked(int)),
-        _connectorView, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(contentsChanged()));
 }
 
-ConnectionsSplitter::~ConnectionsSplitter () {
+ConnectionsDrawer::~ConnectionsDrawer () {
 }
 
-JackClientList *ConnectionsSplitter::outputClientList() const {
-    return 0;
+void ConnectionsDrawer::setDrawingBezierLines(bool drawingBezierLines) {
+    _portConnectionsWidget->setDrawingBezierLines(drawingBezierLines);
 }
 
-JackClientList *ConnectionsSplitter::inputClientList() const {
-    return 0;
+bool ConnectionsDrawer::isDrawingBezierLines() const {
+    return _portConnectionsWidget->isDrawingBezierLines();
 }
 
-void ConnectionsSplitter::setDrawingBezierLines(bool drawingBezierLines) {
-    _drawingBezierLines = drawingBezierLines;
-}
-
-bool ConnectionsSplitter::isDrawingBezierLines() const {
-    return _drawingBezierLines;
-}
-
-void ConnectionsSplitter::setIconSize(IconSize iconSize) {
-    if (iconSize == _iconSize) {
+void ConnectionsDrawer::setIconSize(IconSize iconSize) {
+    if(iconSize == _iconSize) {
 		return;
     }
 
@@ -102,6 +88,6 @@ void ConnectionsSplitter::setIconSize(IconSize iconSize) {
 	_inputTreeWidget->setIconSize(iconsize);
 }
 
-ConnectionsSplitter::IconSize ConnectionsSplitter::iconSize() const {
+ConnectionsDrawer::IconSize ConnectionsDrawer::iconSize() const {
     return _iconSize;
 }

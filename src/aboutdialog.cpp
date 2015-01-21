@@ -20,7 +20,7 @@
 
 // Own includes
 #include "aboutdialog.h"
-#include "About.h"
+#include "about.h"
 
 // Qt includes
 #include <QMessageBox>

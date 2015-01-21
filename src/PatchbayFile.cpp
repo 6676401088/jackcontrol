@@ -19,7 +19,7 @@
 *****************************************************************************/
 
 // Qt includes
-#include "About.h"
+#include "about.h"
 #include "PatchbayFile.h"
 
 // Qt includes

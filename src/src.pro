@@ -12,10 +12,7 @@ include(src.pri)
 
 HEADERS += \
     InterfaceComboBox.h \
-    About.h \
     SystemTrayIcon.h \
-    AlsaConnect.h \
-    JackConnect.h \
     SocketDialog.h \
     PatchbayFile.h \
     PatchbayRack.h \
@@ -30,11 +27,6 @@ HEADERS += \
     aboutdialog.h \
     settings.h \
     jackservice.h \
-    jackportconnectorwidget.h \
-    clientlisttreewidget.h \
-    jackporttreewidgetitem.h \
-    jackclienttreewidgetitem.h \
-    jackclientlist.h \
     plugtreewidgetitem.h \
     sockettreewidgetitem.h \
     socketlist.h \
@@ -45,13 +37,22 @@ HEADERS += \
     connectalias.h \
     patchbay.h \
     mainwidget.h \
-    connectionssplitter.h
+    connectionsdrawer/clienttreewidgetitem.h \
+    connectionsdrawer/portconnectionswidget.h \
+    connectionsdrawer/porttreewidgetitem.h \
+    connectionsdrawer/connectionsdrawer.h \
+    about.h \
+    jackconnectionsdrawer/JackConnect.h \
+    alsaconnectionsdrawer/AlsaConnect.h \
+    jackconnectionsdrawer/jackconnectionsdrawer.h \
+    alsaconnectionsdrawer/alsaconnectionsdrawer.h \
+    connectionsdrawer/clienttreewidget.h \
+    jackconnectionsdrawer/jackclienttreewidgetitem.h \
+    jackconnectionsdrawer/jackaudioporttreewidgetitem.h
 
 SOURCES += \
     SystemTrayIcon.cpp \
-    AlsaConnect.cpp \
     InterfaceComboBox.cpp \
-    JackConnect.cpp \
     SocketDialog.cpp \
     PatchbayFile.cpp \
     PatchbayRack.cpp \
@@ -66,11 +67,6 @@ SOURCES += \
     settings.cpp \
     jackservice.cpp \
     application.cpp \
-    jackportconnectorwidget.cpp \
-    clientlisttreewidget.cpp \
-    jackporttreewidgetitem.cpp \
-    jackclienttreewidgetitem.cpp \
-    jackclientlist.cpp \
     plugtreewidgetitem.cpp \
     sockettreewidgetitem.cpp \
     socketlist.cpp \
@@ -81,7 +77,17 @@ SOURCES += \
     connectalias.cpp \
     patchbay.cpp \
     mainwidget.cpp \
-    connectionssplitter.cpp
+    connectionsdrawer/clienttreewidgetitem.cpp \
+    connectionsdrawer/portconnectionswidget.cpp \
+    connectionsdrawer/porttreewidgetitem.cpp \
+    connectionsdrawer/connectionsdrawer.cpp \
+    jackconnectionsdrawer/JackConnect.cpp \
+    alsaconnectionsdrawer/AlsaConnect.cpp \
+    jackconnectionsdrawer/jackconnectionsdrawer.cpp \
+    alsaconnectionsdrawer/alsaconnectionsdrawer.cpp \
+    connectionsdrawer/clienttreewidget.cpp \
+    jackconnectionsdrawer/jackclienttreewidgetitem.cpp \
+    jackconnectionsdrawer/jackaudioporttreewidgetitem.cpp
 
 FORMS += \
     SocketDialog.ui \
@@ -149,7 +155,11 @@ QT += xml
         QT += widgets
 }
 
-INCLUDEPATH += .. ../qjack
+INCLUDEPATH += \
+    connectionsdrawer \
+    jackconnectionsdrawer \
+    alsaconnectionsdrawer \
+     .. ../qjack
 
 LIBS += -L../qjack/lib \
                 -lqjack \

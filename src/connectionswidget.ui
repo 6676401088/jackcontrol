@@ -69,7 +69,7 @@
      </property>
      <widget class="QWidget" name="AudioConnectTab">
       <attribute name="title">
-       <string>Audio</string>
+       <string>JACK</string>
       </attribute>
       <layout class="QGridLayout">
        <property name="leftMargin">
@@ -88,7 +88,7 @@
         <number>4</number>
        </property>
        <item row="0" column="0">
-        <widget class="ConnectionsSplitter" name="AudioConnectView" native="true">
+        <widget class="JackConnectionsDrawer" name="AudioConnectView" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -259,7 +259,7 @@
         <number>4</number>
        </property>
        <item row="0" column="0">
-        <widget class="ConnectionsSplitter" name="MidiConnectView" native="true">
+        <widget class="ConnectionsDrawer" name="MidiConnectView" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -430,7 +430,7 @@
         <number>4</number>
        </property>
        <item row="0" column="0">
-        <widget class="ConnectionsSplitter" name="AlsaConnectView" native="true">
+        <widget class="AlsaConnectionsDrawer" name="AlsaConnectView" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -587,9 +587,21 @@
  <layoutdefault spacing="4" margin="4"/>
  <customwidgets>
   <customwidget>
-   <class>ConnectionsSplitter</class>
+   <class>ConnectionsDrawer</class>
    <extends>QWidget</extends>
-   <header>connectionssplitter.h</header>
+   <header>connectionsdrawer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>JackConnectionsDrawer</class>
+   <extends>QWidget</extends>
+   <header>jackconnectionsdrawer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AlsaConnectionsDrawer</class>
+   <extends>QWidget</extends>
+   <header>alsaconnectionsdrawer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

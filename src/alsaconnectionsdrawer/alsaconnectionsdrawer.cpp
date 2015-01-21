@@ -17,51 +17,12 @@
 
 *****************************************************************************/
 
-#pragma once
+// Own includes
+#include "alsaconnectionsdrawer.h"
 
-// Qt includes
-#include <QObject>
-#include <QSocketNotifier>
+AlsaConnectionsDrawer::AlsaConnectionsDrawer(QWidget *parent)
+    : ConnectionsDrawer(parent) {
+}
 
-// QJack includes
-#include <System>
-#include <Server>
-#include <Client>
-
-class JackService : public QObject {
-    Q_OBJECT
-public:
-    static JackService& instance() {
-        static JackService jackService;
-        return jackService;
-    }
-
-    enum MessageType {
-        MessageTypeNormal,
-        MessageTypeError,
-        MessageTypeStdOut
-    };
-
-    void start();
-    void stop();
-
-    QJack::Client& client();
-    QJack::Server& server();
-
-signals:
-    void message(QString message, JackService::MessageType messageType);
-
-private slots:
-    void stdOutActivated(int fileDescriptor);
-
-
-private:
-    void setupStdOutRedirect();
-
-private:
-    JackService(QObject *parent = 0);
-
-    QSocketNotifier *_stdOutSocketNotifier;
-    QJack::Server _jackServer;
-    QJack::Client _jackClient;
-};
+AlsaConnectionsDrawer::~AlsaConnectionsDrawer() {
+}

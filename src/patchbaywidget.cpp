@@ -21,7 +21,7 @@
 #include <Qt>
 
 // Own includes
-#include "About.h"
+#include "about.h"
 #include "patchbaywidget.h"
 #include "PatchbayFile.h"
 #include "settings.h"

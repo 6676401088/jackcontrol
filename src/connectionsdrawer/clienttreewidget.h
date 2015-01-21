@@ -23,30 +23,41 @@
 #include <QTreeWidget>
 
 // Own includes
-class ConnectionsSplitter;
 #include "connectalias.h"
+#include "connectionsdrawer.h"
+#include "porttreewidgetitem.h"
 
-class ClientListTreeWidget : public QTreeWidget {
+/**
+ * An actual client tree.
+ */
+class ClientTreeWidget : public QTreeWidget {
     Q_OBJECT
 
 public:
-    ClientListTreeWidget(ConnectionsSplitter *pConnectView, bool bReadable);
-    ~ClientListTreeWidget();
+    ClientTreeWidget(QWidget *parent = 0);
+    virtual ~ClientTreeWidget();
+
+    void setHeaderTitle(QString headerTitle);
 
     // Auto-open timer methods.
-    void setAutoOpenTimeout(int iAutoOpenTimeout);
+    void setAutoOpenTimeout(int autoOpenTimeout);
     int autoOpenTimeout() const;
 
     // Aliasing support methods.
-    void setAliases(ConnectAlias *pAliases, bool bRenameEnabled);
+    void setAliases(ConnectAlias *connectAliases, bool renameEnabled);
     ConnectAlias *aliases() const;
     bool renameEnabled() const;
 
-protected slots:
+    QList<PortTreeWidgetItem *> ports();
 
+signals:
+    void contentsChanged();
+
+protected slots:
     // In-place aliasing slots.
     void startRenameSlot();
     void renamedSlot();
+
     // Auto-open timeout slot.
     void timeoutSlot();
 
@@ -72,21 +83,17 @@ protected:
     void contextMenuEvent(QContextMenuEvent *);
 
 private:
-
-    // Bindings.
-    ConnectionsSplitter *m_pConnectView;
-
     // Auto-open timer.
-    int     m_iAutoOpenTimeout;
-    QTimer *m_pAutoOpenTimer;
+    int     _autoOpenTimeout;
+    QTimer *_autoOpenTimer;
 
     // Items we'll eventually drop something.
-    QTreeWidgetItem *m_pDragItem;
-    QTreeWidgetItem *m_pDropItem;
+    QTreeWidgetItem *_dragItem;
+    QTreeWidgetItem *_dropItem;
     // The point from where drag started.
-    QPoint m_posDrag;
+    QPoint _dragStartPosition;
 
     // Aliasing support.
-    ConnectAlias *m_pAliases;
-    bool m_bRenameEnabled;
+    ConnectAlias *_connectAliases;
+    bool _renameEnabled;
 };

@@ -20,7 +20,7 @@
 *****************************************************************************/
 
 // Own includes
-#include "About.h"
+#include "about.h"
 #include "InterfaceComboBox.h"
 #include "settings.h"
 

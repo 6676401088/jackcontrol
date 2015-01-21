@@ -21,7 +21,7 @@
 #include <Qt>
 
 // Own includes
-#include "About.h"
+#include "about.h"
 #include "connectionswidget.h"
 #include "settings.h"
 #include "mainwidget.h"
@@ -87,24 +87,24 @@ ConnectionsWidget::ConnectionsWidget(QWidget *parent)
 		SLOT(alsaRefreshClear()));
 
 	// Connect it to some UI feedback slots.
-    connect(ui.AudioConnectView->outputTreeWidget(),
-		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-		SLOT(audioStabilize()));
-    connect(ui.AudioConnectView->inputTreeWidget(),
-		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-		SLOT(audioStabilize()));
-    connect(ui.MidiConnectView->outputTreeWidget(),
-		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-		SLOT(midiStabilize()));
-    connect(ui.MidiConnectView->inputTreeWidget(),
-		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-		SLOT(midiStabilize()));
-    connect(ui.AlsaConnectView->outputTreeWidget(),
-		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-		SLOT(alsaStabilize()));
-    connect(ui.AlsaConnectView->inputTreeWidget(),
-		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-		SLOT(alsaStabilize()));
+//    connect(ui.AudioConnectView->outputTreeWidget(),
+//		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+//		SLOT(audioStabilize()));
+//    connect(ui.AudioConnectView->inputTreeWidget(),
+//		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+//		SLOT(audioStabilize()));
+//    connect(ui.MidiConnectView->outputTreeWidget(),
+//		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+//		SLOT(midiStabilize()));
+//    connect(ui.MidiConnectView->inputTreeWidget(),
+//		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+//		SLOT(midiStabilize()));
+//    connect(ui.AlsaConnectView->outputTreeWidget(),
+//		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+//		SLOT(alsaStabilize()));
+//    connect(ui.AlsaConnectView->inputTreeWidget(),
+//		SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+//		SLOT(alsaStabilize()));
 
 	// Dirty dispatcher (refresh deferral).
     connect(ui.AudioConnectView,
@@ -122,7 +122,7 @@ ConnectionsWidget::ConnectionsWidget(QWidget *parent)
     ui.ConnectionsTabWidget->setTabEnabled(1, false);
 #endif
 #ifndef CONFIG_ALSA_SEQ
-//	ui.ConnectionsTabWidget->setTabEnabled(2, false);
+    ui.ConnectionsTabWidget->setTabEnabled(2, false);
     ui.ConnectionsTabWidget->removeTab(2);
 #endif
 
@@ -175,7 +175,7 @@ void ConnectionsWidget::setSettings ( Settings *pSetup )
         _settings->loadSplitterSizes(ui.MidiConnectView, sizes);
         _settings->loadSplitterSizes(ui.AlsaConnectView, sizes);
 	#ifdef CONFIG_ALSA_SEQ
-		if (!m_pSetup->bAlsaSeqEnabled) {
+        if (!_settings->bAlsaSeqEnabled) {
 		//	m_ui.ConnectionsTabWidget->setTabEnabled(2, false);
             ui.ConnectionsTabWidget->removeTab(2);
 		}
@@ -186,17 +186,17 @@ void ConnectionsWidget::setSettings ( Settings *pSetup )
 	updateAliases();
 }
 
-ConnectionsSplitter *ConnectionsWidget::audioConnectView () const
+ConnectionsDrawer *ConnectionsWidget::audioConnectView () const
 {
     return ui.AudioConnectView;
 }
 
-ConnectionsSplitter *ConnectionsWidget::midiConnectView () const
+ConnectionsDrawer *ConnectionsWidget::midiConnectView () const
 {
     return ui.MidiConnectView;
 }
 
-ConnectionsSplitter *ConnectionsWidget::alsaConnectView () const
+ConnectionsDrawer *ConnectionsWidget::alsaConnectView () const
 {
     return ui.AlsaConnectView;
 }
@@ -285,21 +285,20 @@ int ConnectionsWidget::tabPage () const
 QFont ConnectionsWidget::connectionsFont () const
 {
 	// Elect one list view to retrieve current font.
-    return ui.AudioConnectView->outputTreeWidget()->font();
+    return QFont(); //ui.AudioConnectView->outputTreeWidget()->font();
 }
 
 void ConnectionsWidget::setConnectionsFont ( const QFont & font )
 {
-	// Set fonts of all listviews...
-    ui.AudioConnectView->outputTreeWidget()->setFont(font);
-    ui.AudioConnectView->inputTreeWidget()->setFont(font);
-    ui.MidiConnectView->outputTreeWidget()->setFont(font);
-    ui.MidiConnectView->inputTreeWidget()->setFont(font);
-    ui.AlsaConnectView->outputTreeWidget()->setFont(font);
-    ui.AlsaConnectView->inputTreeWidget()->setFont(font);
+//    ui.AudioConnectView->outputTreeWidget()->setFont(font);
+//    ui.AudioConnectView->inputTreeWidget()->setFont(font);
+//    ui.MidiConnectView->outputTreeWidget()->setFont(font);
+//    ui.MidiConnectView->inputTreeWidget()->setFont(font);
+//    ui.AlsaConnectView->outputTreeWidget()->setFont(font);
+//    ui.AlsaConnectView->inputTreeWidget()->setFont(font);
 }
 
-void ConnectionsWidget::setConnectionsIconSize(ConnectionsSplitter::IconSize iconSize) {
+void ConnectionsWidget::setConnectionsIconSize(ConnectionsDrawer::IconSize iconSize) {
     ui.AudioConnectView->setIconSize(iconSize);
     ui.MidiConnectView->setIconSize(iconSize);
     ui.AlsaConnectView->setIconSize(iconSize);
@@ -346,7 +345,7 @@ void ConnectionsWidget::audioExpandAll ()
 }
 
 void ConnectionsWidget::audioDisconnecting (
-    JackPortTreeWidgetItem *pOPort, JackPortTreeWidgetItem *pIPort )
+    PortTreeWidgetItem *pOPort, PortTreeWidgetItem *pIPort )
 {
     MainWidget *pMainForm = MainWidget::getInstance();
 	if (pMainForm)
@@ -411,7 +410,7 @@ void ConnectionsWidget::midiExpandAll ()
 }
 
 void ConnectionsWidget::midiDisconnecting (
-    JackPortTreeWidgetItem *pOPort, JackPortTreeWidgetItem *pIPort )
+    PortTreeWidgetItem *pOPort, PortTreeWidgetItem *pIPort )
 {
     MainWidget *pMainForm = MainWidget::getInstance();
 	if (pMainForm)
@@ -476,7 +475,7 @@ void ConnectionsWidget::alsaExpandAll ()
 }
 
 void ConnectionsWidget::alsaDisconnecting (
-    JackPortTreeWidgetItem *pOPort, JackPortTreeWidgetItem *pIPort )
+    PortTreeWidgetItem *pOPort, PortTreeWidgetItem *pIPort )
 {
     MainWidget *pMainForm = MainWidget::getInstance();
 	if (pMainForm)
@@ -615,28 +614,28 @@ void ConnectionsWidget::stabilizeAlsa ( bool bEnabled, bool bClear )
 void ConnectionsWidget::updateAliases ()
 {
 	// Set alias maps for all listviews...
-    if (_settings && _settings->bAliasesEnabled) {
-        bool bRenameEnabled = _settings->bAliasesEditing;
-        ui.AudioConnectView->outputTreeWidget()->setAliases(
-            &(_settings->aliasAudioOutputs), bRenameEnabled);
-        ui.AudioConnectView->inputTreeWidget()->setAliases(
-            &(_settings->aliasAudioInputs),  bRenameEnabled);
-        ui.MidiConnectView->outputTreeWidget()->setAliases(
-            &(_settings->aliasMidiOutputs), bRenameEnabled);
-        ui.MidiConnectView->inputTreeWidget()->setAliases(
-            &(_settings->aliasMidiInputs),  bRenameEnabled);
-        ui.AlsaConnectView->outputTreeWidget()->setAliases(
-            &(_settings->aliasAlsaOutputs), bRenameEnabled);
-        ui.AlsaConnectView->inputTreeWidget()->setAliases(
-            &(_settings->aliasAlsaInputs),  bRenameEnabled);
-	} else {
-        ui.AudioConnectView->outputTreeWidget()->setAliases(NULL, false);
-        ui.AudioConnectView->inputTreeWidget()->setAliases(NULL, false);
-        ui.MidiConnectView->outputTreeWidget()->setAliases(NULL, false);
-        ui.MidiConnectView->inputTreeWidget()->setAliases(NULL, false);
-        ui.AlsaConnectView->outputTreeWidget()->setAliases(NULL, false);
-        ui.AlsaConnectView->inputTreeWidget()->setAliases(NULL, false);
-	}
+//    if (_settings && _settings->bAliasesEnabled) {
+//        bool bRenameEnabled = _settings->bAliasesEditing;
+//        ui.AudioConnectView->outputTreeWidget()->setAliases(
+//            &(_settings->aliasAudioOutputs), bRenameEnabled);
+//        ui.AudioConnectView->inputTreeWidget()->setAliases(
+//            &(_settings->aliasAudioInputs),  bRenameEnabled);
+//        ui.MidiConnectView->outputTreeWidget()->setAliases(
+//            &(_settings->aliasMidiOutputs), bRenameEnabled);
+//        ui.MidiConnectView->inputTreeWidget()->setAliases(
+//            &(_settings->aliasMidiInputs),  bRenameEnabled);
+//        ui.AlsaConnectView->outputTreeWidget()->setAliases(
+//            &(_settings->aliasAlsaOutputs), bRenameEnabled);
+//        ui.AlsaConnectView->inputTreeWidget()->setAliases(
+//            &(_settings->aliasAlsaInputs),  bRenameEnabled);
+//	} else {
+//        ui.AudioConnectView->outputTreeWidget()->setAliases(NULL, false);
+//        ui.AudioConnectView->inputTreeWidget()->setAliases(NULL, false);
+//        ui.MidiConnectView->outputTreeWidget()->setAliases(NULL, false);
+//        ui.MidiConnectView->inputTreeWidget()->setAliases(NULL, false);
+//        ui.AlsaConnectView->outputTreeWidget()->setAliases(NULL, false);
+//        ui.AlsaConnectView->inputTreeWidget()->setAliases(NULL, false);
+//	}
 }
 
 void ConnectionsWidget::keyPressEvent ( QKeyEvent *pKeyEvent )

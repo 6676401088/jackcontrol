@@ -17,51 +17,38 @@
 
 *****************************************************************************/
 
-#pragma once
+// Own includes
+#include "jackaudioporttreewidgetitem.h"
 
 // Qt includes
-#include <QObject>
-#include <QSocketNotifier>
+#include <QIcon>
 
-// QJack includes
-#include <System>
-#include <Server>
-#include <Client>
+JackAudioPortTreeWidgetItem::JackAudioPortTreeWidgetItem(QJack::AudioPort audioPort)
+    : PortTreeWidgetItem(audioPort.portName()) {
+    _audioPort = audioPort;
 
-class JackService : public QObject {
-    Q_OBJECT
-public:
-    static JackService& instance() {
-        static JackService jackService;
-        return jackService;
+    if(_audioPort.isOutput()) {
+        setIcon(0, QIcon(":/images/aportlto_64x64.png"));
+    } else
+    if(_audioPort.isInput()) {
+        setIcon(0, QIcon(":/images/aportpti_64x64.png"));
+    }
+}
+
+bool JackAudioPortTreeWidgetItem::isConnectedTo(PortTreeWidgetItem *other) {
+    // Null ports cannot be connected.
+    if(!other) {
+        return false;
     }
 
-    enum MessageType {
-        MessageTypeNormal,
-        MessageTypeError,
-        MessageTypeStdOut
-    };
+    // Try to cast to an audio port.
+    JackAudioPortTreeWidgetItem *audioPortItem
+        = dynamic_cast<JackAudioPortTreeWidgetItem*>(other);
 
-    void start();
-    void stop();
+    if(!audioPortItem) {
+        // This not an audio port, therefore it cannot be connected.
+        return false;
+    }
 
-    QJack::Client& client();
-    QJack::Server& server();
-
-signals:
-    void message(QString message, JackService::MessageType messageType);
-
-private slots:
-    void stdOutActivated(int fileDescriptor);
-
-
-private:
-    void setupStdOutRedirect();
-
-private:
-    JackService(QObject *parent = 0);
-
-    QSocketNotifier *_stdOutSocketNotifier;
-    QJack::Server _jackServer;
-    QJack::Client _jackClient;
-};
+    return false;
+}
