@@ -26,7 +26,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
+    <width>815</width>
     <height>409</height>
    </rect>
   </property>
@@ -46,585 +46,135 @@
    <iconset resource="qjackctl.qrc">
     <normaloff>:/images/connections1.png</normaloff>:/images/connections1.png</iconset>
   </property>
-  <layout class="QGridLayout">
-   <property name="leftMargin">
-    <number>4</number>
-   </property>
-   <property name="topMargin">
-    <number>4</number>
-   </property>
-   <property name="rightMargin">
-    <number>4</number>
-   </property>
-   <property name="bottomMargin">
-    <number>4</number>
-   </property>
-   <property name="spacing">
-    <number>4</number>
-   </property>
-   <item row="0" column="0">
-    <widget class="QTabWidget" name="ConnectionsTabWidget">
-     <property name="currentIndex">
-      <number>0</number>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="JackConnectionsDrawer" name="jackConnectionsDrawer" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <widget class="QWidget" name="AudioConnectTab">
-      <attribute name="title">
-       <string>JACK</string>
-      </attribute>
-      <layout class="QGridLayout">
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>4</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
-        <number>4</number>
-       </property>
-       <property name="spacing">
-        <number>4</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="JackConnectionsDrawer" name="AudioConnectView" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::TabFocus</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout">
-         <property name="spacing">
-          <number>4</number>
-         </property>
-         <property name="leftMargin">
-          <number>4</number>
-         </property>
-         <property name="topMargin">
-          <number>4</number>
-         </property>
-         <property name="rightMargin">
-          <number>4</number>
-         </property>
-         <property name="bottomMargin">
-          <number>4</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="AudioConnectPushButton">
-           <property name="toolTip">
-            <string>Connect currently selected ports</string>
-           </property>
-           <property name="text">
-            <string>&amp;Connect</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/connect1.png</normaloff>:/images/connect1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+C</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="AudioDisconnectPushButton">
-           <property name="toolTip">
-            <string>Disconnect currently selected ports</string>
-           </property>
-           <property name="text">
-            <string>&amp;Disconnect</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/disconnect1.png</normaloff>:/images/disconnect1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+D</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="AudioDisconnectAllPushButton">
-           <property name="toolTip">
-            <string>Disconnect all currently connected ports</string>
-           </property>
-           <property name="text">
-            <string>Disconnect &amp;All</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/disconnectall1.png</normaloff>:/images/disconnectall1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+A</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>8</width>
-             <height>8</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="AudioExpandAllPushButton">
-           <property name="toolTip">
-            <string>Expand all client ports</string>
-           </property>
-           <property name="text">
-            <string>E&amp;xpand All</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/expandall1.png</normaloff>:/images/expandall1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+X</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>8</width>
-             <height>8</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="AudioRefreshPushButton">
-           <property name="toolTip">
-            <string>Refresh current connections view</string>
-           </property>
-           <property name="text">
-            <string>&amp;Refresh</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/refresh1.png</normaloff>:/images/refresh1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+R</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="MidiConnectTab">
-      <attribute name="title">
-       <string>MIDI</string>
-      </attribute>
-      <layout class="QGridLayout">
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>4</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
-        <number>4</number>
-       </property>
-       <property name="spacing">
-        <number>4</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="ConnectionsDrawer" name="MidiConnectView" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::TabFocus</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout">
-         <property name="spacing">
-          <number>4</number>
-         </property>
-         <property name="leftMargin">
-          <number>4</number>
-         </property>
-         <property name="topMargin">
-          <number>4</number>
-         </property>
-         <property name="rightMargin">
-          <number>4</number>
-         </property>
-         <property name="bottomMargin">
-          <number>4</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="MidiConnectPushButton">
-           <property name="toolTip">
-            <string>Connect currently selected ports</string>
-           </property>
-           <property name="text">
-            <string>&amp;Connect</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/connect1.png</normaloff>:/images/connect1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+C</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="MidiDisconnectPushButton">
-           <property name="toolTip">
-            <string>Disconnect currently selected ports</string>
-           </property>
-           <property name="text">
-            <string>&amp;Disconnect</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/disconnect1.png</normaloff>:/images/disconnect1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+D</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="MidiDisconnectAllPushButton">
-           <property name="toolTip">
-            <string>Disconnect all currently connected ports</string>
-           </property>
-           <property name="text">
-            <string>Disconnect &amp;All</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/disconnectall1.png</normaloff>:/images/disconnectall1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+A</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>8</width>
-             <height>8</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="MidiExpandAllPushButton">
-           <property name="toolTip">
-            <string>Expand all client ports</string>
-           </property>
-           <property name="text">
-            <string>E&amp;xpand All</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/expandall1.png</normaloff>:/images/expandall1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+X</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>8</width>
-             <height>8</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="MidiRefreshPushButton">
-           <property name="toolTip">
-            <string>Refresh current connections view</string>
-           </property>
-           <property name="text">
-            <string>&amp;Refresh</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/refresh1.png</normaloff>:/images/refresh1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+R</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="AlsaConnectTab">
-      <attribute name="title">
-       <string>ALSA</string>
-      </attribute>
-      <layout class="QGridLayout">
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>4</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
-        <number>4</number>
-       </property>
-       <property name="spacing">
-        <number>4</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="AlsaConnectionsDrawer" name="AlsaConnectView" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::TabFocus</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout">
-         <property name="spacing">
-          <number>4</number>
-         </property>
-         <property name="leftMargin">
-          <number>4</number>
-         </property>
-         <property name="topMargin">
-          <number>4</number>
-         </property>
-         <property name="rightMargin">
-          <number>4</number>
-         </property>
-         <property name="bottomMargin">
-          <number>4</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="AlsaConnectPushButton">
-           <property name="toolTip">
-            <string>Connect currently selected ports</string>
-           </property>
-           <property name="text">
-            <string>&amp;Connect</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/connect1.png</normaloff>:/images/connect1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+C</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="AlsaDisconnectPushButton">
-           <property name="toolTip">
-            <string>Disconnect currently selected ports</string>
-           </property>
-           <property name="text">
-            <string>&amp;Disconnect</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/disconnect1.png</normaloff>:/images/disconnect1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+D</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="AlsaDisconnectAllPushButton">
-           <property name="toolTip">
-            <string>Disconnect all currently connected ports</string>
-           </property>
-           <property name="text">
-            <string>Disconnect &amp;All</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/disconnectall1.png</normaloff>:/images/disconnectall1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+A</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>8</width>
-             <height>8</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="AlsaExpandAllPushButton">
-           <property name="toolTip">
-            <string>Expand all client ports</string>
-           </property>
-           <property name="text">
-            <string>E&amp;xpand All</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/expandall1.png</normaloff>:/images/expandall1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+X</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>8</width>
-             <height>8</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="AlsaRefreshPushButton">
-           <property name="toolTip">
-            <string>Refresh current connections view</string>
-           </property>
-           <property name="text">
-            <string>&amp;Refresh</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qjackctl.qrc">
-             <normaloff>:/images/refresh1.png</normaloff>:/images/refresh1.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Alt+R</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
+     <property name="focusPolicy">
+      <enum>Qt::TabFocus</enum>
+     </property>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButtonConnect">
+       <property name="toolTip">
+        <string>Connect currently selected ports</string>
+       </property>
+       <property name="text">
+        <string>&amp;Connect</string>
+       </property>
+       <property name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/connect1.png</normaloff>:/images/connect1.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Alt+C</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonDisconnect">
+       <property name="toolTip">
+        <string>Disconnect currently selected ports</string>
+       </property>
+       <property name="text">
+        <string>&amp;Disconnect</string>
+       </property>
+       <property name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/disconnect1.png</normaloff>:/images/disconnect1.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Alt+D</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>13</width>
+         <height>13</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonDisconnectAll">
+       <property name="toolTip">
+        <string>Disconnect all currently connected ports</string>
+       </property>
+       <property name="text">
+        <string>Disconnect &amp;all</string>
+       </property>
+       <property name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/disconnectall1.png</normaloff>:/images/disconnectall1.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Alt+A</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonCollapseAll">
+       <property name="text">
+        <string>Collapse all</string>
+       </property>
+       <property name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/expandall1.png</normaloff>:/images/expandall1.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonExpandAll">
+       <property name="toolTip">
+        <string>Expand all client ports</string>
+       </property>
+       <property name="text">
+        <string>E&amp;xpand all</string>
+       </property>
+       <property name="icon">
+        <iconset resource="qjackctl.qrc">
+         <normaloff>:/images/expandall1.png</normaloff>:/images/expandall1.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Alt+X</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="4" margin="4"/>
  <customwidgets>
   <customwidget>
-   <class>ConnectionsDrawer</class>
-   <extends>QWidget</extends>
-   <header>connectionsdrawer.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>JackConnectionsDrawer</class>
    <extends>QWidget</extends>
    <header>jackconnectionsdrawer.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>AlsaConnectionsDrawer</class>
-   <extends>QWidget</extends>
-   <header>alsaconnectionsdrawer.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>ConnectionsTabWidget</tabstop>
-  <tabstop>AudioConnectView</tabstop>
-  <tabstop>AudioConnectPushButton</tabstop>
-  <tabstop>AudioDisconnectPushButton</tabstop>
-  <tabstop>AudioDisconnectAllPushButton</tabstop>
-  <tabstop>AudioExpandAllPushButton</tabstop>
-  <tabstop>AudioRefreshPushButton</tabstop>
-  <tabstop>MidiConnectView</tabstop>
-  <tabstop>MidiConnectPushButton</tabstop>
-  <tabstop>MidiDisconnectPushButton</tabstop>
-  <tabstop>MidiDisconnectAllPushButton</tabstop>
-  <tabstop>MidiExpandAllPushButton</tabstop>
-  <tabstop>MidiRefreshPushButton</tabstop>
-  <tabstop>AlsaConnectView</tabstop>
-  <tabstop>AlsaConnectPushButton</tabstop>
-  <tabstop>AlsaDisconnectPushButton</tabstop>
-  <tabstop>AlsaDisconnectAllPushButton</tabstop>
-  <tabstop>AlsaExpandAllPushButton</tabstop>
-  <tabstop>AlsaRefreshPushButton</tabstop>
+  <tabstop>pushButtonConnect</tabstop>
+  <tabstop>pushButtonDisconnect</tabstop>
+  <tabstop>pushButtonDisconnectAll</tabstop>
+  <tabstop>pushButtonExpandAll</tabstop>
  </tabstops>
  <resources>
   <include location="qjackctl.qrc"/>

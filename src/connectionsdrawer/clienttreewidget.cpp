@@ -69,6 +69,8 @@ ClientTreeWidget::ClientTreeWidget(QWidget *parent)
     setColumnCount(1);
     setAlternatingRowColors(true);
     setAnimated(true);
+    setTextElideMode(Qt::ElideMiddle);
+    setMinimumWidth(120);
 
     sortItems(0, Qt::AscendingOrder);
 

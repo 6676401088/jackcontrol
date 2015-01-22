@@ -485,8 +485,7 @@ bool MainWidget::setup ( Settings *pSetup )
     m_pPatchbayForm    = new PatchbayWidget    (pParent, wflags);
     // Setup appropriately...
     m_pSessionForm->setup(m_pSetup);
-    m_pConnectionsForm->setTabPage(m_pSetup->iConnectionsTabPage);
-    m_pConnectionsForm->setSettings(m_pSetup);
+    //m_pConnectionsForm->setSettings(m_pSetup);
     m_pPatchbayForm->setup(m_pSetup);
 
     // Set the patchbay cable connection notification signal/slot.
@@ -747,11 +746,11 @@ bool MainWidget::queryClose ()
     }
 
     // Try to save current aliases default settings.
-    if (bQueryClose && m_pConnectionsForm) {
-        bQueryClose = m_pConnectionsForm->queryClose();
-        if (bQueryClose)
-            m_pSetup->iConnectionsTabPage = m_pConnectionsForm->tabPage();
-    }
+//    if (bQueryClose && m_pConnectionsForm) {
+//        bQueryClose = m_pConnectionsForm->queryClose();
+////        if (bQueryClose)
+////            m_pSetup->iConnectionsTabPage = m_pConnectionsForm->tabPage();
+//    }
 
     // Try to save current patchbay default settings.
     if (bQueryClose && m_pPatchbayForm) {
@@ -1235,21 +1234,21 @@ void MainWidget::startJack ()
 // Stop jack audio server...
 void MainWidget::stopJack ()
 {
-    // Check if we're allowed to stop (shutdown)...
-    if (m_pSetup->bQueryShutdown && m_pConnectionsForm
-        && (m_pConnectionsForm->isAudioConnected() ||
-            m_pConnectionsForm->isMidiConnected())
-        && QMessageBox::warning(this,
-            tr("Warning") + " - " QJACKCTL_SUBTITLE1,
-            tr("Some client audio applications\n"
-            "are still active and connected.\n\n"
-            "Do you want to stop the JACK audio server?"),
-            QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
-        return;
-    }
+//    // Check if we're allowed to stop (shutdown)...
+//    if (m_pSetup->bQueryShutdown && m_pConnectionsForm
+//        && (m_pConnectionsForm->isAudioConnected() ||
+//            m_pConnectionsForm->isMidiConnected())
+//        && QMessageBox::warning(this,
+//            tr("Warning") + " - " QJACKCTL_SUBTITLE1,
+//            tr("Some client audio applications\n"
+//            "are still active and connected.\n\n"
+//            "Do you want to stop the JACK audio server?"),
+//            QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+//        return;
+//    }
 
-    // Stop the server unconditionally.
-    stopJackServer();
+//    // Stop the server unconditionally.
+//    stopJackServer();
 }
 
 
@@ -1515,25 +1514,25 @@ void MainWidget::stdoutNotifySlot ( int fd )
 // Force update of the connections font.
 void MainWidget::updateConnectionsFont ()
 {
-    if (m_pSetup == NULL)
-        return;
+//    if (m_pSetup == NULL)
+//        return;
 
-    if (m_pConnectionsForm && !m_pSetup->sConnectionsFont.isEmpty()) {
-        QFont font;
-        if (font.fromString(m_pSetup->sConnectionsFont))
-            m_pConnectionsForm->setConnectionsFont(font);
-    }
+//    if (m_pConnectionsForm && !m_pSetup->sConnectionsFont.isEmpty()) {
+//        QFont font;
+//        if (font.fromString(m_pSetup->sConnectionsFont))
+//            m_pConnectionsForm->setConnectionsFont(font);
+//    }
 }
 
 
 // Update of the connections view icon size.
 void MainWidget::updateConnectionsIconSize ()
 {
-    if (m_pSetup == NULL)
-        return;
+//    if (m_pSetup == NULL)
+//        return;
 
-    if (m_pConnectionsForm)
-        m_pConnectionsForm->setConnectionsIconSize(m_pSetup->iConnectionsIconSize);
+//    if (m_pConnectionsForm)
+//        m_pConnectionsForm->setConnectionsIconSize(m_pSetup->iConnectionsIconSize);
 }
 
 
@@ -1658,8 +1657,8 @@ void MainWidget::updateTimeFormat ()
 // Update the connections client/port aliases.
 void MainWidget::updateAliases ()
 {
-    if (m_pConnectionsForm)
-        m_pConnectionsForm->updateAliases();
+//    if (m_pConnectionsForm)
+//        m_pConnectionsForm->updateAliases();
 }
 
 
@@ -2160,8 +2159,8 @@ void MainWidget::timerSlot ()
         // Are we about to refresh it, really?
         if (m_iJackRefresh > 0 && m_pJackClient != NULL) {
             m_iJackRefresh = 0;
-            m_pConnectionsForm->refreshAudio(true);
-            m_pConnectionsForm->refreshMidi(true);
+//            m_pConnectionsForm->refreshAudio(true);
+//            m_pConnectionsForm->refreshMidi(true);
         }
 //        if (m_iAlsaRefresh > 0 && m_pAlsaSeq != NULL) {
 //            m_iAlsaRefresh = 0;
@@ -2293,9 +2292,9 @@ bool MainWidget::startJackClient ( bool bDetach )
     if (m_pSetup == NULL)
         return false;
 
-    // Time to (re)load current preset aliases?
-    if (m_pConnectionsForm && !m_pConnectionsForm->loadAliases())
-        return false;
+//    // Time to (re)load current preset aliases?
+//    if (m_pConnectionsForm && !m_pConnectionsForm->loadAliases())
+//        return false;
 
     // Make sure all status(es) will be updated ASAP.
     m_iStatusRefresh += QJACKCTL_STATUS_CYCLE;
@@ -2370,10 +2369,10 @@ bool MainWidget::startJackClient ( bool bDetach )
     g_nframes = jack_get_buffer_size(m_pJackClient);
 
     // Reconstruct our connections and session...
-    if (m_pConnectionsForm) {
-        m_pConnectionsForm->stabilizeAudio(true);
-        m_pConnectionsForm->stabilizeMidi(true);
-    }
+//    if (m_pConnectionsForm) {
+//        m_pConnectionsForm->stabilizeAudio(true);
+//        m_pConnectionsForm->stabilizeMidi(true);
+//    }
     if (m_pSessionForm)
         m_pSessionForm->stabilizeForm(true);
 
@@ -2472,10 +2471,10 @@ void MainWidget::stopJackClient ()
     m_sJackCmdLine.clear();
 
     // Clear out the connections and session...
-    if (m_pConnectionsForm) {
-        m_pConnectionsForm->stabilizeAudio(false);
-        m_pConnectionsForm->stabilizeMidi(false);
-    }
+//    if (m_pConnectionsForm) {
+//        m_pConnectionsForm->stabilizeAudio(false);
+//        m_pConnectionsForm->stabilizeMidi(false);
+//    }
     if (m_pSessionForm)
         m_pSessionForm->stabilizeForm(false);
 
@@ -2630,8 +2629,8 @@ void MainWidget::toggleConnectionsForm ()
 {
     if (m_pConnectionsForm) {
         m_pSetup->saveWidgetGeometry(m_pConnectionsForm);
-        m_pConnectionsForm->stabilizeAudio(m_pJackClient != NULL);
-        m_pConnectionsForm->stabilizeMidi(m_pJackClient != NULL);
+//        m_pConnectionsForm->stabilizeAudio(m_pJackClient != NULL);
+//        m_pConnectionsForm->stabilizeMidi(m_pJackClient != NULL);
         //m_pConnectionsForm->stabilizeAlsa(m_pAlsaSeq != NULL);
         if (m_pConnectionsForm->isVisible()) {
             m_pConnectionsForm->hide();
@@ -3431,15 +3430,15 @@ void MainWidget::activatePreset ( const QString& sPreset )
 // Select the current default preset (by index).
 void MainWidget::activatePreset ( int iPreset )
 {
-    if (m_pConnectionsForm && !m_pConnectionsForm->queryClose())
-        return;
+//    if (m_pConnectionsForm && !m_pConnectionsForm->queryClose())
+//        return;
 
-    if (iPreset >= 0 && iPreset < m_pSetup->presets.count())
-        m_pSetup->sDefPreset = m_pSetup->presets[iPreset];
-    else
-        m_pSetup->sDefPreset = m_pSetup->sDefPresetName;
+//    if (iPreset >= 0 && iPreset < m_pSetup->presets.count())
+//        m_pSetup->sDefPreset = m_pSetup->presets[iPreset];
+//    else
+//        m_pSetup->sDefPreset = m_pSetup->sDefPresetName;
 
-    showDirtySettingsWarning();
+//    showDirtySettingsWarning();
 }
 
 

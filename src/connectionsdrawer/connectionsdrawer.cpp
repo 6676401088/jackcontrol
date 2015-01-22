@@ -27,6 +27,7 @@
 // Qt includes
 #include <QHeaderView>
 #include <QScrollBar>
+#include <QHBoxLayout>
 
 ConnectionsDrawer::ConnectionsDrawer(QWidget *parent)
     : QSplitter(Qt::Horizontal, parent) {
@@ -35,16 +36,29 @@ ConnectionsDrawer::ConnectionsDrawer(QWidget *parent)
     _portConnectionsWidget  = new PortConnectionsWidget(_outputTreeWidget,
                                                         _inputTreeWidget);
 
-    addWidget(_outputTreeWidget);
+    // This is a bit hacky, but we need this to get the scrollbar to the left
+    // without changing the layout direction while preserving the existing
+    // scrollbar.
+    QWidget *widget = new QWidget();
+    QHBoxLayout *layout = new QHBoxLayout();
+    layout->addWidget(_outputTreeWidget->verticalScrollBar());
+    layout->addWidget(_outputTreeWidget);
+    layout->setSpacing(3);
+    layout->setContentsMargins(0, 0, 0, 0);
+    widget->setLayout(layout);
+
+    addWidget(widget);
     addWidget(_portConnectionsWidget);
     addWidget(_inputTreeWidget);
 
+    setCollapsible(0, false);
+    setCollapsible(1, false);
+    setCollapsible(2, false);
+
+    _outputTreeWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _inputTreeWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
     setHandleWidth(0);
-
-    _outputTreeWidget->setLayoutDirection(Qt::RightToLeft);
-    _inputTreeWidget->setLayoutDirection(Qt::LeftToRight);
-
-    _iconSize               = IconSize16x16;
 
     _outputTreeWidget->setHeaderTitle("Outputs (Readable clients)");
     _inputTreeWidget->setHeaderTitle("Inputs (Writable clients)");
@@ -81,22 +95,26 @@ ConnectionsDrawer::ConnectionsDrawer(QWidget *parent)
 ConnectionsDrawer::~ConnectionsDrawer () {
 }
 
-void ConnectionsDrawer::setIconSize(IconSize iconSize) {
-    if(iconSize == _iconSize) {
-		return;
-    }
+void ConnectionsDrawer::connectSelectedItems() {
 
-    _iconSize = iconSize;
-
-	// Update item sizes properly...
-    int px = (16 << _iconSize);
-	const QSize iconsize(px, px);
-	_outputTreeWidget->setIconSize(iconsize);
-	_inputTreeWidget->setIconSize(iconsize);
 }
 
-ConnectionsDrawer::IconSize ConnectionsDrawer::iconSize() const {
-    return _iconSize;
+void ConnectionsDrawer::disconnectSelectedItems() {
+
+}
+
+void ConnectionsDrawer::disconnectAll() {
+
+}
+
+void ConnectionsDrawer::collapseAll() {
+    _outputTreeWidget->collapseAll();
+    _inputTreeWidget->collapseAll();
+}
+
+void ConnectionsDrawer::expandAll() {
+    _outputTreeWidget->expandAll();
+    _inputTreeWidget->expandAll();
 }
 
 void ConnectionsDrawer::itemSelectionChanged() {

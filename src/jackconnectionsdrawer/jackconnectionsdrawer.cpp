@@ -53,6 +53,7 @@ void JackConnectionsDrawer::disconnectedFromServer() {
 }
 
 void JackConnectionsDrawer::clientRegistered(QString clientName) {
+    Q_UNUSED(clientName);
 }
 
 void JackConnectionsDrawer::clientUnregistered(QString clientName) {
@@ -165,4 +166,6 @@ void JackConnectionsDrawer::completeUpdate() {
             }
         }
     }
+
+    expandAll();
 }

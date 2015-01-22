@@ -32,19 +32,14 @@ class PortConnectionsWidget;
 class ConnectionsDrawer : public QSplitter {
 	Q_OBJECT
 public:
-    /** @deprecated: do not use these anymore. */
-    enum IconSize {
-        IconSize16x16 = 0,
-        IconSize32x32 = 1,
-        IconSize64x64 = 2
-    };
-
     ConnectionsDrawer(QWidget *parent = 0);
     virtual ~ConnectionsDrawer();
 
-    /** @deprecated: do not use these anymore. */
-    void setIconSize(IconSize iconSize);
-    IconSize iconSize() const;
+    void connectSelectedItems();
+    void disconnectSelectedItems();
+    void disconnectAll();
+    void collapseAll();
+    void expandAll();
 
 signals:
     void itemSelectionChanged(QList<QTreeWidgetItem*> selectedOutputItems,
@@ -57,10 +52,6 @@ protected:
     ClientTreeWidget *      _outputTreeWidget;
     PortConnectionsWidget * _portConnectionsWidget;
     ClientTreeWidget *      _inputTreeWidget;
-
-private:
-    /** @deprecated: */
-    IconSize                _iconSize;
 };
 
 

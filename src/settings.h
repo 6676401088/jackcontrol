@@ -147,7 +147,7 @@ public:
 	bool    bDisplayEffect;
 	bool    bDisplayBlink;
 	int     iJackClientPortAlias;
-    ConnectionsDrawer::IconSize iConnectionsIconSize;
+    int     iConnectionsIconSize;
 	QString sConnectionsFont;
 	bool    bQueryClose;
 	bool    bKeepOnTop;

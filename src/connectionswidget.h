@@ -23,94 +23,21 @@
 // uic includes
 #include "ui_connectionswidget.h"
 
-// Own includes
-#include "porttreewidgetitem.h"
-class Settings;
-
 class ConnectionsWidget : public QWidget {
 	Q_OBJECT
 public:
     ConnectionsWidget(QWidget *parent = 0);
     ~ConnectionsWidget();
 
-    void setSettings(Settings *pSetup);
-
-    ConnectionsDrawer *audioConnectView() const;
-    ConnectionsDrawer *midiConnectView() const;
-    ConnectionsDrawer *alsaConnectView() const;
-
-	bool queryClose();
-
-	enum TabPage { AudioTab = 0, MidiTab = 1, AlsaTab = 2 };
-
-	void setTabPage(int iTabPage);
-	int tabPage() const;
-
-	QFont connectionsFont() const;
-	void setConnectionsFont(const QFont& font);
-
-    void setConnectionsIconSize(ConnectionsDrawer::IconSize iconSize);
-
-	bool isAudioConnected() const;
-	bool isMidiConnected() const;
-	bool isAlsaConnected() const;
-
-	void refreshAudio(bool bEnabled, bool bClear = false);
-	void refreshMidi(bool bEnabled, bool bClear = false);
-	void refreshAlsa(bool bEnabled, bool bClear = false);
-
-	void stabilizeAudio(bool bEnabled, bool bClear = false);
-	void stabilizeMidi(bool bEnabled, bool bClear = false);
-	void stabilizeAlsa(bool bEnabled, bool bClear = false);
-
-    void setupAliases(Settings *pSetup);
-	void updateAliases();
-	bool loadAliases();
-	bool saveAliases();
-
 public slots:
+    void on_pushButtonConnect_clicked();
+    void on_pushButtonDisconnect_clicked();
 
-	void audioConnectSelected();
-	void audioDisconnectSelected();
-	void audioDisconnectAll();
-	void audioExpandAll();
-	void audioRefreshClear();
-	void audioRefresh();
-	void audioStabilize();
+    void on_pushButtonDisconnectAll_clicked();
 
-	void midiConnectSelected();
-	void midiDisconnectSelected();
-	void midiDisconnectAll();
-	void midiExpandAll();
-	void midiRefreshClear();
-	void midiRefresh();
-	void midiStabilize();
-
-	void alsaConnectSelected();
-	void alsaDisconnectSelected();
-	void alsaDisconnectAll();
-	void alsaExpandAll();
-	void alsaRefreshClear();
-	void alsaRefresh();
-	void alsaStabilize();
-
-protected slots:
-
-    void audioDisconnecting(PortTreeWidgetItem *, PortTreeWidgetItem *);
-    void midiDisconnecting(PortTreeWidgetItem *, PortTreeWidgetItem *);
-    void alsaDisconnecting(PortTreeWidgetItem *, PortTreeWidgetItem *);
-
-protected:
-
-	void showEvent(QShowEvent *);
-	void hideEvent(QHideEvent *);
-	void closeEvent(QCloseEvent *);
-
-	void keyPressEvent(QKeyEvent *);
+    void on_pushButtonCollapseAll_clicked();
+    void on_pushButtonExpandAll_clicked();
 
 private:
     Ui::ConnectionsWidget ui;
-
-    Settings *  _settings;
-    QString     _preset;
 };
