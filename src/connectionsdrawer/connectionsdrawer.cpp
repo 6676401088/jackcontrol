@@ -60,8 +60,8 @@ ConnectionsDrawer::ConnectionsDrawer(QWidget *parent)
 
     setHandleWidth(0);
 
-    _outputTreeWidget->setHeaderTitle("Outputs (Readable clients)");
-    _inputTreeWidget->setHeaderTitle("Inputs (Writable clients)");
+    _outputTreeWidget->setHeaderTitle(tr("Auxiliary sends"));
+    _inputTreeWidget->setHeaderTitle(tr("Auxiliary returns"));
 
 	connect(_outputTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
         _portConnectionsWidget, SLOT(update()));

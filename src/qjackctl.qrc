@@ -1,5 +1,5 @@
-<RCC version="1.0">
-	<qresource>
+<RCC>
+    <qresource prefix="/">
         <file>images/qjackctl.png</file>
         <file>images/about1.png</file>
         <file>images/accept1.png</file>
@@ -95,5 +95,8 @@
         <file>images/xstopped1.png</file>
         <file>images/xstopping1.png</file>
         <file>images/qtlogo.png</file>
-	</qresource>
+        <file>images/network-server.svg</file>
+        <file>images/audio-card.svg</file>
+        <file>images/gnome-mime-audio.svg</file>
+    </qresource>
 </RCC>

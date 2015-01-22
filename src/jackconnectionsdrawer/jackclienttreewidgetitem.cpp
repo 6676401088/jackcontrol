@@ -25,5 +25,5 @@
 
 JackClientTreeWidgetItem::JackClientTreeWidgetItem(QString clientName)
     : ClientTreeWidgetItem(clientName) {
-    setIcon(0, QIcon(":/images/aclienti_64x64.png"));
+    setIcon(0, QIcon("://images/audio-card.svg"));
 }

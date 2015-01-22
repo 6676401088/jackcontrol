@@ -71,6 +71,7 @@ ClientTreeWidget::ClientTreeWidget(QWidget *parent)
     setAnimated(true);
     setTextElideMode(Qt::ElideMiddle);
     setMinimumWidth(120);
+    setIconSize(QSize(24, 24));
 
     sortItems(0, Qt::AscendingOrder);
 

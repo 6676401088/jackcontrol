@@ -26,7 +26,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>815</width>
+    <width>828</width>
     <height>409</height>
    </rect>
   </property>
@@ -94,6 +94,30 @@
        <property name="shortcut">
         <string>Alt+D</string>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBoxSelectionMode">
+       <item>
+        <property name="text">
+         <string>Single selection (classic)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Multiple selection</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Extended selection</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Contiguous selection</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>
