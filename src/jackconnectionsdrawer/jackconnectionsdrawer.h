@@ -35,10 +35,17 @@ protected slots:
     void connectedToServer();
     void disconnectedFromServer();
 
+    void clientRegistered(QString clientName);
+    void clientUnregistered(QString clientName);
+
     void portRegistered(QJack::Port port);
+    void portUnregistered(QJack::Port port);
 
 protected:
     void completeUpdate();
+
+    void removeClient(ClientTreeWidget *clientTreeWidget, QString clientName);
+
     void addAudioPort(ClientTreeWidget *clientTreeWidget, QJack::AudioPort audioPort);
 
 };

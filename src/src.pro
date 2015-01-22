@@ -42,8 +42,6 @@ HEADERS += \
     connectionsdrawer/porttreewidgetitem.h \
     connectionsdrawer/connectionsdrawer.h \
     about.h \
-    jackconnectionsdrawer/JackConnect.h \
-    alsaconnectionsdrawer/AlsaConnect.h \
     jackconnectionsdrawer/jackconnectionsdrawer.h \
     alsaconnectionsdrawer/alsaconnectionsdrawer.h \
     connectionsdrawer/clienttreewidget.h \
@@ -81,8 +79,6 @@ SOURCES += \
     connectionsdrawer/portconnectionswidget.cpp \
     connectionsdrawer/porttreewidgetitem.cpp \
     connectionsdrawer/connectionsdrawer.cpp \
-    jackconnectionsdrawer/JackConnect.cpp \
-    alsaconnectionsdrawer/AlsaConnect.cpp \
     jackconnectionsdrawer/jackconnectionsdrawer.cpp \
     alsaconnectionsdrawer/alsaconnectionsdrawer.cpp \
     connectionsdrawer/clienttreewidget.cpp \

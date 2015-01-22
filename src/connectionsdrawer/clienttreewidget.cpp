@@ -57,17 +57,18 @@ ClientTreeWidget::ClientTreeWidget(QWidget *parent)
 
     setRootIsDecorated(true);
     setUniformRowHeights(true);
-//	setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
     setAutoScroll(true);
-    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSelectionMode(QAbstractItemView::MultiSelection);
+    setExpandsOnDoubleClick(true);
+
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
                               QSizePolicy::Expanding));
     setSortingEnabled(true);
-    setMinimumWidth(120);
     setColumnCount(1);
-
+    setAlternatingRowColors(true);
+    setAnimated(true);
 
     sortItems(0, Qt::AscendingOrder);
 
@@ -81,8 +82,7 @@ ClientTreeWidget::ClientTreeWidget(QWidget *parent)
     setAutoOpenTimeout(800);
 }
 
-ClientTreeWidget::~ClientTreeWidget ()
-{
+ClientTreeWidget::~ClientTreeWidget() {
     setAutoOpenTimeout(0);
 }
 
@@ -111,6 +111,8 @@ int ClientTreeWidget::autoOpenTimeout() const {
 }
 
 void ClientTreeWidget::setAliases(ConnectAlias *connectAliases, bool renameEnabled) {
+    Q_UNUSED(connectAliases);
+    Q_UNUSED(renameEnabled);
 //    _connectAliases = connectAliases;
 //    _renameEnabled = renameEnabled;
 
@@ -166,25 +168,22 @@ void ClientTreeWidget::setAliases(ConnectAlias *connectAliases, bool renameEnabl
 //    }
 }
 
-ConnectAlias *ClientTreeWidget::aliases () const
-{
+ConnectAlias *ClientTreeWidget::aliases() const {
     return _connectAliases;
 }
 
-bool ClientTreeWidget::renameEnabled () const
-{
+bool ClientTreeWidget::renameEnabled() const {
     return _renameEnabled;
 }
 
-void ClientTreeWidget::startRenameSlot ()
-{
+void ClientTreeWidget::startRenameSlot() {
     QTreeWidgetItem *pItem = QTreeWidget::currentItem();
-    if (pItem)
+    if(pItem) {
         QTreeWidget::editItem(pItem, 0);
+    }
 }
 
-void ClientTreeWidget::renamedSlot ()
-{
+void ClientTreeWidget::renamedSlot() {
 //    if (_connectAliases == NULL)
 //        return;
 
@@ -212,55 +211,53 @@ void ClientTreeWidget::renamedSlot ()
 //    emit contentsChanged();
 }
 
-void ClientTreeWidget::timeoutSlot ()
-{
+void ClientTreeWidget::timeoutSlot() {
     if (_autoOpenTimer) {
         _autoOpenTimer->stop();
         if (_dropItem && _dropItem->type() == QJACKCTL_CLIENTITEM) {
             ClientTreeWidgetItem *pClientItem
                 = static_cast<ClientTreeWidgetItem *> (_dropItem);
-            if (pClientItem && !pClientItem->isOpen())
-                pClientItem->setOpen(true);
+            if(pClientItem && !pClientItem->isExpanded()) {
+                pClientItem->setExpanded(true);
+            }
         }
     }
 }
 
-bool ClientTreeWidget::eventFilter ( QObject *pObject, QEvent *pEvent )
-{
-    QWidget *pViewport = QTreeWidget::viewport();
-    if (static_cast<QWidget *> (pObject) == pViewport
-        && pEvent->type() == QEvent::ToolTip) {
-        QHelpEvent *pHelpEvent = static_cast<QHelpEvent *> (pEvent);
-        if (pHelpEvent) {
-            QTreeWidgetItem *pItem = QTreeWidget::itemAt(pHelpEvent->pos());
-            if (pItem && pItem->type() == QJACKCTL_CLIENTITEM) {
-                ClientTreeWidgetItem *pClientItem
-                    = static_cast<ClientTreeWidgetItem *> (pItem);
-                if (pClientItem) {
-                    QToolTip::showText(pHelpEvent->globalPos(),
-                        pClientItem->clientName(), pViewport);
-                    return true;
-                }
-            }
-            else
-            if (pItem && pItem->type() == QJACKCTL_PORTITEM) {
-                PortTreeWidgetItem *pPortItem
-                    = static_cast<PortTreeWidgetItem *> (pItem);
-                if (pPortItem) {
-                    QToolTip::showText(pHelpEvent->globalPos(),
-                        pPortItem->portName(), pViewport);
-                    return true;
-                }
-            }
-        }
-    }
+bool ClientTreeWidget::eventFilter(QObject *pObject, QEvent *pEvent) {
+//    QWidget *pViewport = QTreeWidget::viewport();
+//    if (static_cast<QWidget *> (pObject) == pViewport
+//        && pEvent->type() == QEvent::ToolTip) {
+//        QHelpEvent *pHelpEvent = static_cast<QHelpEvent *> (pEvent);
+//        if (pHelpEvent) {
+//            QTreeWidgetItem *pItem = QTreeWidget::itemAt(pHelpEvent->pos());
+//            if (pItem && pItem->type() == QJACKCTL_CLIENTITEM) {
+//                ClientTreeWidgetItem *pClientItem
+//                    = static_cast<ClientTreeWidgetItem *> (pItem);
+//                if (pClientItem) {
+//                    QToolTip::showText(pHelpEvent->globalPos(),
+//                        pClientItem->clientName(), pViewport);
+//                    return true;
+//                }
+//            }
+//            else
+//            if (pItem && pItem->type() == QJACKCTL_PORTITEM) {
+//                PortTreeWidgetItem *pPortItem
+//                    = static_cast<PortTreeWidgetItem *> (pItem);
+//                if (pPortItem) {
+//                    QToolTip::showText(pHelpEvent->globalPos(),
+//                        pPortItem->portName(), pViewport);
+//                    return true;
+//                }
+//            }
+//        }
+//    }
 
     // Not handled here.
     return QTreeWidget::eventFilter(pObject, pEvent);
 }
 
-QTreeWidgetItem *ClientTreeWidget::dragDropItem ( const QPoint& pos )
-{
+QTreeWidgetItem *ClientTreeWidget::dragDropItem(const QPoint& pos) {
     QTreeWidgetItem *pItem = QTreeWidget::itemAt(pos);
 //    if (pItem) {
 //        if (m_pDropItem != pItem) {
@@ -282,9 +279,8 @@ QTreeWidgetItem *ClientTreeWidget::dragDropItem ( const QPoint& pos )
     return pItem;
 }
 
-void ClientTreeWidget::dragEnterEvent ( QDragEnterEvent *pDragEnterEvent )
-{
-    if (pDragEnterEvent->source() != this &&
+void ClientTreeWidget::dragEnterEvent(QDragEnterEvent *pDragEnterEvent) {
+    if(pDragEnterEvent->source() != this &&
         pDragEnterEvent->mimeData()->hasText() &&
         dragDropItem(pDragEnterEvent->pos())) {
         pDragEnterEvent->accept();
@@ -294,8 +290,7 @@ void ClientTreeWidget::dragEnterEvent ( QDragEnterEvent *pDragEnterEvent )
 }
 
 
-void ClientTreeWidget::dragMoveEvent ( QDragMoveEvent *pDragMoveEvent )
-{
+void ClientTreeWidget::dragMoveEvent(QDragMoveEvent *pDragMoveEvent) {
     if (pDragMoveEvent->source() != this &&
         pDragMoveEvent->mimeData()->hasText() &&
         dragDropItem(pDragMoveEvent->pos())) {
@@ -306,16 +301,15 @@ void ClientTreeWidget::dragMoveEvent ( QDragMoveEvent *pDragMoveEvent )
 }
 
 
-void ClientTreeWidget::dragLeaveEvent ( QDragLeaveEvent * )
-{
+void ClientTreeWidget::dragLeaveEvent(QDragLeaveEvent *) {
     _dropItem = 0;
     if (_autoOpenTimer)
         _autoOpenTimer->stop();
 }
 
 
-void ClientTreeWidget::dropEvent( QDropEvent *pDropEvent )
-{
+void ClientTreeWidget::dropEvent(QDropEvent *pDropEvent) {
+    Q_UNUSED(pDropEvent);
 //    if (pDropEvent->source() != this &&
 //        pDropEvent->mimeData()->hasText() &&
 //        dragDropItem(pDropEvent->pos())) {
@@ -328,8 +322,7 @@ void ClientTreeWidget::dropEvent( QDropEvent *pDropEvent )
     dragLeaveEvent(0);
 }
 
-void ClientTreeWidget::mousePressEvent ( QMouseEvent *pMouseEvent )
-{
+void ClientTreeWidget::mousePressEvent(QMouseEvent *pMouseEvent) {
     QTreeWidget::mousePressEvent(pMouseEvent);
 
     if (pMouseEvent->button() == Qt::LeftButton) {
@@ -339,8 +332,7 @@ void ClientTreeWidget::mousePressEvent ( QMouseEvent *pMouseEvent )
 }
 
 
-void ClientTreeWidget::mouseMoveEvent ( QMouseEvent *pMouseEvent )
-{
+void ClientTreeWidget::mouseMoveEvent(QMouseEvent *pMouseEvent) {
     QTreeWidget::mouseMoveEvent(pMouseEvent);
 
     if ((pMouseEvent->buttons() & Qt::LeftButton) && _dragItem
@@ -359,8 +351,8 @@ void ClientTreeWidget::mouseMoveEvent ( QMouseEvent *pMouseEvent )
     }
 }
 
-void ClientTreeWidget::contextMenuEvent ( QContextMenuEvent *pContextMenuEvent )
-{
+void ClientTreeWidget::contextMenuEvent(QContextMenuEvent *pContextMenuEvent) {
+    Q_UNUSED(pContextMenuEvent);
 //    ConnectionsModel *pConnect = m_pConnectView->binding();
 //    if (pConnect == 0)
 //        return;
@@ -414,5 +406,9 @@ QList<PortTreeWidgetItem *> ClientTreeWidget::ports() {
         }
     }
     return items;
+}
+
+void ClientTreeWidget::propagateWheelEvent(QWheelEvent *wheelEvent) {
+    QTreeWidget::wheelEvent(wheelEvent);
 }
 

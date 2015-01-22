@@ -50,5 +50,5 @@ bool JackAudioPortTreeWidgetItem::isConnectedTo(PortTreeWidgetItem *other) {
         return false;
     }
 
-    return false;
+    return _audioPort.isConnectedTo(audioPortItem->_audioPort);
 }

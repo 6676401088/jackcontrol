@@ -39,39 +39,46 @@ ConnectionsDrawer::ConnectionsDrawer(QWidget *parent)
     addWidget(_portConnectionsWidget);
     addWidget(_inputTreeWidget);
 
+    setHandleWidth(0);
+
+    _outputTreeWidget->setLayoutDirection(Qt::RightToLeft);
+    _inputTreeWidget->setLayoutDirection(Qt::LeftToRight);
+
     _iconSize               = IconSize16x16;
 
     _outputTreeWidget->setHeaderTitle("Outputs (Readable clients)");
     _inputTreeWidget->setHeaderTitle("Inputs (Writable clients)");
 
 	connect(_outputTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
-        _portConnectionsWidget, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(update()));
 	connect(_outputTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
-        _portConnectionsWidget, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(update()));
 	connect(_outputTreeWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
-        _portConnectionsWidget, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(update()));
 	connect(_outputTreeWidget->header(), SIGNAL(sectionClicked(int)),
-        _portConnectionsWidget, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(update()));
+
+    connect(_outputTreeWidget, SIGNAL(itemSelectionChanged()),
+        _portConnectionsWidget, SLOT(update()));
+    connect(_outputTreeWidget, SIGNAL(itemSelectionChanged()),
+        this, SLOT(itemSelectionChanged()));
 
 	connect(_inputTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
-        _portConnectionsWidget, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(update()));
 	connect(_inputTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
-        _portConnectionsWidget, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(update()));
 	connect(_inputTreeWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
-        _portConnectionsWidget, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(update()));
 	connect(_inputTreeWidget->header(), SIGNAL(sectionClicked(int)),
-        _portConnectionsWidget, SLOT(contentsChanged()));
+        _portConnectionsWidget, SLOT(update()));
+
+    connect(_inputTreeWidget, SIGNAL(itemSelectionChanged()),
+        _portConnectionsWidget, SLOT(update()));
+    connect(_inputTreeWidget, SIGNAL(itemSelectionChanged()),
+        this, SLOT(itemSelectionChanged()));
 }
 
 ConnectionsDrawer::~ConnectionsDrawer () {
-}
-
-void ConnectionsDrawer::setDrawingBezierLines(bool drawingBezierLines) {
-    _portConnectionsWidget->setDrawingBezierLines(drawingBezierLines);
-}
-
-bool ConnectionsDrawer::isDrawingBezierLines() const {
-    return _portConnectionsWidget->isDrawingBezierLines();
 }
 
 void ConnectionsDrawer::setIconSize(IconSize iconSize) {
@@ -90,4 +97,9 @@ void ConnectionsDrawer::setIconSize(IconSize iconSize) {
 
 ConnectionsDrawer::IconSize ConnectionsDrawer::iconSize() const {
     return _iconSize;
+}
+
+void ConnectionsDrawer::itemSelectionChanged() {
+    emit itemSelectionChanged(_outputTreeWidget->selectedItems(),
+                              _inputTreeWidget->selectedItems());
 }

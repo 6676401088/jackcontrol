@@ -23,10 +23,6 @@
 // uic includes
 #include "ui_SocketDialog.h"
 
-// Own includes
-#include "JackConnect.h"
-#include "AlsaConnect.h"
-
 // Forward declarations.
 class Patchbay;
 class qjackctlPatchbaySocket;

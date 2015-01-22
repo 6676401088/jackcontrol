@@ -76,11 +76,4 @@ void ClientTreeWidgetItem::setHighlighted(bool highlighted) {
         : pal.text().color());
 }
 
-void ClientTreeWidgetItem::setOpen ( bool bOpen ) {
-    QTreeWidgetItem::setExpanded(bOpen);
-}
-
-bool ClientTreeWidgetItem::isOpen () const {
-    return QTreeWidgetItem::isExpanded();
-}
 

@@ -31,7 +31,14 @@ JackConnectionsDrawer::JackConnectionsDrawer(QWidget *parent)
     : ConnectionsDrawer(parent) {
     connect(&JackService::instance().client(), SIGNAL(connectedToServer()), this, SLOT(connectedToServer()));
     connect(&JackService::instance().client(), SIGNAL(disconnectedFromServer()), this, SLOT(disconnectedFromServer()));
+
+    connect(&JackService::instance().client(), SIGNAL(clientRegistered(QString)), this, SLOT(clientRegistered(QString)));
+    connect(&JackService::instance().client(), SIGNAL(clientUnregistered(QString)), this, SLOT(clientUnregistered(QString)));
+
     connect(&JackService::instance().client(), SIGNAL(portRegistered(QJack::Port)), this, SLOT(portRegistered(QJack::Port)));
+    connect(&JackService::instance().client(), SIGNAL(portUnregistered(QJack::Port)), this, SLOT(portUnregistered(QJack::Port)));
+
+    connect(&JackService::instance().client(), SIGNAL(graphOrderHasChanged()), _portConnectionsWidget, SLOT(update()));
 }
 
 JackConnectionsDrawer::~JackConnectionsDrawer() {
@@ -45,8 +52,15 @@ void JackConnectionsDrawer::connectedToServer() {
 void JackConnectionsDrawer::disconnectedFromServer() {
 }
 
+void JackConnectionsDrawer::clientRegistered(QString clientName) {
+}
+
+void JackConnectionsDrawer::clientUnregistered(QString clientName) {
+    removeClient(_inputTreeWidget, clientName);
+    removeClient(_outputTreeWidget, clientName);
+}
+
 void JackConnectionsDrawer::portRegistered(QJack::Port port) {
-    qDebug() << "test";
     if(port.isAudioPort()) {
         QJack::AudioPort audioPort = QJack::AudioPort(port);
         if(audioPort.isValid()) {
@@ -60,6 +74,31 @@ void JackConnectionsDrawer::portRegistered(QJack::Port port) {
     } else
     if(port.isMidiPort()) {
         // ..
+    }
+}
+
+
+void JackConnectionsDrawer::portUnregistered(QJack::Port port) {
+    Q_UNUSED(port);
+}
+
+void JackConnectionsDrawer::removeClient(ClientTreeWidget *clientTreeWidget,
+                                         QString clientName) {
+    int clientCount     = clientTreeWidget->topLevelItemCount();
+    for(int clientIndex = 0; clientIndex < clientCount; clientIndex++) {
+        // Get the client tree widget item
+        QTreeWidgetItem *treeWidgetItem = clientTreeWidget->topLevelItem(clientIndex);
+        JackClientTreeWidgetItem *jackClientTreeWidgetItem
+            = dynamic_cast<JackClientTreeWidgetItem*>(treeWidgetItem);
+
+        // Check if it is a client tree widget item
+        if(jackClientTreeWidgetItem) {
+            if(jackClientTreeWidgetItem->clientName() == clientName) {
+                if(clientTreeWidget->takeTopLevelItem(clientIndex)) {
+                    clientCount--;
+                }
+            }
+        }
     }
 }
 
@@ -80,6 +119,7 @@ void JackConnectionsDrawer::addAudioPort(ClientTreeWidget *clientTreeWidget,
             if(jackClientTreeWidgetItem->clientName() == clientName) {
                 clientFound = true;
                 jackClientTreeWidgetItem->addChild(new JackAudioPortTreeWidgetItem(audioPort));
+                return;
             }
         }
     }

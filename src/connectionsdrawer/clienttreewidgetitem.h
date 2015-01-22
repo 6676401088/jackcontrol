@@ -44,10 +44,6 @@ public:
     bool isHighlighted() const;
     void setHighlighted(bool highlighted);
 
-    // Client item openness status.
-    void setOpen(bool bOpen);
-    bool isOpen() const;
-
 private:
     QString _clientName;
     int     _clientMark;

@@ -25,11 +25,14 @@ class ClientTreeWidget;
 class PortConnectionsWidget;
 
 // Qt includes
+#include <QList>
 #include <QSplitter>
+#include <QTreeWidgetItem>
 
 class ConnectionsDrawer : public QSplitter {
 	Q_OBJECT
 public:
+    /** @deprecated: do not use these anymore. */
     enum IconSize {
         IconSize16x16 = 0,
         IconSize32x32 = 1,
@@ -39,17 +42,16 @@ public:
     ConnectionsDrawer(QWidget *parent = 0);
     virtual ~ConnectionsDrawer();
 
-    /** Connector line style accessors. */
-    void setDrawingBezierLines(bool drawingBezierLines);
-    bool isDrawingBezierLines() const;
-
-    /** Common icon size pixmap accessors. */
+    /** @deprecated: do not use these anymore. */
     void setIconSize(IconSize iconSize);
     IconSize iconSize() const;
 
 signals:
-    /** Contents change signal. */
-	void contentsChanged();
+    void itemSelectionChanged(QList<QTreeWidgetItem*> selectedOutputItems,
+                              QList<QTreeWidgetItem*> selectedInputItems);
+
+protected slots:
+    void itemSelectionChanged();
 
 protected:
     ClientTreeWidget *      _outputTreeWidget;
@@ -57,6 +59,7 @@ protected:
     ClientTreeWidget *      _inputTreeWidget;
 
 private:
+    /** @deprecated: */
     IconSize                _iconSize;
 };
 

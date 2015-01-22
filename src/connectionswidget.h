@@ -24,8 +24,7 @@
 #include "ui_connectionswidget.h"
 
 // Own includes
-#include "JackConnect.h"
-#include "AlsaConnect.h"
+#include "porttreewidgetitem.h"
 class Settings;
 
 class ConnectionsWidget : public QWidget {

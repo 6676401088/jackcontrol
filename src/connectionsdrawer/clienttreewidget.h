@@ -21,6 +21,7 @@
 
 // Qt includes
 #include <QTreeWidget>
+class QWheelEvent;
 
 // Own includes
 #include "connectalias.h"
@@ -49,6 +50,8 @@ public:
     bool renameEnabled() const;
 
     QList<PortTreeWidgetItem *> ports();
+
+    void propagateWheelEvent(QWheelEvent *wheelEvent);
 
 signals:
     void contentsChanged();

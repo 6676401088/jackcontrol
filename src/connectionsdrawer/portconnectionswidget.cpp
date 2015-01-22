@@ -30,6 +30,9 @@
 #include <QMenu>
 #include <QAction>
 #include <QContextMenuEvent>
+#include <QWheelEvent>
+#include <QDebug>
+#include <QScrollBar>
 
 PortConnectionsWidget::PortConnectionsWidget(
     ClientTreeWidget *outputClientListTreeWidget,
@@ -38,10 +41,7 @@ PortConnectionsWidget::PortConnectionsWidget(
     : QWidget(parent) {
     _outputClientListTreeWidget = outputClientListTreeWidget;
     _inputClientListTreeWidget  = inputClientListTreeWidget;
-    _drawingBezierLines         = true;
 
-    setMinimumWidth(200);
-    setMaximumWidth(200);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
                               QSizePolicy::Expanding));
 }
@@ -49,31 +49,23 @@ PortConnectionsWidget::PortConnectionsWidget(
 PortConnectionsWidget::~PortConnectionsWidget() {
 }
 
-int PortConnectionsWidget::itemY(QTreeWidgetItem *pItem) const {
+int PortConnectionsWidget::treeWidgetItemYPosition(QTreeWidgetItem *pItem) const {
     QRect rect;
     QTreeWidget *pList = pItem->treeWidget();
     QTreeWidgetItem *pParent = pItem->parent();
     ClientTreeWidgetItem *pClientItem = NULL;
     if (pParent && pParent->type() == QJACKCTL_CLIENTITEM)
         pClientItem = static_cast<ClientTreeWidgetItem *> (pParent);
-    if (pClientItem && !pClientItem->isOpen()) {
+    if (pClientItem && !pClientItem->isExpanded()) {
         rect = pList->visualItemRect(pClientItem);
     } else {
         rect = pList->visualItemRect(pItem);
     }
-    return rect.top() + rect.height() / 2;
-}
-
-void PortConnectionsWidget::setDrawingBezierLines(bool drawingBezierLines) {
-    _drawingBezierLines = drawingBezierLines;
-}
-
-bool PortConnectionsWidget::isDrawingBezierLines() const {
-    return _drawingBezierLines;
+    return rect.top() + rect.height() / 2 + 1;
 }
 
 void PortConnectionsWidget::drawConnectionLine(
-    QPainter *pPainter,
+    QPainter *painter,
     int x1, int y1,
     int x2, int y2,
     int h1, int h2 ) {
@@ -81,33 +73,32 @@ void PortConnectionsWidget::drawConnectionLine(
     y1 += h1;
     y2 += h2;
 
-    // Invisible output ports don't get a connecting dot.
-    if (y1 > h1)
-        pPainter->drawLine(x1, y1, x1 + 4, y1);
+    // Setup control points
+    QPolygon spline(4);
+    int cp = int(float(x2 - x1 - 8) * 0.4f);
 
-    // How do we'll draw it?
-    if (isDrawingBezierLines()) {
-        // Setup control points
-        QPolygon spline(4);
-        int cp = int(float(x2 - x1 - 8) * 0.4f);
-        spline.putPoints(0, 4,
-            x1 + 4, y1, x1 + 4 + cp, y1,
-            x2 - 4 - cp, y2, x2 - 4, y2);
-        // The connection line, it self.
-        QPainterPath path;
-        path.moveTo(spline.at(0));
-        path.cubicTo(spline.at(1), spline.at(2), spline.at(3));
-        pPainter->strokePath(path, pPainter->pen());
-    }
-    else pPainter->drawLine(x1 + 4, y1, x2 - 4, y2);
+    spline.putPoints(0, 4,
+        x1, y1,
+        x1 + cp, y1,
+        x2 - cp, y2,
+        x2, y2);
 
-    // Invisible input ports don't get a connecting dot.
-    if (y2 > h2)
-        pPainter->drawLine(x2 - 4, y2, x2, y2);
+    // The connection line, it self.
+    QPainterPath path;
+    path.moveTo(spline.at(0));
+    path.cubicTo(spline.at(1), spline.at(2), spline.at(3));
+    painter->strokePath(path, painter->pen());
+
+    // Draw terminals
+//    painter->drawRoundedRect(x1 + 0, y1 - 2, 8, 4, 2, 1);
+//    painter->drawRoundedRect(x2 - 8, y2 - 2, 8, 4, 2, 1);
 }
 
 void PortConnectionsWidget::paintEvent(QPaintEvent *) {
     QPainter painter(this);
+
+    painter.setRenderHint(QPainter::Antialiasing);
+
     // Window offsets and measures
     int widgetPositionY     = pos().y();
     int outputPositionY     = _outputClientListTreeWidget->pos().y();
@@ -126,8 +117,31 @@ void PortConnectionsWidget::paintEvent(QPaintEvent *) {
     foreach(PortTreeWidgetItem *outputPort, outputPorts) {
         foreach(PortTreeWidgetItem *inputPort, inputPorts) {
             if(outputPort->isConnectedTo(inputPort)) {
-                startY  = itemY(outputPort) + outputPositionY - widgetPositionY;
-                endY    = itemY(inputPort) + inputPositionY - widgetPositionY;
+                startY  = treeWidgetItemYPosition(outputPort) + outputPositionY - widgetPositionY;
+                endY    = treeWidgetItemYPosition(inputPort) + inputPositionY - widgetPositionY;
+
+                QPen pen = painter.pen();
+
+                if(outputPort->isSelected() || inputPort->isSelected()) {
+                    pen.setWidthF(2.0);
+                } else {
+                    pen.setWidthF(0.5);
+                }
+
+                pen.setColor(QColor(40, 40, 40));
+                if(outputPort->isSelected()) {
+                    pen.setColor(QColor(115, 40, 15));
+                }
+                if(inputPort->isSelected()) {
+                    pen.setColor(QColor(15, 40, 115));
+                }
+                if(outputPort->isSelected() && inputPort->isSelected()) {
+                    pen.setColor(QColor(55, 155, 55));
+                    pen.setWidthF(3.0);
+                }
+
+                painter.setPen(pen);
+
                 drawConnectionLine(&painter,
                                    left, startY,
                                    right, endY,
@@ -140,9 +154,7 @@ void PortConnectionsWidget::paintEvent(QPaintEvent *) {
 void PortConnectionsWidget::contextMenuEvent (
     QContextMenuEvent *pContextMenuEvent )
 {
-//    ConnectionsModel *pConnect = m_pConnectView->binding();
-//    if (pConnect == 0)
-//        return;
+
 
 //    QMenu menu(this);
 //    QAction *pAction;
@@ -168,6 +180,9 @@ void PortConnectionsWidget::contextMenuEvent (
 //    menu.exec(pContextMenuEvent->globalPos());
 }
 
-void PortConnectionsWidget::contentsChanged() {
-    QWidget::update();
+void PortConnectionsWidget::wheelEvent(QWheelEvent *wheelEvent) {
+    _outputClientListTreeWidget->propagateWheelEvent(wheelEvent);
+    _inputClientListTreeWidget->propagateWheelEvent(wheelEvent);
 }
+
+

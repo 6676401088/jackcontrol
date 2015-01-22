@@ -26,6 +26,9 @@
 #include <QWidget>
 #include <QTreeWidgetItem>
 
+/**
+ * Visualizes connections between two client tree widgets.
+ */
 class PortConnectionsWidget : public QWidget {
     Q_OBJECT
 public:
@@ -33,14 +36,8 @@ public:
             ClientTreeWidget *outputClientListTreeWidget,
             ClientTreeWidget *inputClientListTreeWidget,
             QWidget *parent = 0);
+
     virtual ~PortConnectionsWidget();
-
-    void setDrawingBezierLines(bool drawingBezierLines);
-    bool isDrawingBezierLines() const;
-
-public slots:
-    /** Useful slots (should this be protected?). */
-    void contentsChanged();
 
 protected:
     /** Draw visible port connection relation arrows. */
@@ -49,9 +46,11 @@ protected:
     /** Context menu request event handler. */
     virtual void contextMenuEvent(QContextMenuEvent *);
 
+    void wheelEvent(QWheelEvent *wheelEvent);
+
 private:
     /** Legal client/port item position helper. */
-    int itemY(QTreeWidgetItem *pItem) const;
+    int treeWidgetItemYPosition(QTreeWidgetItem *pItem) const;
 
     /** Drawing methods. */
     void drawConnectionLine(QPainter *pPainter,
@@ -59,7 +58,4 @@ private:
 
     ClientTreeWidget *_inputClientListTreeWidget;
     ClientTreeWidget *_outputClientListTreeWidget;
-
-    /** Connection lines drawing style. */
-    bool _drawingBezierLines;
 };
