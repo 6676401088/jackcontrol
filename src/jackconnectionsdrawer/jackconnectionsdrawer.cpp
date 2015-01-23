@@ -18,16 +18,13 @@
 *****************************************************************************/
 
 // Own includes
-#include "jackconnectionsdrawer.h"
 #include "jackservice.h"
 #include "clienttreewidget.h"
 #include "portconnectionswidget.h"
+#include "jackconnectionsdrawer.h"
 #include "jackclienttreewidgetitem.h"
-
 #include "jackaudioporttreewidgetitem.h"
 #include "jackmidiporttreewidgetitem.h"
-
-#include <QDebug>
 
 JackConnectionsDrawer::JackConnectionsDrawer(QWidget *parent)
     : ConnectionsDrawer(parent) {

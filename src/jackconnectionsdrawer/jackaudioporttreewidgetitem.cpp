@@ -28,10 +28,19 @@ JackAudioPortTreeWidgetItem::JackAudioPortTreeWidgetItem(QJack::AudioPort audioP
     _audioPort = audioPort;
 
     if(_audioPort.isOutput()) {
-        setIcon(0, QIcon("://images/aportlno_64x64.png"));
-    } else
-    if(_audioPort.isInput()) {
-        setIcon(0, QIcon("://images/aportlni_64x64.png"));
+        if(_audioPort.isPhysical()) {
+            setIcon(0, QIcon("://images/aportlto_64x64.png"));
+        } else {
+            setIcon(0, QIcon("://images/aportlno_64x64.png"));
+        }
+    } else {
+        if(_audioPort.isInput()) {
+            if(_audioPort.isPhysical()) {
+                setIcon(0, QIcon("://images/aportpti_64x64.png"));
+            } else {
+                setIcon(0, QIcon("://images/aportlni_64x64.png"));
+            }
+        }
     }
 }
 

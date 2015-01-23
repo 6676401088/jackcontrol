@@ -23,8 +23,6 @@
 #include "statuswidget.h"
 #include "Status.h"
 #include "settings.h"
-#include "mainwidget.h"
-
 // Qt includes
 #include <QFile>
 #include <QDateTime>

@@ -32,7 +32,7 @@ public:
 
     // Instance accessors.
     void setPortName(QString portName);
-    const QString& portName() const;
+    QString portName() const;
 
     virtual bool isConnectedTo(PortTreeWidgetItem *other);
 };

@@ -3,36 +3,14 @@
         <file>images/qjackctl.png</file>
         <file>images/about1.png</file>
         <file>images/accept1.png</file>
-        <file>images/aclienti.png</file>
-        <file>images/aclienti_32x32.png</file>
-        <file>images/aclienti_64x64.png</file>
-        <file>images/acliento.png</file>
-        <file>images/acliento_32x32.png</file>
-        <file>images/acliento_64x64.png</file>
         <file>images/add1.png</file>
-        <file>images/aportlni.png</file>
-        <file>images/aportlni_32x32.png</file>
         <file>images/aportlni_64x64.png</file>
-        <file>images/aportlno.png</file>
-        <file>images/aportlno_32x32.png</file>
         <file>images/aportlno_64x64.png</file>
-        <file>images/aportlti.png</file>
-        <file>images/aportlti_32x32.png</file>
         <file>images/aportlti_64x64.png</file>
-        <file>images/aportlto.png</file>
-        <file>images/aportlto_32x32.png</file>
         <file>images/aportlto_64x64.png</file>
-        <file>images/aportpni.png</file>
-        <file>images/aportpni_32x32.png</file>
         <file>images/aportpni_64x64.png</file>
-        <file>images/aportpno.png</file>
-        <file>images/aportpno_32x32.png</file>
         <file>images/aportpno_64x64.png</file>
-        <file>images/aportpti.png</file>
-        <file>images/aportpti_32x32.png</file>
         <file>images/aportpti_64x64.png</file>
-        <file>images/aportpto.png</file>
-        <file>images/aportpto_32x32.png</file>
         <file>images/aportpto_64x64.png</file>
         <file>images/apply1.png</file>
         <file>images/asocketi.png</file>
@@ -59,11 +37,7 @@
         <file>images/mcliento_64x64.png</file>
         <file>images/messages1.png</file>
         <file>images/messagesstatus1.png</file>
-        <file>images/mporti.png</file>
-        <file>images/mporti_32x32.png</file>
         <file>images/mporti_64x64.png</file>
-        <file>images/mporto.png</file>
-        <file>images/mporto_32x32.png</file>
         <file>images/mporto_64x64.png</file>
         <file>images/msocketi.png</file>
         <file>images/msocketo.png</file>

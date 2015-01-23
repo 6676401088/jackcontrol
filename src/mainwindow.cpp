@@ -39,8 +39,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionStartJackServer->setEnabled(true);
     ui->actionStopJackServer->setEnabled(false);
 
+
     connect(&JackService::instance(), SIGNAL(message(QString,JackService::MessageType)),
             this, SLOT(message(QString,JackService::MessageType)));
+
+    JackService::instance().start();
 }
 
 MainWindow::~MainWindow() {

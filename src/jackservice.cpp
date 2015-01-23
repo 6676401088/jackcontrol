@@ -29,6 +29,7 @@ JackService::JackService(QObject *parent)
     setupStdOutRedirect();
 
     //hw:PCH,0|hw:PCH,0|256|3|44100|0|0|nomon|swmeter|-|32bit
+
 }
 
 void JackService::start() {

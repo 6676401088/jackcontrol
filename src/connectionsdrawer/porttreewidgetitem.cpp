@@ -32,7 +32,7 @@ void PortTreeWidgetItem::setPortName(QString portName) {
     setText(0, portName);
 }
 
-const QString& PortTreeWidgetItem::portName() const {
+QString PortTreeWidgetItem::portName() const {
     return text(0);
 }
 
