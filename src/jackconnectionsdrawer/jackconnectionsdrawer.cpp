@@ -23,7 +23,9 @@
 #include "clienttreewidget.h"
 #include "portconnectionswidget.h"
 #include "jackclienttreewidgetitem.h"
+
 #include "jackaudioporttreewidgetitem.h"
+#include "jackmidiporttreewidgetitem.h"
 
 #include <QDebug>
 
@@ -74,7 +76,15 @@ void JackConnectionsDrawer::portRegistered(QJack::Port port) {
         }
     } else
     if(port.isMidiPort()) {
-        // ..
+        QJack::MidiPort midiPort = QJack::MidiPort(port);
+        if(midiPort.isValid()) {
+            if(midiPort.isOutput()) {
+                addMidiPort(_sendTreeWidget, midiPort);
+            } else
+            if(midiPort.isInput()) {
+                addMidiPort(_returnTreeWidget, midiPort);
+            }
+        }
     }
 }
 
@@ -133,6 +143,36 @@ void JackConnectionsDrawer::addAudioPort(ClientTreeWidget *clientTreeWidget,
     }
 }
 
+void JackConnectionsDrawer::addMidiPort(ClientTreeWidget *clientTreeWidget,
+                                        QJack::MidiPort midiPort) {
+    QString clientName  = midiPort.clientName();
+    int clientCount     = clientTreeWidget->topLevelItemCount();
+    bool clientFound    = false;
+
+    for(int clientIndex = 0; clientIndex < clientCount; clientIndex++) {
+        // Get the client tree widget item
+        QTreeWidgetItem *treeWidgetItem = clientTreeWidget->topLevelItem(clientIndex);
+        JackClientTreeWidgetItem *jackClientTreeWidgetItem
+            = dynamic_cast<JackClientTreeWidgetItem*>(treeWidgetItem);
+
+        // Check if it is a client tree widget item
+        if(jackClientTreeWidgetItem) {
+            if(jackClientTreeWidgetItem->clientName() == clientName) {
+                clientFound = true;
+                jackClientTreeWidgetItem->addChild(new JackMidiPortTreeWidgetItem(midiPort));
+                return;
+            }
+        }
+    }
+
+    if(!clientFound) {
+        JackClientTreeWidgetItem *inputItem = new JackClientTreeWidgetItem(clientName);
+        clientTreeWidget->addTopLevelItem(inputItem);
+        inputItem->addChild(new JackMidiPortTreeWidgetItem(midiPort));
+        clientTreeWidget->expandItem(inputItem);
+    }
+}
+
 void JackConnectionsDrawer::completeUpdate() {
     _returnTreeWidget->clear();
     _sendTreeWidget->clear();
@@ -163,7 +203,13 @@ void JackConnectionsDrawer::completeUpdate() {
                 }
             } else
             if(port.isMidiPort()) {
-
+                QJack::MidiPort midiPort = QJack::MidiPort(port);
+                if(midiPort.isInput()) {
+                    inputItem->addChild(new JackMidiPortTreeWidgetItem(midiPort));
+                } else
+                if(midiPort.isOutput()) {
+                    outputItem->addChild(new JackMidiPortTreeWidgetItem(midiPort));
+                }
             }
         }
     }

@@ -20,35 +20,17 @@
 #pragma once
 
 // Own includes
-#include "connectionsdrawer.h"
+#include "porttreewidgetitem.h"
 
 // QJack includes
-#include <qjack/audioport.h>
 #include <qjack/midiport.h>
 
-class JackConnectionsDrawer : public ConnectionsDrawer {
-    Q_OBJECT
+class JackMidiPortTreeWidgetItem : public PortTreeWidgetItem {
 public:
-    JackConnectionsDrawer(QWidget *parent = 0);
-    ~JackConnectionsDrawer();
+    JackMidiPortTreeWidgetItem(QJack::MidiPort port);
 
-protected slots:
-    void connectedToServer();
-    void disconnectedFromServer();
-
-    void clientRegistered(QString clientName);
-    void clientUnregistered(QString clientName);
-
-    void portRegistered(QJack::Port port);
-    void portUnregistered(QJack::Port port);
+    bool isConnectedTo(PortTreeWidgetItem *other);
 
 protected:
-    void completeUpdate();
-
-    void removeClient(ClientTreeWidget *clientTreeWidget, QString clientName);
-
-    void addAudioPort(ClientTreeWidget *clientTreeWidget, QJack::AudioPort audioPort);
-    void addMidiPort(ClientTreeWidget *clientTreeWidget, QJack::MidiPort midiPort);
-
+    QJack::MidiPort _midiPort;
 };
-

@@ -45,7 +45,8 @@ HEADERS += \
     jackconnectionsdrawer/jackconnectionsdrawer.h \
     connectionsdrawer/clienttreewidget.h \
     jackconnectionsdrawer/jackclienttreewidgetitem.h \
-    jackconnectionsdrawer/jackaudioporttreewidgetitem.h
+    jackconnectionsdrawer/jackaudioporttreewidgetitem.h \
+    jackconnectionsdrawer/jackmidiporttreewidgetitem.h
 
 SOURCES += \
     SystemTrayIcon.cpp \
@@ -81,7 +82,8 @@ SOURCES += \
     jackconnectionsdrawer/jackconnectionsdrawer.cpp \
     connectionsdrawer/clienttreewidget.cpp \
     jackconnectionsdrawer/jackclienttreewidgetitem.cpp \
-    jackconnectionsdrawer/jackaudioporttreewidgetitem.cpp
+    jackconnectionsdrawer/jackaudioporttreewidgetitem.cpp \
+    jackconnectionsdrawer/jackmidiporttreewidgetitem.cpp
 
 FORMS += \
     SocketDialog.ui \

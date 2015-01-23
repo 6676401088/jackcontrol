@@ -17,38 +17,39 @@
 
 *****************************************************************************/
 
-#pragma once
-
 // Own includes
-#include "connectionsdrawer.h"
+#include "jackmidiporttreewidgetitem.h"
 
-// QJack includes
-#include <qjack/audioport.h>
-#include <qjack/midiport.h>
+// Qt includes
+#include <QIcon>
 
-class JackConnectionsDrawer : public ConnectionsDrawer {
-    Q_OBJECT
-public:
-    JackConnectionsDrawer(QWidget *parent = 0);
-    ~JackConnectionsDrawer();
+JackMidiPortTreeWidgetItem::JackMidiPortTreeWidgetItem(QJack::MidiPort midiPort)
+    : PortTreeWidgetItem(midiPort.portName()) {
+    _midiPort = midiPort;
 
-protected slots:
-    void connectedToServer();
-    void disconnectedFromServer();
+    if(_midiPort.isOutput()) {
+        setIcon(0, QIcon("://images/mporto_64x64.png"));
+    } else
+    if(_midiPort.isInput()) {
+        setIcon(0, QIcon("://images/mporti_64x64.png"));
+    }
+}
 
-    void clientRegistered(QString clientName);
-    void clientUnregistered(QString clientName);
+bool JackMidiPortTreeWidgetItem::isConnectedTo(PortTreeWidgetItem *other) {
+    // Null ports cannot be connected.
+    if(!other) {
+        return false;
+    }
 
-    void portRegistered(QJack::Port port);
-    void portUnregistered(QJack::Port port);
+    // Try to cast to a midi port.
+    JackMidiPortTreeWidgetItem *midiPortItem
+        = dynamic_cast<JackMidiPortTreeWidgetItem*>(other);
 
-protected:
-    void completeUpdate();
+    if(!midiPortItem) {
+        // This not a midi port, therefore it cannot be connected.
+        return false;
+    }
 
-    void removeClient(ClientTreeWidget *clientTreeWidget, QString clientName);
-
-    void addAudioPort(ClientTreeWidget *clientTreeWidget, QJack::AudioPort audioPort);
-    void addMidiPort(ClientTreeWidget *clientTreeWidget, QJack::MidiPort midiPort);
-
-};
+    return _midiPort.isConnectedTo(midiPortItem->_midiPort);
+}
 
