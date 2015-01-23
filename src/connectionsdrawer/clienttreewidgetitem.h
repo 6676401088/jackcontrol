@@ -22,8 +22,6 @@
 // Qt includes
 #include <QTreeWidgetItem>
 
-#define QJACKCTL_CLIENTITEM    1001
-
 /**
  * A tree widget item that represents a client in the tree.
  */
@@ -35,18 +33,5 @@ public:
     // Instance accessors.
     void setClientName(QString clientName);
     QString clientName() const;
-
-    // Client port cleanup marker.
-    void markClient(int mark);
-    int clientMark() const;
-
-    // Connectiopn highlight methods.
-    bool isHighlighted() const;
-    void setHighlighted(bool highlighted);
-
-private:
-    QString _clientName;
-    int     _clientMark;
-    int     _hilight;
 };
 

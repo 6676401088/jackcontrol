@@ -19,13 +19,8 @@
 
 #pragma once
 
-// Own includes
-class ClientTreeWidgetItem;
-
 // Qt includes
 #include <QTreeWidgetItem>
-
-#define QJACKCTL_PORTITEM      1002
 
 /**
  * A tree widget item that represents a port of a client in the tree.
@@ -39,21 +34,5 @@ public:
     void setPortName(QString portName);
     const QString& portName() const;
 
-    // Client port cleanup marker.
-    void markPort(int mark);
-    int portMark() const;
-
-    // Connectiopn highlight methods.
-    bool highlighted() const;
-    void setHighlighted(bool highlighted);
-
     virtual bool isConnectedTo(PortTreeWidgetItem *other);
-
-private:
-
-    // Instance variables.
-    ClientTreeWidgetItem *_clientTreeWidgetItem;
-
-    int     _portMark;
-    bool    _highlight;
 };

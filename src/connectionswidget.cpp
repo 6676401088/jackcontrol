@@ -18,23 +18,16 @@
 
 *****************************************************************************/
 
-#include <Qt>
-
 // Own includes
-#include "about.h"
 #include "connectionswidget.h"
-#include "settings.h"
-#include "mainwidget.h"
-#include "patchbay.h"
-
-// Qt includes
-#include <QMessageBox>
-#include <QShowEvent>
-#include <QHideEvent>
 
 ConnectionsWidget::ConnectionsWidget(QWidget *parent)
     : QWidget(parent) {
     ui.setupUi(this);
+
+    // Set default selection mode
+    ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    ui.comboBoxSelectionMode->setCurrentIndex(2); // Extended
 }
 
 ConnectionsWidget::~ConnectionsWidget() {
@@ -46,6 +39,24 @@ void ConnectionsWidget::on_pushButtonConnect_clicked() {
 
 void ConnectionsWidget::on_pushButtonDisconnect_clicked() {
     ui.jackConnectionsDrawer->disconnectSelectedItems();
+}
+
+void ConnectionsWidget::on_comboBoxSelectionMode_activated(int index) {
+    switch(index) {
+    default:
+    case 0: // Single selection
+        ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::SingleSelection);
+        break;
+    case 1: // Multiple selection
+        ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::MultiSelection);
+        break;
+    case 2: // Extended selection
+        ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        break;
+    case 3: // Contiguous selection
+        ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::ContiguousSelection);
+        break;
+    }
 }
 
 void ConnectionsWidget::on_pushButtonDisconnectAll_clicked() {

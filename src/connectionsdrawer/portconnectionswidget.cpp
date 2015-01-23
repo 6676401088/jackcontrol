@@ -54,8 +54,8 @@ int PortConnectionsWidget::treeWidgetItemYPosition(QTreeWidgetItem *pItem) const
     QTreeWidget *pList = pItem->treeWidget();
     QTreeWidgetItem *pParent = pItem->parent();
     ClientTreeWidgetItem *pClientItem = NULL;
-    if (pParent && pParent->type() == QJACKCTL_CLIENTITEM)
-        pClientItem = static_cast<ClientTreeWidgetItem *> (pParent);
+    if (pParent && dynamic_cast<ClientTreeWidgetItem*>(pParent))
+        pClientItem = dynamic_cast<ClientTreeWidgetItem *> (pParent);
     if (pClientItem && !pClientItem->isExpanded()) {
         rect = pList->visualItemRect(pClientItem);
     } else {

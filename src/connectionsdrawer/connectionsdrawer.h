@@ -41,6 +41,9 @@ public:
     void collapseAll();
     void expandAll();
 
+public slots:
+    void setSelectionMode(QAbstractItemView::SelectionMode selectionMode);
+
 signals:
     void itemSelectionChanged(QList<QTreeWidgetItem*> selectedOutputItems,
                               QList<QTreeWidgetItem*> selectedInputItems);
@@ -49,9 +52,9 @@ protected slots:
     void itemSelectionChanged();
 
 protected:
-    ClientTreeWidget *      _outputTreeWidget;
+    ClientTreeWidget *      _sendTreeWidget;
     PortConnectionsWidget * _portConnectionsWidget;
-    ClientTreeWidget *      _inputTreeWidget;
+    ClientTreeWidget *      _returnTreeWidget;
 };
 
 

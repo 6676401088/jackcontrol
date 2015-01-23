@@ -98,5 +98,9 @@
         <file>images/network-server.svg</file>
         <file>images/audio-card.svg</file>
         <file>images/gnome-mime-audio.svg</file>
+        <file>images/single-selection-64.png</file>
+        <file>images/multi-selection-64.png</file>
+        <file>images/extended-selection-64.png</file>
+        <file>images/contiguous-selection-64.png</file>
     </qresource>
 </RCC>

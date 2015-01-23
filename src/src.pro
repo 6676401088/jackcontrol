@@ -43,7 +43,6 @@ HEADERS += \
     connectionsdrawer/connectionsdrawer.h \
     about.h \
     jackconnectionsdrawer/jackconnectionsdrawer.h \
-    alsaconnectionsdrawer/alsaconnectionsdrawer.h \
     connectionsdrawer/clienttreewidget.h \
     jackconnectionsdrawer/jackclienttreewidgetitem.h \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.h
@@ -80,7 +79,6 @@ SOURCES += \
     connectionsdrawer/porttreewidgetitem.cpp \
     connectionsdrawer/connectionsdrawer.cpp \
     jackconnectionsdrawer/jackconnectionsdrawer.cpp \
-    alsaconnectionsdrawer/alsaconnectionsdrawer.cpp \
     connectionsdrawer/clienttreewidget.cpp \
     jackconnectionsdrawer/jackclienttreewidgetitem.cpp \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.cpp
@@ -154,7 +152,6 @@ QT += xml
 INCLUDEPATH += \
     connectionsdrawer \
     jackconnectionsdrawer \
-    alsaconnectionsdrawer \
      .. ../qjack
 
 LIBS += -L../qjack/lib \

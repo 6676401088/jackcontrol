@@ -26,7 +26,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>828</width>
+    <width>877</width>
     <height>409</height>
    </rect>
   </property>
@@ -98,24 +98,43 @@
      </item>
      <item>
       <widget class="QComboBox" name="comboBoxSelectionMode">
+       <property name="toolTip">
+        <string>Choose an item selection mode</string>
+       </property>
        <item>
         <property name="text">
          <string>Single selection (classic)</string>
+        </property>
+        <property name="icon">
+         <iconset resource="qjackctl.qrc">
+          <normaloff>:/images/single-selection-64.png</normaloff>:/images/single-selection-64.png</iconset>
         </property>
        </item>
        <item>
         <property name="text">
          <string>Multiple selection</string>
         </property>
+        <property name="icon">
+         <iconset resource="qjackctl.qrc">
+          <normaloff>:/images/multi-selection-64.png</normaloff>:/images/multi-selection-64.png</iconset>
+        </property>
        </item>
        <item>
         <property name="text">
-         <string>Extended selection</string>
+         <string>Extended selection (default)</string>
+        </property>
+        <property name="icon">
+         <iconset resource="qjackctl.qrc">
+          <normaloff>:/images/extended-selection-64.png</normaloff>:/images/extended-selection-64.png</iconset>
         </property>
        </item>
        <item>
         <property name="text">
          <string>Contiguous selection</string>
+        </property>
+        <property name="icon">
+         <iconset resource="qjackctl.qrc">
+          <normaloff>:/images/contiguous-selection-64.png</normaloff>:/images/contiguous-selection-64.png</iconset>
         </property>
        </item>
       </widget>

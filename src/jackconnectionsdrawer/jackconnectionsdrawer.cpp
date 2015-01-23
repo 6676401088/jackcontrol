@@ -57,8 +57,8 @@ void JackConnectionsDrawer::clientRegistered(QString clientName) {
 }
 
 void JackConnectionsDrawer::clientUnregistered(QString clientName) {
-    removeClient(_inputTreeWidget, clientName);
-    removeClient(_outputTreeWidget, clientName);
+    removeClient(_returnTreeWidget, clientName);
+    removeClient(_sendTreeWidget, clientName);
 }
 
 void JackConnectionsDrawer::portRegistered(QJack::Port port) {
@@ -66,10 +66,10 @@ void JackConnectionsDrawer::portRegistered(QJack::Port port) {
         QJack::AudioPort audioPort = QJack::AudioPort(port);
         if(audioPort.isValid()) {
             if(audioPort.isOutput()) {
-                addAudioPort(_outputTreeWidget, audioPort);
+                addAudioPort(_sendTreeWidget, audioPort);
             } else
             if(audioPort.isInput()) {
-                addAudioPort(_inputTreeWidget, audioPort);
+                addAudioPort(_returnTreeWidget, audioPort);
             }
         }
     } else
@@ -129,12 +129,13 @@ void JackConnectionsDrawer::addAudioPort(ClientTreeWidget *clientTreeWidget,
         JackClientTreeWidgetItem *inputItem = new JackClientTreeWidgetItem(clientName);
         clientTreeWidget->addTopLevelItem(inputItem);
         inputItem->addChild(new JackAudioPortTreeWidgetItem(audioPort));
+        clientTreeWidget->expandItem(inputItem);
     }
 }
 
 void JackConnectionsDrawer::completeUpdate() {
-    _inputTreeWidget->clear();
-    _outputTreeWidget->clear();
+    _returnTreeWidget->clear();
+    _sendTreeWidget->clear();
     _portConnectionsWidget->update();
 
     // Get a full list of all connected clients.
@@ -144,10 +145,10 @@ void JackConnectionsDrawer::completeUpdate() {
     foreach(QString client, clientList) {
         // Add client items
         JackClientTreeWidgetItem *outputItem = new JackClientTreeWidgetItem(client);
-        _outputTreeWidget->addTopLevelItem(outputItem);
+        _sendTreeWidget->addTopLevelItem(outputItem);
 
         JackClientTreeWidgetItem *inputItem = new JackClientTreeWidgetItem(client);
-        _inputTreeWidget->addTopLevelItem(inputItem);
+        _returnTreeWidget->addTopLevelItem(inputItem);
 
         //
         QList<QJack::Port> ports = JackService::instance().client().portsForClient(client);

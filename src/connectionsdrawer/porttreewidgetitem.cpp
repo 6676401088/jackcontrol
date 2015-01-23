@@ -19,14 +19,9 @@
 
 // Own includes
 #include "porttreewidgetitem.h"
-#include "clienttreewidgetitem.h"
-#include "connectalias.h"
-#include "clienttreewidget.h"
 
 PortTreeWidgetItem::PortTreeWidgetItem(QString portName)
-    : QTreeWidgetItem(QJACKCTL_PORTITEM) {
-    _portMark               = 0;
-    _highlight              = false;
+    : QTreeWidgetItem() {
     setPortName(portName);
 }
 
@@ -39,38 +34,6 @@ void PortTreeWidgetItem::setPortName(QString portName) {
 
 const QString& PortTreeWidgetItem::portName() const {
     return text(0);
-}
-
-void PortTreeWidgetItem::markPort(int mark) {
-    setHighlighted(false);
-    _portMark = mark;
-}
-
-int PortTreeWidgetItem::portMark() const {
-    return _portMark;
-}
-
-bool PortTreeWidgetItem::highlighted() const {
-    return _highlight;
-}
-
-void PortTreeWidgetItem::setHighlighted (bool highlighted ) {
-    // Update the port highlightning if changed...
-    if ((_highlight && !highlighted) || (!_highlight && highlighted)) {
-        _highlight = highlighted;
-        // Propagate this to the parent...
-        _clientTreeWidgetItem->setHighlighted(highlighted);
-    }
-
-    // Set the new color.
-    QTreeWidget *pTreeWidget = QTreeWidgetItem::treeWidget();
-    if (pTreeWidget == NULL)
-        return;
-
-    const QPalette& pal = pTreeWidget->palette();
-    QTreeWidgetItem::setTextColor(0, _highlight
-        ? (pal.base().color().value() < 0x7f ? Qt::cyan : Qt::blue)
-        : pal.text().color());
 }
 
 bool PortTreeWidgetItem::isConnectedTo(PortTreeWidgetItem *other) {

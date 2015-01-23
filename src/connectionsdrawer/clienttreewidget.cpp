@@ -215,16 +215,16 @@ void ClientTreeWidget::renamedSlot() {
 }
 
 void ClientTreeWidget::timeoutSlot() {
-    if (_autoOpenTimer) {
-        _autoOpenTimer->stop();
-        if (_dropItem && _dropItem->type() == QJACKCTL_CLIENTITEM) {
-            ClientTreeWidgetItem *pClientItem
-                = static_cast<ClientTreeWidgetItem *> (_dropItem);
-            if(pClientItem && !pClientItem->isExpanded()) {
-                pClientItem->setExpanded(true);
-            }
-        }
-    }
+//    if (_autoOpenTimer) {
+//        _autoOpenTimer->stop();
+//        if (_dropItem && _dropItem->type() == QJACKCTL_CLIENTITEM) {
+//            ClientTreeWidgetItem *pClientItem
+//                = static_cast<ClientTreeWidgetItem *> (_dropItem);
+//            if(pClientItem && !pClientItem->isExpanded()) {
+//                pClientItem->setExpanded(true);
+//            }
+//        }
+//    }
 }
 
 bool ClientTreeWidget::eventFilter(QObject *pObject, QEvent *pEvent) {

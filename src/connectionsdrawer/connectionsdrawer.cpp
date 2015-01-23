@@ -31,64 +31,64 @@
 
 ConnectionsDrawer::ConnectionsDrawer(QWidget *parent)
     : QSplitter(Qt::Horizontal, parent) {
-    _inputTreeWidget        = new ClientTreeWidget();
-    _outputTreeWidget       = new ClientTreeWidget();
-    _portConnectionsWidget  = new PortConnectionsWidget(_outputTreeWidget,
-                                                        _inputTreeWidget);
+    _returnTreeWidget        = new ClientTreeWidget();
+    _sendTreeWidget       = new ClientTreeWidget();
+    _portConnectionsWidget  = new PortConnectionsWidget(_sendTreeWidget,
+                                                        _returnTreeWidget);
 
     // This is a bit hacky, but we need this to get the scrollbar to the left
     // without changing the layout direction while preserving the existing
     // scrollbar.
     QWidget *widget = new QWidget();
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(_outputTreeWidget->verticalScrollBar());
-    layout->addWidget(_outputTreeWidget);
+    layout->addWidget(_sendTreeWidget->verticalScrollBar());
+    layout->addWidget(_sendTreeWidget);
     layout->setSpacing(3);
     layout->setContentsMargins(0, 0, 0, 0);
     widget->setLayout(layout);
 
     addWidget(widget);
     addWidget(_portConnectionsWidget);
-    addWidget(_inputTreeWidget);
+    addWidget(_returnTreeWidget);
 
     setCollapsible(0, false);
     setCollapsible(1, false);
     setCollapsible(2, false);
 
-    _outputTreeWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    _inputTreeWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    _sendTreeWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _returnTreeWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     setHandleWidth(0);
 
-    _outputTreeWidget->setHeaderTitle(tr("Auxiliary sends"));
-    _inputTreeWidget->setHeaderTitle(tr("Auxiliary returns"));
+    _sendTreeWidget->setHeaderTitle(tr("Auxiliary sends"));
+    _returnTreeWidget->setHeaderTitle(tr("Auxiliary returns"));
 
-	connect(_outputTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
+    connect(_sendTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
         _portConnectionsWidget, SLOT(update()));
-	connect(_outputTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
+    connect(_sendTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
         _portConnectionsWidget, SLOT(update()));
-	connect(_outputTreeWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
+    connect(_sendTreeWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
         _portConnectionsWidget, SLOT(update()));
-	connect(_outputTreeWidget->header(), SIGNAL(sectionClicked(int)),
+    connect(_sendTreeWidget->header(), SIGNAL(sectionClicked(int)),
         _portConnectionsWidget, SLOT(update()));
 
-    connect(_outputTreeWidget, SIGNAL(itemSelectionChanged()),
+    connect(_sendTreeWidget, SIGNAL(itemSelectionChanged()),
         _portConnectionsWidget, SLOT(update()));
-    connect(_outputTreeWidget, SIGNAL(itemSelectionChanged()),
+    connect(_sendTreeWidget, SIGNAL(itemSelectionChanged()),
         this, SLOT(itemSelectionChanged()));
 
-	connect(_inputTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
+    connect(_returnTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
         _portConnectionsWidget, SLOT(update()));
-	connect(_inputTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
+    connect(_returnTreeWidget, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
         _portConnectionsWidget, SLOT(update()));
-	connect(_inputTreeWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
+    connect(_returnTreeWidget->verticalScrollBar(), SIGNAL(valueChanged(int)),
         _portConnectionsWidget, SLOT(update()));
-	connect(_inputTreeWidget->header(), SIGNAL(sectionClicked(int)),
+    connect(_returnTreeWidget->header(), SIGNAL(sectionClicked(int)),
         _portConnectionsWidget, SLOT(update()));
 
-    connect(_inputTreeWidget, SIGNAL(itemSelectionChanged()),
+    connect(_returnTreeWidget, SIGNAL(itemSelectionChanged()),
         _portConnectionsWidget, SLOT(update()));
-    connect(_inputTreeWidget, SIGNAL(itemSelectionChanged()),
+    connect(_returnTreeWidget, SIGNAL(itemSelectionChanged()),
         this, SLOT(itemSelectionChanged()));
 }
 
@@ -108,16 +108,21 @@ void ConnectionsDrawer::disconnectAll() {
 }
 
 void ConnectionsDrawer::collapseAll() {
-    _outputTreeWidget->collapseAll();
-    _inputTreeWidget->collapseAll();
+    _sendTreeWidget->collapseAll();
+    _returnTreeWidget->collapseAll();
 }
 
 void ConnectionsDrawer::expandAll() {
-    _outputTreeWidget->expandAll();
-    _inputTreeWidget->expandAll();
+    _sendTreeWidget->expandAll();
+    _returnTreeWidget->expandAll();
 }
 
 void ConnectionsDrawer::itemSelectionChanged() {
-    emit itemSelectionChanged(_outputTreeWidget->selectedItems(),
-                              _inputTreeWidget->selectedItems());
+    emit itemSelectionChanged(_sendTreeWidget->selectedItems(),
+                              _returnTreeWidget->selectedItems());
+}
+
+void ConnectionsDrawer::setSelectionMode(QAbstractItemView::SelectionMode selectionMode) {
+    _sendTreeWidget->setSelectionMode(selectionMode);
+    _returnTreeWidget->setSelectionMode(selectionMode);
 }

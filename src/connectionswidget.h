@@ -33,6 +33,7 @@ public slots:
     void on_pushButtonConnect_clicked();
     void on_pushButtonDisconnect_clicked();
 
+    void on_comboBoxSelectionMode_activated(int index);
     void on_pushButtonDisconnectAll_clicked();
 
     void on_pushButtonCollapseAll_clicked();

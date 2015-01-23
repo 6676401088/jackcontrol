@@ -19,16 +19,9 @@
 
 // Own includes
 #include "clienttreewidgetitem.h"
-#include "clienttreewidget.h"
-
-#define QJACKCTL_CLIENTITEM    1001
 
 ClientTreeWidgetItem::ClientTreeWidgetItem(QString clientName)
-    : QTreeWidgetItem(QJACKCTL_CLIENTITEM) {
-    _clientName = clientName;
-    _clientMark = 0;
-    _hilight    = 0;
-
+    : QTreeWidgetItem() {
     setText(0, clientName);
 }
 
@@ -36,44 +29,10 @@ ClientTreeWidgetItem::~ClientTreeWidgetItem () {
 }
 
 void ClientTreeWidgetItem::setClientName(QString clientName) {
-    QTreeWidgetItem::setText(0, clientName);
-
-    _clientName = clientName;
+    setText(0, clientName);
 }
 
 QString ClientTreeWidgetItem::clientName() const {
-    return _clientName;
+    return text(0);
 }
-
-void ClientTreeWidgetItem::markClient(int mark) {
-    setHighlighted(false);
-    _clientMark = mark;
-}
-
-int ClientTreeWidgetItem::clientMark () const {
-    return _clientMark;
-}
-
-bool ClientTreeWidgetItem::isHighlighted () const {
-    return (_hilight > 0);
-}
-
-void ClientTreeWidgetItem::setHighlighted(bool highlighted) {
-    if (highlighted)
-        _hilight++;
-    else
-    if (_hilight > 0)
-        _hilight--;
-
-    // Set the new color.
-    QTreeWidget *pTreeWidget = QTreeWidgetItem::treeWidget();
-    if (pTreeWidget == NULL)
-        return;
-
-    const QPalette& pal = pTreeWidget->palette();
-    QTreeWidgetItem::setTextColor(0, _hilight > 0
-        ? (pal.base().color().value() < 0x7f ? Qt::darkCyan : Qt::darkBlue)
-        : pal.text().color());
-}
-
 
