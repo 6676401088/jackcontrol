@@ -32,6 +32,10 @@ public:
     JackConnectionsDrawer(QWidget *parent = 0);
     ~JackConnectionsDrawer();
 
+    void connectSelectedItems();
+    void disconnectSelectedItems();
+    void disconnectAll();
+
 protected slots:
     void connectedToServer();
     void disconnectedFromServer();

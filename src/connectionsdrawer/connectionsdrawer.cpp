@@ -96,15 +96,12 @@ ConnectionsDrawer::~ConnectionsDrawer () {
 }
 
 void ConnectionsDrawer::connectSelectedItems() {
-
 }
 
 void ConnectionsDrawer::disconnectSelectedItems() {
-
 }
 
 void ConnectionsDrawer::disconnectAll() {
-
 }
 
 void ConnectionsDrawer::collapseAll() {

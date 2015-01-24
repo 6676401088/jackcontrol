@@ -31,6 +31,8 @@ public:
 
     bool isConnectedTo(PortTreeWidgetItem *other);
 
+    QJack::MidiPort midiPort();
+
 protected:
     QJack::MidiPort _midiPort;
 };

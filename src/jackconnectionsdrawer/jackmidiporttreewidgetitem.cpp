@@ -53,3 +53,6 @@ bool JackMidiPortTreeWidgetItem::isConnectedTo(PortTreeWidgetItem *other) {
     return _midiPort.isConnectedTo(midiPortItem->_midiPort);
 }
 
+QJack::MidiPort JackMidiPortTreeWidgetItem::midiPort() {
+    return _midiPort;
+}

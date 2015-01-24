@@ -51,6 +51,80 @@ void JackConnectionsDrawer::connectedToServer() {
 void JackConnectionsDrawer::disconnectedFromServer() {
 }
 
+void JackConnectionsDrawer::connectSelectedItems() {
+    QList<QTreeWidgetItem*> sendItems = _sendTreeWidget->selectedItems();
+    QList<QTreeWidgetItem*> returnItems = _returnTreeWidget->selectedItems();
+
+    foreach(QTreeWidgetItem* sendItem, sendItems) {
+        JackAudioPortTreeWidgetItem *jackAudioPortTreeWidgetSendItem
+            = dynamic_cast<JackAudioPortTreeWidgetItem*>(sendItem);
+        JackMidiPortTreeWidgetItem *jackMidiPortTreeWidgetSendItem
+            = dynamic_cast<JackMidiPortTreeWidgetItem*>(sendItem);
+
+        foreach(QTreeWidgetItem* returnItem, returnItems) {
+            JackAudioPortTreeWidgetItem *jackAudioPortTreeWidgetReturnItem
+                = dynamic_cast<JackAudioPortTreeWidgetItem*>(returnItem);
+            JackMidiPortTreeWidgetItem *jackMidiPortTreeWidgetReturnItem
+                = dynamic_cast<JackMidiPortTreeWidgetItem*>(returnItem);
+
+            if(jackAudioPortTreeWidgetSendItem) {
+                if(jackAudioPortTreeWidgetReturnItem) {
+                    JackService::instance().client().connect(jackAudioPortTreeWidgetSendItem->audioPort(),
+                                                             jackAudioPortTreeWidgetReturnItem->audioPort());
+
+                }
+            }
+
+            if(jackMidiPortTreeWidgetSendItem) {
+                if(jackMidiPortTreeWidgetReturnItem) {
+                    JackService::instance().client().connect(jackMidiPortTreeWidgetSendItem->midiPort(),
+                                                             jackMidiPortTreeWidgetReturnItem->midiPort());
+                }
+            }
+        }
+    }
+}
+
+void JackConnectionsDrawer::disconnectSelectedItems() {
+    QList<QTreeWidgetItem*> sendItems = _sendTreeWidget->selectedItems();
+    QList<QTreeWidgetItem*> returnItems = _returnTreeWidget->selectedItems();
+
+    foreach(QTreeWidgetItem* sendItem, sendItems) {
+        JackAudioPortTreeWidgetItem *jackAudioPortTreeWidgetSendItem
+            = dynamic_cast<JackAudioPortTreeWidgetItem*>(sendItem);
+        JackMidiPortTreeWidgetItem *jackMidiPortTreeWidgetSendItem
+            = dynamic_cast<JackMidiPortTreeWidgetItem*>(sendItem);
+
+        foreach(QTreeWidgetItem* returnItem, returnItems) {
+            JackAudioPortTreeWidgetItem *jackAudioPortTreeWidgetReturnItem
+                = dynamic_cast<JackAudioPortTreeWidgetItem*>(returnItem);
+            JackMidiPortTreeWidgetItem *jackMidiPortTreeWidgetReturnItem
+                = dynamic_cast<JackMidiPortTreeWidgetItem*>(returnItem);
+
+            if(jackAudioPortTreeWidgetSendItem) {
+                if(jackAudioPortTreeWidgetReturnItem) {
+                    JackService::instance().client().disconnect(jackAudioPortTreeWidgetSendItem->audioPort(),
+                                                                jackAudioPortTreeWidgetReturnItem->audioPort());
+
+                }
+            }
+
+            if(jackMidiPortTreeWidgetSendItem) {
+                if(jackMidiPortTreeWidgetReturnItem) {
+                    JackService::instance().client().disconnect(jackMidiPortTreeWidgetSendItem->midiPort(),
+                                                                jackMidiPortTreeWidgetReturnItem->midiPort());
+                }
+            }
+        }
+    }
+}
+
+void JackConnectionsDrawer::disconnectAll() {
+    _sendTreeWidget->selectAll();
+    _returnTreeWidget->selectAll();
+    disconnectSelectedItems();
+}
+
 void JackConnectionsDrawer::clientRegistered(QString clientName) {
     Q_UNUSED(clientName);
 }

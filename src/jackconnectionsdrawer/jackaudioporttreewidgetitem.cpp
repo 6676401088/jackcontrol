@@ -61,3 +61,7 @@ bool JackAudioPortTreeWidgetItem::isConnectedTo(PortTreeWidgetItem *other) {
 
     return _audioPort.isConnectedTo(audioPortItem->_audioPort);
 }
+
+QJack::AudioPort JackAudioPortTreeWidgetItem::audioPort() {
+    return _audioPort;
+}

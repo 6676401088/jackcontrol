@@ -31,6 +31,8 @@ public:
 
     bool isConnectedTo(PortTreeWidgetItem *other);
 
+    QJack::AudioPort audioPort();
+
 protected:
     QJack::AudioPort _audioPort;
 };

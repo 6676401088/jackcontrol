@@ -35,9 +35,10 @@ public:
     ConnectionsDrawer(QWidget *parent = 0);
     virtual ~ConnectionsDrawer();
 
-    void connectSelectedItems();
-    void disconnectSelectedItems();
-    void disconnectAll();
+    virtual void connectSelectedItems();
+    virtual void disconnectSelectedItems();
+    virtual void disconnectAll();
+
     void collapseAll();
     void expandAll();
 

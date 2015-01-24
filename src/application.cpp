@@ -22,7 +22,6 @@
 #include "about.h"
 #include "settings.h"
 #include "mainwindow.h"
-#include "systemtrayicon.h"
 
 // Qt includes
 #include <QApplication>
@@ -110,9 +109,6 @@ private:
 
 int main(int argc, char **argv) {
     Application app(argc, argv);
-    SystemTrayIcon systemTrayIcon;
-    systemTrayIcon.setIcon(QIcon("://images/aportlni_64x64.png"));
-    systemTrayIcon.show();
 	// Construct default settings; override with command line arguments.
     Settings settings;
 	if (!settings.parse_args(app.arguments())) {

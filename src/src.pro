@@ -27,8 +27,7 @@ HEADERS += \
     connectionsdrawer/clienttreewidget.h \
     jackconnectionsdrawer/jackclienttreewidgetitem.h \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.h \
-    jackconnectionsdrawer/jackmidiporttreewidgetitem.h \
-    systemtrayicon.h
+    jackconnectionsdrawer/jackmidiporttreewidgetitem.h
 
 SOURCES += \
     InterfaceComboBox.cpp \
@@ -50,8 +49,7 @@ SOURCES += \
     connectionsdrawer/clienttreewidget.cpp \
     jackconnectionsdrawer/jackclienttreewidgetitem.cpp \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.cpp \
-    jackconnectionsdrawer/jackmidiporttreewidgetitem.cpp \
-    systemtrayicon.cpp
+    jackconnectionsdrawer/jackmidiporttreewidgetitem.cpp
 
 FORMS += \
     statuswidget.ui \
