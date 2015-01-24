@@ -24,8 +24,7 @@
 #include <QWidget>
 #include <QSystemTrayIcon>
 
-class SystemTrayIcon : public QSystemTrayIcon
-{
+class SystemTrayIcon : public QSystemTrayIcon {
 	Q_OBJECT
 
 public:

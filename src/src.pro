@@ -1,18 +1,13 @@
-# qjackctl.pro
-#
 TARGET = qjackctl
 
 TEMPLATE = app
 DEPENDPATH += .
 INCLUDEPATH += .
 
-include(src.pri)
-
 #DEFINES += DEBUG
 
 HEADERS += \
     InterfaceComboBox.h \
-    SystemTrayIcon.h \
     Status.h \
     statuswidget.h \
     connectionswidget.h \
@@ -32,10 +27,10 @@ HEADERS += \
     connectionsdrawer/clienttreewidget.h \
     jackconnectionsdrawer/jackclienttreewidgetitem.h \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.h \
-    jackconnectionsdrawer/jackmidiporttreewidgetitem.h
+    jackconnectionsdrawer/jackmidiporttreewidgetitem.h \
+    systemtrayicon.h
 
 SOURCES += \
-    SystemTrayIcon.cpp \
     InterfaceComboBox.cpp \
     statuswidget.cpp \
     connectionswidget.cpp \
@@ -55,7 +50,8 @@ SOURCES += \
     connectionsdrawer/clienttreewidget.cpp \
     jackconnectionsdrawer/jackclienttreewidgetitem.cpp \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.cpp \
-    jackconnectionsdrawer/jackmidiporttreewidgetitem.cpp
+    jackconnectionsdrawer/jackmidiporttreewidgetitem.cpp \
+    systemtrayicon.cpp
 
 FORMS += \
     statuswidget.ui \

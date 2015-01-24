@@ -20,8 +20,8 @@
 
 #pragma once
 
-#define CONFIG_JACK_MIDI
-#define CONFIG_ALSA_SEQ
+//#define CONFIG_JACK_MIDI
+//#define CONFIG_ALSA_SEQ
 
 #define QJACKCTL_TITLE      ""
 #define QJACKCTL_VERSION    ""

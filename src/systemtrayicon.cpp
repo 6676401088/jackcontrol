@@ -20,7 +20,7 @@
 
 // Own includes
 #include "about.h"
-#include "SystemTrayIcon.h"
+#include "systemtrayicon.h"
 
 // Qt includes
 #include <QBitmap>
