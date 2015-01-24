@@ -279,22 +279,22 @@ bool Settings::loadAliases ( const QString& sPreset )
 			return false;
 	}
 
-	// Load preset aliases...
-	const QString sAliasesKey = "/Aliases" + sSuffix;
-    _settings.beginGroup(sAliasesKey);
-    _settings.beginGroup("/Jack");	// FIXME: Audio
-    aliasAudioOutputs.loadSettings(_settings, "/Outputs");
-    aliasAudioInputs.loadSettings(_settings, "/Inputs");
-    _settings.endGroup();
-    _settings.beginGroup("/Midi");
-    aliasMidiOutputs.loadSettings(_settings, "/Outputs");
-    aliasMidiInputs.loadSettings(_settings, "/Inputs");
-    _settings.endGroup();
-    _settings.beginGroup("/Alsa");
-    aliasAlsaOutputs.loadSettings(_settings, "/Outputs");
-    aliasAlsaInputs.loadSettings(_settings, "/Inputs");
-    _settings.endGroup();
-    _settings.endGroup();
+//	// Load preset aliases...
+//	const QString sAliasesKey = "/Aliases" + sSuffix;
+//    _settings.beginGroup(sAliasesKey);
+//    _settings.beginGroup("/Jack");	// FIXME: Audio
+//    aliasAudioOutputs.loadSettings(_settings, "/Outputs");
+//    aliasAudioInputs.loadSettings(_settings, "/Inputs");
+//    _settings.endGroup();
+//    _settings.beginGroup("/Midi");
+//    aliasMidiOutputs.loadSettings(_settings, "/Outputs");
+//    aliasMidiInputs.loadSettings(_settings, "/Inputs");
+//    _settings.endGroup();
+//    _settings.beginGroup("/Alsa");
+//    aliasAlsaOutputs.loadSettings(_settings, "/Outputs");
+//    aliasAlsaInputs.loadSettings(_settings, "/Inputs");
+//    _settings.endGroup();
+//    _settings.endGroup();
 
 	return true;
 }
@@ -309,23 +309,23 @@ bool Settings::saveAliases ( const QString& sPreset )
 			presets.prepend(sPreset);
 	}
 
-	// Save preset aliases...
-	const QString sAliasesKey = "/Aliases" + sSuffix;
-    _settings.remove(sAliasesKey);
-    _settings.beginGroup(sAliasesKey);
-    _settings.beginGroup("/Jack");	// FIXME: Audio
-    aliasAudioOutputs.saveSettings(_settings, "/Outputs");
-    aliasAudioInputs.saveSettings(_settings, "/Inputs");
-    _settings.endGroup();
-    _settings.beginGroup("/Midi");
-    aliasMidiOutputs.saveSettings(_settings, "/Outputs");
-    aliasMidiInputs.saveSettings(_settings, "/Inputs");
-    _settings.endGroup();
-    _settings.beginGroup("/Alsa");
-    aliasAlsaOutputs.saveSettings(_settings, "/Outputs");
-    aliasAlsaInputs.saveSettings(_settings, "/Inputs");
-    _settings.endGroup();
-    _settings.endGroup();
+//	// Save preset aliases...
+//	const QString sAliasesKey = "/Aliases" + sSuffix;
+//    _settings.remove(sAliasesKey);
+//    _settings.beginGroup(sAliasesKey);
+//    _settings.beginGroup("/Jack");	// FIXME: Audio
+//    aliasAudioOutputs.saveSettings(_settings, "/Outputs");
+//    aliasAudioInputs.saveSettings(_settings, "/Inputs");
+//    _settings.endGroup();
+//    _settings.beginGroup("/Midi");
+//    aliasMidiOutputs.saveSettings(_settings, "/Outputs");
+//    aliasMidiInputs.saveSettings(_settings, "/Inputs");
+//    _settings.endGroup();
+//    _settings.beginGroup("/Alsa");
+//    aliasAlsaOutputs.saveSettings(_settings, "/Outputs");
+//    aliasAlsaInputs.saveSettings(_settings, "/Inputs");
+//    _settings.endGroup();
+//    _settings.endGroup();
 
 	return true;
 }

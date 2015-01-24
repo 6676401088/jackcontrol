@@ -1,4 +1,4 @@
-TARGET = qjackctl
+TARGET = qjackctl2
 
 TEMPLATE = app
 DEPENDPATH += .
@@ -16,8 +16,6 @@ HEADERS += \
     aboutdialog.h \
     settings.h \
     jackservice.h \
-    clientalias.h \
-    connectalias.h \
     connectionsdrawer/clienttreewidgetitem.h \
     connectionsdrawer/portconnectionswidget.h \
     connectionsdrawer/porttreewidgetitem.h \
@@ -39,8 +37,6 @@ SOURCES += \
     settings.cpp \
     jackservice.cpp \
     application.cpp \
-    clientalias.cpp \
-    connectalias.cpp \
     connectionsdrawer/clienttreewidgetitem.cpp \
     connectionsdrawer/portconnectionswidget.cpp \
     connectionsdrawer/porttreewidgetitem.cpp \

@@ -22,11 +22,11 @@
 
 // Qt includes
 #include <QWidget>
+#include <QSettings>
 class QComboBox;
 class QSplitter;
 
 // Own includes
-#include "connectalias.h"
 #include "connectionsdrawer/connectionsdrawer.h"
 
 // Icon size combobox item indexes.
@@ -184,12 +184,12 @@ public:
 	bool bSessionSaveVersion;
 	
 	// Aliases containers.
-    ConnectAlias aliasAudioOutputs;
-    ConnectAlias aliasAudioInputs;
-    ConnectAlias aliasMidiOutputs;
-    ConnectAlias aliasMidiInputs;
-    ConnectAlias aliasAlsaOutputs;
-    ConnectAlias aliasAlsaInputs;
+//    ConnectAlias aliasAudioOutputs;
+//    ConnectAlias aliasAudioInputs;
+//    ConnectAlias aliasMidiOutputs;
+//    ConnectAlias aliasMidiInputs;
+//    ConnectAlias aliasAlsaOutputs;
+//    ConnectAlias aliasAlsaInputs;
 
 	// Aliases preset management methods.
 	bool loadAliases(const QString& sPreset);

@@ -24,7 +24,6 @@
 class QWheelEvent;
 
 // Own includes
-#include "connectalias.h"
 #include "connectionsdrawer.h"
 #include "porttreewidgetitem.h"
 
@@ -40,63 +39,16 @@ public:
 
     void setHeaderTitle(QString headerTitle);
 
-    // Auto-open timer methods.
-    void setAutoOpenTimeout(int autoOpenTimeout);
-    int autoOpenTimeout() const;
-
-    // Aliasing support methods.
-    void setAliases(ConnectAlias *connectAliases, bool renameEnabled);
-    ConnectAlias *aliases() const;
-    bool renameEnabled() const;
-
     QList<PortTreeWidgetItem *> ports();
 
     void propagateWheelEvent(QWheelEvent *wheelEvent);
 
-signals:
-    void contentsChanged();
-
-protected slots:
-    // In-place aliasing slots.
-    void startRenameSlot();
-    void renamedSlot();
-
-    // Auto-open timeout slot.
-    void timeoutSlot();
-
 protected:
-
-    // Trap for help/tool-tip events.
-    bool eventFilter(QObject *pObject, QEvent *pEvent);
-
-    // Drag-n-drop stuff.
-    QTreeWidgetItem *dragDropItem(const QPoint& pos);
-
-    // Drag-n-drop stuff -- reimplemented virtual methods.
     void dragEnterEvent(QDragEnterEvent *pDragEnterEvent);
     void dragMoveEvent(QDragMoveEvent *pDragMoveEvent);
     void dragLeaveEvent(QDragLeaveEvent *);
     void dropEvent(QDropEvent *pDropEvent);
 
-    // Handle mouse events for drag-and-drop stuff.
-    void mousePressEvent(QMouseEvent *pMouseEvent);
-    void mouseMoveEvent(QMouseEvent *pMouseEvent);
-
     // Context menu request event handler.
     void contextMenuEvent(QContextMenuEvent *);
-
-private:
-    // Auto-open timer.
-    int     _autoOpenTimeout;
-    QTimer *_autoOpenTimer;
-
-    // Items we'll eventually drop something.
-    QTreeWidgetItem *_dragItem;
-    QTreeWidgetItem *_dropItem;
-    // The point from where drag started.
-    QPoint _dragStartPosition;
-
-    // Aliasing support.
-    ConnectAlias *_connectAliases;
-    bool _renameEnabled;
 };

@@ -53,6 +53,6 @@ protected:
 
     void addAudioPort(ClientTreeWidget *clientTreeWidget, QJack::AudioPort audioPort);
     void addMidiPort(ClientTreeWidget *clientTreeWidget, QJack::MidiPort midiPort);
-
+    void removePort(ClientTreeWidget *clientTreeWidget, QJack::Port port);
 };
 

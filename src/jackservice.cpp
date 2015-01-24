@@ -20,6 +20,8 @@
 // Own includes
 #include "jackservice.h"
 
+#include <QDebug>
+
 #if !defined(WIN32)
 #include <unistd.h>
 #endif
@@ -41,7 +43,8 @@ void JackService::start() {
 //    parameters["device"].setValue("hw:PCH,0");
 
 //    _jackServer.start(alsaDriver);
-    _jackClient.connectToServer("QJackControl2");
+    qDebug() << _jackClient.connectToServer("QJackControl2");
+    qDebug() << _jackClient.activate();
 }
 
 void JackService::stop() {

@@ -17,11 +17,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>QJackControl</string>
+   <string>JACK Control</string>
   </property>
   <property name="windowIcon">
    <iconset resource="qjackctl.qrc">
-    <normaloff>:/images/aportlni_64x64.png</normaloff>:/images/aportlni_64x64.png</iconset>
+    <normaloff>:/images/qjackctl2.png</normaloff>:/images/qjackctl2.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
