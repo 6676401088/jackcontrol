@@ -33,6 +33,8 @@ public:
 
     QJack::AudioPort audioPort();
 
+    QString dragIdentifier();
+
 protected:
     QJack::AudioPort _audioPort;
 };

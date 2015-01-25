@@ -34,6 +34,8 @@
 #include <QDrag>
 #include <QMenu>
 #include <QAction>
+#include <QMimeData>
+#include <QDebug>
 
 ClientTreeWidget::ClientTreeWidget(QWidget *parent)
     : QTreeWidget(parent) {
@@ -74,16 +76,53 @@ void ClientTreeWidget::setHeaderTitle(QString headerTitle) {
     setToolTip(headerTitle);
 }
 
+void ClientTreeWidget::mousePressEvent(QMouseEvent *mouseEvent) {
+    QTreeWidget::mousePressEvent(mouseEvent);
+    if(mouseEvent->button() == Qt::LeftButton) {
+        QTreeWidgetItem *treeItem = itemAt(mouseEvent->pos());
+        PortTreeWidgetItem *portTreeItem
+            = dynamic_cast<PortTreeWidgetItem*>(treeItem);
+
+        if(portTreeItem) {
+            QDrag *drag = new QDrag(this);
+            QMimeData *mimeData = new QMimeData();
+
+            mimeData->setText(portTreeItem->dragIdentifier());
+            drag->setMimeData(mimeData);
+            drag->start();
+        }
+    }
+}
+
 void ClientTreeWidget::dragEnterEvent(QDragEnterEvent *dragEnterEvent) {
+    if (dragEnterEvent->mimeData()->hasText()) {
+        dragEnterEvent->accept();
+    }
 }
 
 void ClientTreeWidget::dragMoveEvent(QDragMoveEvent *dragMoveEvent) {
-}
-
-void ClientTreeWidget::dragLeaveEvent(QDragLeaveEvent *dragLeaveEvent) {
+    if (dragMoveEvent->mimeData()->hasText()) {
+        QTreeWidgetItem *treeItem = itemAt(dragMoveEvent->pos());
+        if(dynamic_cast<PortTreeWidgetItem*>(treeItem)) {
+            dragMoveEvent->accept();
+        } else {
+            dragMoveEvent->ignore();
+        }
+    }
 }
 
 void ClientTreeWidget::dropEvent(QDropEvent *dropEvent) {
+    if (dropEvent->mimeData()->hasText()) {
+        QTreeWidgetItem *treeItem = itemAt(dropEvent->pos());
+        PortTreeWidgetItem *portTreeItem
+            = dynamic_cast<PortTreeWidgetItem*>(treeItem);
+
+        if(portTreeItem) {
+            emit droppedItem(portTreeItem, dropEvent->mimeData()->text());
+            treeItem->setSelected(true);
+            dropEvent->accept();
+        }
+    }
 }
 
 void ClientTreeWidget::contextMenuEvent(QContextMenuEvent *pContextMenuEvent) {

@@ -22,10 +22,12 @@
 // Qt includes
 #include <QTreeWidget>
 class QWheelEvent;
+class QMouseEvent;
 
 // Own includes
 #include "connectionsdrawer.h"
 #include "porttreewidgetitem.h"
+
 
 /**
  * An actual client tree.
@@ -43,11 +45,15 @@ public:
 
     void propagateWheelEvent(QWheelEvent *wheelEvent);
 
+signals:
+    void droppedItem(PortTreeWidgetItem *portTreeWidgetItem, QString itemIdentifier);
+
 protected:
-    void dragEnterEvent(QDragEnterEvent *pDragEnterEvent);
-    void dragMoveEvent(QDragMoveEvent *pDragMoveEvent);
-    void dragLeaveEvent(QDragLeaveEvent *);
-    void dropEvent(QDropEvent *pDropEvent);
+
+    void mousePressEvent(QMouseEvent *mouseEvent);
+    void dragEnterEvent(QDragEnterEvent *dragEnterEvent);
+    void dragMoveEvent(QDragMoveEvent *dragMoveEvent);
+    void dropEvent(QDropEvent *dropEvent);
 
     // Context menu request event handler.
     void contextMenuEvent(QContextMenuEvent *);

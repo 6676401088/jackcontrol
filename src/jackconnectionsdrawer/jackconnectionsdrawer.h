@@ -20,6 +20,7 @@
 #pragma once
 
 // Own includes
+#include "porttreewidgetitem.h"
 #include "connectionsdrawer.h"
 
 // QJack includes
@@ -45,6 +46,8 @@ protected slots:
 
     void portRegistered(QJack::Port port);
     void portUnregistered(QJack::Port port);
+
+    void connectDroppedItem(PortTreeWidgetItem* portItem, QString itemIdentifier);
 
 protected:
     void completeUpdate();

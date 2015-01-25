@@ -34,5 +34,7 @@ public:
     void setPortName(QString portName);
     QString portName() const;
 
+    virtual QString dragIdentifier() { return ""; }
+
     virtual bool isConnectedTo(PortTreeWidgetItem *other);
 };
