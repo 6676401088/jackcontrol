@@ -8,7 +8,6 @@ INCLUDEPATH += .
 
 HEADERS += \
     InterfaceComboBox.h \
-    Status.h \
     statuswidget.h \
     connectionswidget.h \
     mainwindow.h \

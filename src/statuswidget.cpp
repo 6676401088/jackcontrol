@@ -21,24 +21,18 @@
 // Own includes
 #include "about.h"
 #include "statuswidget.h"
-#include "Status.h"
 #include "settings.h"
+#include "jackservice.h"
+
 // Qt includes
-#include <QFile>
-#include <QDateTime>
-#include <QTextBlock>
-#include <QTextCursor>
-#include <QTextStream>
 #include <QHeaderView>
-#include <QShowEvent>
-#include <QHideEvent>
+#include <QTimerEvent>
 
 StatusWidget::StatusWidget(QWidget *parent)
     : QWidget(parent),
       ui(new Ui::StatusWidget()) {
     ui->setupUi(this);
 
-	// Create the list view items 'a priori'...
 	const QString s = " ";
 	const QString c = ":" + s;
 	const QString n = "--";
@@ -50,8 +44,6 @@ StatusWidget::StatusWidget(QWidget *parent)
 	pHeader->setSectionsMovable(false);
 	pHeader->setStretchLastSection(true);
 
-    _treeWidgetItems[ServerName] = new QTreeWidgetItem(ui->statusTreeWidget,
-		QStringList() << s + tr("Server name") + c << n);
     _treeWidgetItems[ServerState] = new QTreeWidgetItem(ui->statusTreeWidget,
 		QStringList() << s + tr("Server state") + c << n);
     _treeWidgetItems[DspLoad]     = new QTreeWidgetItem(ui->statusTreeWidget,
@@ -88,16 +80,15 @@ StatusWidget::StatusWidget(QWidget *parent)
 		QStringList() << s + tr("XRUN average") + c << n);
     _treeWidgetItems[XRunTotal] = new QTreeWidgetItem(treeWidgetSubItem,
 		QStringList() << s + tr("XRUN total") + c << n);
-
-#ifdef CONFIG_JACK_MAX_DELAY
     _treeWidgetItems[MaxDelay]  = new QTreeWidgetItem(ui->statusTreeWidget,
 		QStringList() << s + tr("Maximum scheduling delay") + c << n);
-#endif
     _treeWidgetItems[ResetTime] = new QTreeWidgetItem(ui->statusTreeWidget,
 		QStringList() << s + tr("Time of last reset") + c << n);
 
     ui->statusTreeWidget->resizeColumnToContents(0);	// Description.
     ui->statusTreeWidget->resizeColumnToContents(1);	// Value.
+
+    startTimer(500);
 }
 
 StatusWidget::~StatusWidget() {
@@ -105,4 +96,22 @@ StatusWidget::~StatusWidget() {
 
 void StatusWidget::updateStatusItem(StatusItem statusItem, QString value) {
     _treeWidgetItems[statusItem]->setText(1, value);
+}
+
+void StatusWidget::timerEvent(QTimerEvent *timerEvent) {
+    Q_UNUSED(timerEvent);
+
+    QJack::Client& client = JackService::instance().client();
+
+    updateStatusItem(SampleRate, QString("%1 Hz").arg(client.sampleRate()));
+
+    float cpuLoad = client.cpuLoad();
+    if(cpuLoad > 5) {
+        updateStatusItem(DspLoad, QString("%1 %").arg(QString::number(cpuLoad, 'g', 3)));
+    } else {
+        updateStatusItem(DspLoad, "Idle");
+    }
+
+    updateStatusItem(BufferSize, QString("%1 Samples").arg(client.bufferSize()));
+    updateStatusItem(Realtime, client.isRealtime() ? "Yes" : "No");
 }

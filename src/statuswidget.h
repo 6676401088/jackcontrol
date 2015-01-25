@@ -23,8 +23,9 @@
 // uic includes
 #include "ui_statuswidget.h"
 
-// QT includes
+// Qt includes
 #include <QMap>
+
 class QTreeWidgetItem;
 
 class StatusWidget : public QWidget {
@@ -32,31 +33,33 @@ class StatusWidget : public QWidget {
 
 public:
     enum StatusItem {
-        ServerName      = 0,
-        ServerState     = 1,
-        DspLoad         = 2,
-        SampleRate      = 3,
-        BufferSize      = 4,
-        Realtime        = 5,
-        TransportState  = 6,
-        TransportTime   = 7,
-        TransportBBT    = 8,
-        TransportBPM    = 9,
-        XRunCount       = 10,
-        XRunTime        = 11,
-        XRunLast        = 12,
-        XRunMax         = 13,
-        XRunMin         = 14,
-        XRunAvg         = 15,
-        XRunTotal       = 16,
-        ResetTime       = 17,
-        MaxDelay        = 18
+        ServerState = 0,
+        DspLoad,
+        SampleRate,
+        BufferSize,
+        Realtime,
+        TransportState,
+        TransportTime,
+        TransportBBT,
+        TransportBPM,
+        XRunCount,
+        XRunTime,
+        XRunLast,
+        XRunMax,
+        XRunMin,
+        XRunAvg,
+        XRunTotal,
+        ResetTime,
+        MaxDelay
     };
 
     StatusWidget(QWidget *parent = 0);
     ~StatusWidget();
 
     void updateStatusItem(StatusItem statusItem, QString value);
+
+protected:
+    void timerEvent(QTimerEvent *timerEvent);
 
 private:
     Ui::StatusWidget *ui;

@@ -34,8 +34,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setupStatusTab();
-//    ui->connectionsTab->setParent(0);
-//    ui->connectionsTab->show();
     ui->actionStartJackServer->setEnabled(true);
     ui->actionStopJackServer->setEnabled(false);
 
