@@ -42,6 +42,8 @@ JackAudioPortTreeWidgetItem::JackAudioPortTreeWidgetItem(QJack::AudioPort audioP
             }
         }
     }
+
+    setFlags(flags() | Qt::ItemIsEditable);
 }
 
 bool JackAudioPortTreeWidgetItem::isConnectedTo(PortTreeWidgetItem *other) {

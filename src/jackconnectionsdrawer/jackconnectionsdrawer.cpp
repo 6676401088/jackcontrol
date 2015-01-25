@@ -197,6 +197,26 @@ void JackConnectionsDrawer::connectDroppedItem(PortTreeWidgetItem* portItem,
     }
 }
 
+void JackConnectionsDrawer::itemChanged(QTreeWidgetItem* treeWidgetItem, int column) {
+    JackAudioPortTreeWidgetItem *audioPortTreeWidgetItem
+        = dynamic_cast<JackAudioPortTreeWidgetItem*>(treeWidgetItem);
+    JackMidiPortTreeWidgetItem *midiPortTreeWidgetItem
+        = dynamic_cast<JackMidiPortTreeWidgetItem*>(treeWidgetItem);
+
+    if(audioPortTreeWidgetItem) {
+        if(!audioPortTreeWidgetItem->audioPort().rename(treeWidgetItem->text(column))) {
+            treeWidgetItem->setText(column, audioPortTreeWidgetItem->audioPort().portName());
+        }
+    }
+
+    if(midiPortTreeWidgetItem) {
+        if(!midiPortTreeWidgetItem->midiPort().rename(treeWidgetItem->text(column))) {
+            treeWidgetItem->setText(column, midiPortTreeWidgetItem->midiPort().portName());
+        }
+    }
+}
+
+
 void JackConnectionsDrawer::completeUpdate() {
     _returnTreeWidget->clear();
     _sendTreeWidget->clear();

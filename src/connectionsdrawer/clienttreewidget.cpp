@@ -36,6 +36,7 @@
 #include <QAction>
 #include <QMimeData>
 #include <QDebug>
+#include <QIcon>
 
 ClientTreeWidget::ClientTreeWidget(QWidget *parent)
     : QTreeWidget(parent) {
@@ -86,9 +87,10 @@ void ClientTreeWidget::mousePressEvent(QMouseEvent *mouseEvent) {
         if(portTreeItem) {
             QDrag *drag = new QDrag(this);
             QMimeData *mimeData = new QMimeData();
-
             mimeData->setText(portTreeItem->dragIdentifier());
+
             drag->setMimeData(mimeData);
+            drag->setPixmap(QPixmap(treeItem->icon(0).pixmap(32,32)));
             drag->start();
         }
     }

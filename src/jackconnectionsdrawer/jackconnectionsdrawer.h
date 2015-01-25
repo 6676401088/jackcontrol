@@ -49,6 +49,8 @@ protected slots:
 
     void connectDroppedItem(PortTreeWidgetItem* portItem, QString itemIdentifier);
 
+    void itemChanged(QTreeWidgetItem* treeWidgetItem, int column);
+
 protected:
     void completeUpdate();
 

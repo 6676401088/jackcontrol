@@ -76,6 +76,8 @@ ConnectionsDrawer::ConnectionsDrawer(QWidget *parent)
         _portConnectionsWidget, SLOT(update()));
     connect(_sendTreeWidget, SIGNAL(itemSelectionChanged()),
         this, SLOT(itemSelectionChanged()));
+    connect(_sendTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
+        this, SLOT(itemChanged(QTreeWidgetItem*,int)));
 
     connect(_returnTreeWidget, SIGNAL(itemExpanded(QTreeWidgetItem *)),
         _portConnectionsWidget, SLOT(update()));
@@ -90,6 +92,9 @@ ConnectionsDrawer::ConnectionsDrawer(QWidget *parent)
         _portConnectionsWidget, SLOT(update()));
     connect(_returnTreeWidget, SIGNAL(itemSelectionChanged()),
         this, SLOT(itemSelectionChanged()));
+    connect(_sendTreeWidget, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
+        this, SLOT(itemChanged(QTreeWidgetItem*,int)));
+
 }
 
 ConnectionsDrawer::~ConnectionsDrawer () {
@@ -122,4 +127,9 @@ void ConnectionsDrawer::itemSelectionChanged() {
 void ConnectionsDrawer::setSelectionMode(QAbstractItemView::SelectionMode selectionMode) {
     _sendTreeWidget->setSelectionMode(selectionMode);
     _returnTreeWidget->setSelectionMode(selectionMode);
+}
+
+void ConnectionsDrawer::itemChanged(QTreeWidgetItem* treeWidgetItem, int column) {
+    Q_UNUSED(treeWidgetItem);
+    Q_UNUSED(column);
 }

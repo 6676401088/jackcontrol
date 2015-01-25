@@ -55,6 +55,5 @@ protected:
     void dragMoveEvent(QDragMoveEvent *dragMoveEvent);
     void dropEvent(QDropEvent *dropEvent);
 
-    // Context menu request event handler.
     void contextMenuEvent(QContextMenuEvent *);
 };

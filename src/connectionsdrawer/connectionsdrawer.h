@@ -44,6 +44,7 @@ public:
 
 public slots:
     void setSelectionMode(QAbstractItemView::SelectionMode selectionMode);
+    virtual void itemChanged(QTreeWidgetItem* treeWidgetItem, int column);
 
 signals:
     void itemSelectionChanged(QList<QTreeWidgetItem*> selectedOutputItems,
