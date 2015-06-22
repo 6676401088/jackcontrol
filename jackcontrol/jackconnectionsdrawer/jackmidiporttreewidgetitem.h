@@ -23,7 +23,7 @@
 #include "porttreewidgetitem.h"
 
 // QJack includes
-#include <qjack/midiport.h>
+#include "midiport.h"
 
 class JackMidiPortTreeWidgetItem : public PortTreeWidgetItem {
 public:

@@ -24,8 +24,8 @@
 #include "connectionsdrawer.h"
 
 // QJack includes
-#include <qjack/audioport.h>
-#include <qjack/midiport.h>
+#include "audioport.h"
+#include "midiport.h"
 
 class JackConnectionsDrawer : public ConnectionsDrawer {
     Q_OBJECT
