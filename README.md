@@ -6,6 +6,7 @@ JACK Control is a simple application to control the JACK sound server
 huge improvements in the code.
 
 License: GNU General Public License (GPL) Version 2+
+Icons: Some icons were take from the Faenza Icon Kit licensed under GNU GPLv3
 
 Requirements
 ------------

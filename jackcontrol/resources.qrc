@@ -76,5 +76,6 @@
         <file>images/extended-selection-64.png</file>
         <file>images/contiguous-selection-64.png</file>
         <file>images/qjackctl2.png</file>
+        <file>images/preferences-desktop.svg</file>
     </qresource>
 </RCC>

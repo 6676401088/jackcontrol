@@ -20,6 +20,7 @@
 // Own includes
 #include "mainwindow.h"
 #include "aboutdialog.h"
+#include "settingsdialog.h"
 
 // uic includes
 #include "ui_mainwindow.h"
@@ -57,6 +58,11 @@ void MainWindow::on_actionStopJackServer_triggered() {
     JackService::instance().stop();
     _ui->actionStopJackServer->setEnabled(false);
     _ui->actionStartJackServer->setEnabled(true);
+}
+
+void MainWindow::on_actionJackSettings_triggered() {
+    SettingsDialog settingsDialog;
+    settingsDialog.exec();
 }
 
 void MainWindow::on_actionAbout_triggered() {
