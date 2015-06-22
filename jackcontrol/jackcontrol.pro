@@ -1,4 +1,4 @@
-TARGET = qjackctl2
+TARGET = jackcontrol
 
 TEMPLATE = app
 DEPENDPATH += .
@@ -110,10 +110,6 @@ QT += xml
 
 INCLUDEPATH += \
     connectionsdrawer \
-    jackconnectionsdrawer \
-     .. ../qjack
+    jackconnectionsdrawer
 
-LIBS += -L../qjack/lib \
-                -lqjack \
-                -ljack \
-                -ljackserver
+include(../pods.pri)
