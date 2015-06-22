@@ -37,7 +37,7 @@
    <string>About JACK Control</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="qjackctl.qrc">
+   <iconset resource="resources.qrc">
     <normaloff>:/images/about1.png</normaloff>:/images/about1.png</iconset>
   </property>
   <property name="sizeGripEnabled">
@@ -82,7 +82,7 @@
   <tabstop>AboutTextView</tabstop>
  </tabstops>
  <resources>
-  <include location="qjackctl.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

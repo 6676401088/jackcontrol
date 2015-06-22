@@ -1,105 +1,56 @@
-QjackCtl - JACK Audio Connection Kit Qt GUI Interface
+JACK Control - JACK Visual Control Interface
 -----------------------------------------------------
 
-QjackCtl is a simple Qt application to control the JACK sound server
-(http://jackaudio.org), for the Linux Audio infrastructure.
+JACK Control is a simple application to control the JACK sound server
+(http://jackaudio.org). It is based on the original qjackctl, but has undergone
+huge improvements in the code.
 
-Written in C++ around the Qt4 toolkit for X11, most exclusively using
-Qt Designer.
-
-Provides a simple GUI dialog for setting several JACK server parameters,
-which are properly saved between sessions, and a way control of the
-status of the audio server. With time, this primordial interface has
-become richer by including a enhanced patchbay and connection control
-features.
-
-Homepage: http://qjackctl.sourceforge.net
-
-License: GNU General Public License (GPL)
-
+License: GNU General Public License (GPL) Version 2+
 
 Requirements
 ------------
 
-The software requirements for build and runtime are listed as follows:
+In contradiction to qjackctl, JACK Control does not use the autotools build
+system anymore. Also, it is based on Qt5, not Qt4. You will need Qt5, libjack,
+libjackserver and libjacknet to build.
 
-  Mandatory:
-
-  - Qt4 (core, gui, xml), C++ class library and tools for
-        crossplatform development and internationalization
-        http://qt-project.org/
-
-  - JACK Audio Connection Kit
-        http://jackaudio.org/
-
-  Optional (opted-in at build time):
-
-  - ALSA, Advanced Linux Sound Architecture
-        http://www.alsa-project.org/
-
-
-Installation
+How to build
 ------------
+git clone --recursive https://github.com/cybercatalyst/qjackctl.git
 
-The installation procedure follows the standard for source distributions:
+Note the "--recursive"-option which is very important, since it clones the
+qtjack pod into its subdirectory.
 
-    ./configure [--prefix=/usr/local]
-    make
+Open the top level jackcontrol.pro and build.
 
-and optionally as root:
+Known bugs
+----------
+Sometimes the build order gets confused. This is easy to solve: just trigger a
+build of qtjack, then build jackcontrol.
 
-    make install
+Warning
+-------
+This software has undergone major changes, it is almost a complete rewrite of
+qjackctl. Please note that this software is not ready to everyday use. However,
+it would be nice if you leave some feedback or improvements.
 
-This procedure will end installing the following files:
-
-    ${prefix}/bin/qjackctl
-    ${prefix}/share/pixmaps/qjackctl.png
-    ${prefix}/share/applications/qjackctl.desktop
-    ${prefix}/share/locale/qjackctl_*.qm
-    ${prefix}/share/man/man1/qjackctl.1
-
-Just launch ${prefix}/bin/qjackctl and you're off (hopefully).
-
-If you're checking out from Subversion (SVN), you'll have to prepare the
-configure script just before you proceed with the above instructions:
-
-   make -f Makefile.svn
-
-
-Configuration
--------------
-
-QjackCtl holds its settings and configuration state per user, in a file
-located as $HOME/.config/rncbc.org/QjackCtl.conf . Normally, there's no
-need to edit this file, as it is recreated and rewritten everytime
-qjackctl is run.
-
-
-Bugs
-----
-
-Probably plenty still, QjackCtl maybe considered on beta stage already.
-It has been locally tested since JACK release 0.98.0, with custom 2.4
-kernels with low-latency, preemptible and capabilities enabling patches.
-As for 2.6 kernels, the emergence of Ingo Molnar's Realtime Preemption
-kernel patch it's being now recommended for your taking benefit of the
-realtime and low-latency audio pleasure JACK can give.
-
+What is qtjack?
+---------------
+QtJack is a pod (ie an includable subproject, see qt-pods.org for more info)
+that allows you to access the JACK server in a Qt app nicely. It wraps the C
+API of libjack, libjackserver and libjacknet in objects. In qjackctl, this
+code was mixed up with user interface code.
 
 Support
 -------
 
-QjackCtl is open source free software. For bug reports, feature
+JACK Control is free software. For bug reports, feature
 requests, discussion forums, mailling lists, or any other matter
-related to the development of this piece of software, please use the
-Sourceforge project page (http://sourceforge.net/projects/qjackctl).
+related to the development of this piece of software, please use the github
+bugtracker or write a mail to jacob@omg-it.works .
 
-You can also find timely and closer contact information on my personal
-web site (http://www.rncbc.org).
-
-
-Acknowledgments
----------------
+Acknowledgments (from original the qjackctl README)
+---------------------------------------------------
 
 QjackCtl's user interface layout (and the whole idea for that matter)
 was partially borrowed from origoinal Lawrie Abbott's jacko project,
@@ -139,6 +90,3 @@ and in fair and strict alphabetic order:
 A special mention should go to the translators of QjackCtl (see TRANSLATORS).
 
 Thanks to you all.
---
-rncbc aka Rui Nuno Capela
-rncbc@rncbc.org

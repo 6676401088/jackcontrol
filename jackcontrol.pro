@@ -5,3 +5,9 @@ SUBDIRS = \
     jackcontrol
 
 include(pods-subdirs.pri)
+
+OTHER_FILES = \
+  README.md \
+  LICENSE \
+  AUTHORS \
+  TRANSLATORS

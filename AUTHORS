@@ -1,1 +1,5 @@
+qjackctl is originally developed by:
 Rui Nuno Capela <rncbc@rncbc.org>
+
+JACK Control is a fork of qjackctl, throwing legacy code abroad, developed by:
+Jacob Dawid <jacob@omg-it.works>

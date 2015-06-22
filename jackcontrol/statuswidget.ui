@@ -46,7 +46,7 @@
    <string>Messages / Status - JACK Audio Connection Kit</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="qjackctl.qrc">
+   <iconset resource="resources.qrc">
     <normaloff>:/images/messagesstatus1.png</normaloff>:/images/messagesstatus1.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -101,7 +101,7 @@
  </widget>
  <layoutdefault spacing="4" margin="4"/>
  <resources>
-  <include location="qjackctl.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

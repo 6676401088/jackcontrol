@@ -43,7 +43,7 @@
    <string>Connections - JACK Audio Connection Kit</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="qjackctl.qrc">
+   <iconset resource="resources.qrc">
     <normaloff>:/images/connections1.png</normaloff>:/images/connections1.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -71,7 +71,7 @@
         <string>&amp;Connect</string>
        </property>
        <property name="icon">
-        <iconset resource="qjackctl.qrc">
+        <iconset resource="resources.qrc">
          <normaloff>:/images/connect1.png</normaloff>:/images/connect1.png</iconset>
        </property>
        <property name="shortcut">
@@ -88,7 +88,7 @@
         <string>&amp;Disconnect</string>
        </property>
        <property name="icon">
-        <iconset resource="qjackctl.qrc">
+        <iconset resource="resources.qrc">
          <normaloff>:/images/disconnect1.png</normaloff>:/images/disconnect1.png</iconset>
        </property>
        <property name="shortcut">
@@ -106,7 +106,7 @@
          <string>Single selection (classic)</string>
         </property>
         <property name="icon">
-         <iconset resource="qjackctl.qrc">
+         <iconset resource="resources.qrc">
           <normaloff>:/images/single-selection-64.png</normaloff>:/images/single-selection-64.png</iconset>
         </property>
        </item>
@@ -115,7 +115,7 @@
          <string>Multiple selection</string>
         </property>
         <property name="icon">
-         <iconset resource="qjackctl.qrc">
+         <iconset resource="resources.qrc">
           <normaloff>:/images/multi-selection-64.png</normaloff>:/images/multi-selection-64.png</iconset>
         </property>
        </item>
@@ -124,7 +124,7 @@
          <string>Extended selection (default)</string>
         </property>
         <property name="icon">
-         <iconset resource="qjackctl.qrc">
+         <iconset resource="resources.qrc">
           <normaloff>:/images/extended-selection-64.png</normaloff>:/images/extended-selection-64.png</iconset>
         </property>
        </item>
@@ -133,7 +133,7 @@
          <string>Contiguous selection</string>
         </property>
         <property name="icon">
-         <iconset resource="qjackctl.qrc">
+         <iconset resource="resources.qrc">
           <normaloff>:/images/contiguous-selection-64.png</normaloff>:/images/contiguous-selection-64.png</iconset>
         </property>
        </item>
@@ -164,7 +164,7 @@
         <string>Disconnect &amp;all</string>
        </property>
        <property name="icon">
-        <iconset resource="qjackctl.qrc">
+        <iconset resource="resources.qrc">
          <normaloff>:/images/disconnectall1.png</normaloff>:/images/disconnectall1.png</iconset>
        </property>
        <property name="shortcut">
@@ -178,7 +178,7 @@
         <string>Collapse all</string>
        </property>
        <property name="icon">
-        <iconset resource="qjackctl.qrc">
+        <iconset resource="resources.qrc">
          <normaloff>:/images/expandall1.png</normaloff>:/images/expandall1.png</iconset>
        </property>
       </widget>
@@ -192,7 +192,7 @@
         <string>E&amp;xpand all</string>
        </property>
        <property name="icon">
-        <iconset resource="qjackctl.qrc">
+        <iconset resource="resources.qrc">
          <normaloff>:/images/expandall1.png</normaloff>:/images/expandall1.png</iconset>
        </property>
        <property name="shortcut">
@@ -220,7 +220,7 @@
   <tabstop>pushButtonExpandAll</tabstop>
  </tabstops>
  <resources>
-  <include location="qjackctl.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

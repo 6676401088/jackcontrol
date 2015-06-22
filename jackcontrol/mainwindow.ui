@@ -20,7 +20,7 @@
    <string>JACK Control</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="qjackctl.qrc">
+   <iconset resource="resources.qrc">
     <normaloff>:/images/qjackctl2.png</normaloff>:/images/qjackctl2.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -84,7 +84,7 @@
   </widget>
   <widget class="QDockWidget" name="dockWidgetStatus">
    <property name="windowIcon">
-    <iconset resource="qjackctl.qrc">
+    <iconset resource="resources.qrc">
      <normaloff>:/images/network-server.svg</normaloff>:/images/network-server.svg</iconset>
    </property>
    <property name="windowTitle">
@@ -131,7 +131,7 @@
   </widget>
   <widget class="QDockWidget" name="dockWidget_2">
    <property name="windowIcon">
-    <iconset resource="qjackctl.qrc">
+    <iconset resource="resources.qrc">
      <normaloff>:/images/messages1.png</normaloff>:/images/messages1.png</iconset>
    </property>
    <property name="windowTitle">
@@ -182,7 +182,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="qjackctl.qrc">
+    <iconset resource="resources.qrc">
      <normaloff>:/images/play1.png</normaloff>:/images/play1.png</iconset>
    </property>
    <property name="text">
@@ -203,7 +203,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="qjackctl.qrc">
+    <iconset resource="resources.qrc">
      <normaloff>:/images/pause1.png</normaloff>:/images/pause1.png</iconset>
    </property>
    <property name="text">
@@ -227,7 +227,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="qjackctl.qrc">
+    <iconset resource="resources.qrc">
      <normaloff>:/images/backward1.png</normaloff>:/images/backward1.png</iconset>
    </property>
    <property name="text">
@@ -251,7 +251,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="qjackctl.qrc">
+    <iconset resource="resources.qrc">
      <normaloff>:/images/forward1.png</normaloff>:/images/forward1.png</iconset>
    </property>
    <property name="text">
@@ -275,7 +275,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="qjackctl.qrc">
+    <iconset resource="resources.qrc">
      <normaloff>:/images/rewind1.png</normaloff>:/images/rewind1.png</iconset>
    </property>
    <property name="text">
@@ -293,7 +293,7 @@
   </action>
   <action name="actionStartJackServer">
    <property name="icon">
-    <iconset resource="qjackctl.qrc">
+    <iconset resource="resources.qrc">
      <normaloff>:/images/start1.png</normaloff>:/images/start1.png</iconset>
    </property>
    <property name="text">
@@ -311,7 +311,7 @@
   </action>
   <action name="actionStopJackServer">
    <property name="icon">
-    <iconset resource="qjackctl.qrc">
+    <iconset resource="resources.qrc">
      <normaloff>:/images/stop1.png</normaloff>:/images/stop1.png</iconset>
    </property>
    <property name="text">
@@ -343,7 +343,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="qjackctl.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>
