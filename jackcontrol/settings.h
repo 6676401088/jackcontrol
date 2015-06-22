@@ -182,14 +182,6 @@ public:
 
 	// Last session save type...
 	bool bSessionSaveVersion;
-	
-	// Aliases containers.
-//    ConnectAlias aliasAudioOutputs;
-//    ConnectAlias aliasAudioInputs;
-//    ConnectAlias aliasMidiOutputs;
-//    ConnectAlias aliasMidiInputs;
-//    ConnectAlias aliasAlsaOutputs;
-//    ConnectAlias aliasAlsaInputs;
 
 	// Aliases preset management methods.
 	bool loadAliases(const QString& sPreset);

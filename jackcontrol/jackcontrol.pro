@@ -54,7 +54,7 @@ FORMS += \
     aboutdialog.ui
 
 RESOURCES += \
-    qjackctl.qrc
+    resources.qrc
 
 TRANSLATIONS += \
 	translations/qjackctl_cs.ts \

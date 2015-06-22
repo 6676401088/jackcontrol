@@ -28,7 +28,14 @@
 #include <Server>
 #include <Client>
 
-class JackService : public QObject {
+/**
+ * @brief Central JACK service class
+ * @author Jacob Dawid <jacob@omg-it.works>
+ * Singleton. This class is used to represent this application as a JACK client
+ * to the server.
+ */
+class JackService :
+    public QObject {
     Q_OBJECT
 public:
     static JackService& instance() {
@@ -53,7 +60,6 @@ signals:
 
 private slots:
     void stdOutActivated(int fileDescriptor);
-
 
 private:
     void setupStdOutRedirect();

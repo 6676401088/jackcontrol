@@ -31,7 +31,12 @@ namespace Ui {
     class MainWindow;
 }
 
-class MainWindow : public QMainWindow {
+/**
+ * @brief The application's main window.
+ * @author Jacob Dawid <jacob@omg-it.works>
+ */
+class MainWindow :
+    public QMainWindow {
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -56,7 +61,7 @@ public slots:
     void message(QString message, JackService::MessageType messageType);
 
 protected:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *_ui;
     Settings *_setup;
 };
 

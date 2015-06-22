@@ -30,12 +30,12 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    _ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    _ui->setupUi(this);
     setupStatusTab();
-    ui->actionStartJackServer->setEnabled(true);
-    ui->actionStopJackServer->setEnabled(false);
+    _ui->actionStartJackServer->setEnabled(true);
+    _ui->actionStopJackServer->setEnabled(false);
 
 
     connect(&JackService::instance(), SIGNAL(message(QString,JackService::MessageType)),
@@ -45,18 +45,18 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
-    delete ui;
+    delete _ui;
 }
 
 void MainWindow::on_actionStartJackServer_triggered() {
     JackService::instance().start();
-    ui->actionStartJackServer->setEnabled(false);
+    _ui->actionStartJackServer->setEnabled(false);
 }
 
 void MainWindow::on_actionStopJackServer_triggered() {
     JackService::instance().stop();
-    ui->actionStopJackServer->setEnabled(false);
-    ui->actionStartJackServer->setEnabled(true);
+    _ui->actionStopJackServer->setEnabled(false);
+    _ui->actionStartJackServer->setEnabled(true);
 }
 
 void MainWindow::on_actionAbout_triggered() {
@@ -74,12 +74,12 @@ void MainWindow::on_actionTransportBackward_triggered() {
 
 void MainWindow::on_actionTransportStart_triggered() {
     JackService::instance().client().startTransport();
-    ui->actionTransportStop->setChecked(false);
+    _ui->actionTransportStop->setChecked(false);
 }
 
 void MainWindow::on_actionTransportStop_triggered() {
     JackService::instance().client().stopTransport();
-    ui->actionTransportStart->setChecked(false);
+    _ui->actionTransportStart->setChecked(false);
 }
 
 void MainWindow::on_actionTransportForward_triggered() {
@@ -106,7 +106,7 @@ void MainWindow::message(QString message, JackService::MessageType messageType) 
         break;
     }
     message.replace("\n", "<br />");
-    ui->messagesTextEdit->append(QString("<font color=\"%1\">%2 %3</font>")
+    _ui->messagesTextEdit->append(QString("<font color=\"%1\">%2 %3</font>")
                                  .arg(color)
                                  .arg(timeStamp)
                                  .arg(message));

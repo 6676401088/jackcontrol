@@ -40,5 +40,5 @@ public slots:
     void on_pushButtonExpandAll_clicked();
 
 private:
-    Ui::ConnectionsWidget ui;
+    Ui::ConnectionsWidget _ui;
 };

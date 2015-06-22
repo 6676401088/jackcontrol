@@ -39,10 +39,10 @@ StatusWidget::StatusWidget(QWidget *parent)
     QTreeWidgetItem *treeWidgetSubItem;
 
 	// Status list view...
-    QHeaderView *pHeader = ui->statusTreeWidget->header();
-    pHeader->setDefaultAlignment(Qt::AlignLeft);
-	pHeader->setSectionsMovable(false);
-	pHeader->setStretchLastSection(true);
+    QHeaderView *headerView = ui->statusTreeWidget->header();
+    headerView->setDefaultAlignment(Qt::AlignLeft);
+    headerView->setSectionsMovable(false);
+    headerView->setStretchLastSection(true);
 
     _treeWidgetItems[ServerState] = new QTreeWidgetItem(ui->statusTreeWidget,
 		QStringList() << s + tr("Server state") + c << n);

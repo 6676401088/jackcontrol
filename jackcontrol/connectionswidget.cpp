@@ -23,51 +23,51 @@
 
 ConnectionsWidget::ConnectionsWidget(QWidget *parent)
     : QWidget(parent) {
-    ui.setupUi(this);
+    _ui.setupUi(this);
 
     // Set default selection mode
-    ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    ui.comboBoxSelectionMode->setCurrentIndex(2); // Extended
+    _ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    _ui.comboBoxSelectionMode->setCurrentIndex(2); // Extended
 }
 
 ConnectionsWidget::~ConnectionsWidget() {
 }
 
 void ConnectionsWidget::on_pushButtonConnect_clicked() {
-    ui.jackConnectionsDrawer->connectSelectedItems();
+    _ui.jackConnectionsDrawer->connectSelectedItems();
 }
 
 void ConnectionsWidget::on_pushButtonDisconnect_clicked() {
-    ui.jackConnectionsDrawer->disconnectSelectedItems();
+    _ui.jackConnectionsDrawer->disconnectSelectedItems();
 }
 
 void ConnectionsWidget::on_comboBoxSelectionMode_activated(int index) {
     switch(index) {
     default:
     case 0: // Single selection
-        ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::SingleSelection);
+        _ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::SingleSelection);
         break;
     case 1: // Multiple selection
-        ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::MultiSelection);
+        _ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::MultiSelection);
         break;
     case 2: // Extended selection
-        ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        _ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::ExtendedSelection);
         break;
     case 3: // Contiguous selection
-        ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::ContiguousSelection);
+        _ui.jackConnectionsDrawer->setSelectionMode(QAbstractItemView::ContiguousSelection);
         break;
     }
 }
 
 void ConnectionsWidget::on_pushButtonDisconnectAll_clicked() {
-    ui.jackConnectionsDrawer->disconnectAll();
+    _ui.jackConnectionsDrawer->disconnectAll();
 }
 
 void ConnectionsWidget::on_pushButtonCollapseAll_clicked() {
-    ui.jackConnectionsDrawer->collapseAll();
+    _ui.jackConnectionsDrawer->collapseAll();
 }
 
 void ConnectionsWidget::on_pushButtonExpandAll_clicked() {
-    ui.jackConnectionsDrawer->expandAll();
+    _ui.jackConnectionsDrawer->expandAll();
 }
 

@@ -20,19 +20,17 @@
 
 #pragma once
 
+// UIC includes
 #include "ui_aboutdialog.h"
 
-class AboutDialog : public QDialog
-{
+class AboutDialog :
+    public QDialog {
 	Q_OBJECT
 
 public:
     AboutDialog(QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
     ~AboutDialog();
 
-public slots:
-	void aboutQt();
-
 private:
-    Ui::AboutDialog m_ui;
+    Ui::AboutDialog _ui;
 };
