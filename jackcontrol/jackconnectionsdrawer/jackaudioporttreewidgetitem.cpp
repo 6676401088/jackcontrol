@@ -23,7 +23,7 @@
 // Qt includes
 #include <QIcon>
 
-JackAudioPortTreeWidgetItem::JackAudioPortTreeWidgetItem(QJack::AudioPort audioPort)
+JackAudioPortTreeWidgetItem::JackAudioPortTreeWidgetItem(QtJack::AudioPort audioPort)
     : PortTreeWidgetItem(audioPort.portName()) {
     _audioPort = audioPort;
 
@@ -64,7 +64,7 @@ bool JackAudioPortTreeWidgetItem::isConnectedTo(PortTreeWidgetItem *other) {
     return _audioPort.isConnectedTo(audioPortItem->_audioPort);
 }
 
-QJack::AudioPort JackAudioPortTreeWidgetItem::audioPort() {
+QtJack::AudioPort JackAudioPortTreeWidgetItem::audioPort() {
     return _audioPort;
 }
 

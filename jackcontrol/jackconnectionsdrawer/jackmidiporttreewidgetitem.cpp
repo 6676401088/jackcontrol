@@ -23,7 +23,7 @@
 // Qt includes
 #include <QIcon>
 
-JackMidiPortTreeWidgetItem::JackMidiPortTreeWidgetItem(QJack::MidiPort midiPort)
+JackMidiPortTreeWidgetItem::JackMidiPortTreeWidgetItem(QtJack::MidiPort midiPort)
     : PortTreeWidgetItem(midiPort.portName()) {
     _midiPort = midiPort;
 
@@ -53,6 +53,6 @@ bool JackMidiPortTreeWidgetItem::isConnectedTo(PortTreeWidgetItem *other) {
     return _midiPort.isConnectedTo(midiPortItem->_midiPort);
 }
 
-QJack::MidiPort JackMidiPortTreeWidgetItem::midiPort() {
+QtJack::MidiPort JackMidiPortTreeWidgetItem::midiPort() {
     return _midiPort;
 }

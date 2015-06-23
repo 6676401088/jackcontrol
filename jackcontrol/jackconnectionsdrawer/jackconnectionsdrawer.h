@@ -23,7 +23,7 @@
 #include "porttreewidgetitem.h"
 #include "connectionsdrawer.h"
 
-// QJack includes
+// QtJack includes
 #include "audioport.h"
 #include "midiport.h"
 
@@ -44,8 +44,8 @@ protected slots:
     void clientRegistered(QString clientName);
     void clientUnregistered(QString clientName);
 
-    void portRegistered(QJack::Port port);
-    void portUnregistered(QJack::Port port);
+    void portRegistered(QtJack::Port port);
+    void portUnregistered(QtJack::Port port);
 
     void connectDroppedItem(PortTreeWidgetItem* portItem, QString itemIdentifier);
 
@@ -56,8 +56,8 @@ protected:
 
     void removeClient(ClientTreeWidget *clientTreeWidget, QString clientName);
 
-    void addAudioPort(ClientTreeWidget *clientTreeWidget, QJack::AudioPort audioPort);
-    void addMidiPort(ClientTreeWidget *clientTreeWidget, QJack::MidiPort midiPort);
-    void removePort(ClientTreeWidget *clientTreeWidget, QJack::Port port);
+    void addAudioPort(ClientTreeWidget *clientTreeWidget, QtJack::AudioPort audioPort);
+    void addMidiPort(ClientTreeWidget *clientTreeWidget, QtJack::MidiPort midiPort);
+    void removePort(ClientTreeWidget *clientTreeWidget, QtJack::Port port);
 };
 

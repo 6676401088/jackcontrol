@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QSocketNotifier>
 
-// QJack includes
+// QtJack includes
 #include <System>
 #include <Server>
 #include <Client>
@@ -52,8 +52,8 @@ public:
     void start();
     void stop();
 
-    QJack::Client& client();
-    QJack::Server& server();
+    QtJack::Client& client();
+    QtJack::Server& server();
 
 signals:
     void message(QString message, JackService::MessageType messageType);
@@ -68,6 +68,6 @@ private:
     JackService(QObject *parent = 0);
 
     QSocketNotifier *_stdOutSocketNotifier;
-    QJack::Server _jackServer;
-    QJack::Client _jackClient;
+    QtJack::Server _jackServer;
+    QtJack::Client _jackClient;
 };

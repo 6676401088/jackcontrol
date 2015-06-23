@@ -22,19 +22,19 @@
 // Own includes
 #include "porttreewidgetitem.h"
 
-// QJack includes
+// QtJack includes
 #include "audioport.h"
 
 class JackAudioPortTreeWidgetItem : public PortTreeWidgetItem {
 public:
-    JackAudioPortTreeWidgetItem(QJack::AudioPort port);
+    JackAudioPortTreeWidgetItem(QtJack::AudioPort port);
 
     bool isConnectedTo(PortTreeWidgetItem *other);
 
-    QJack::AudioPort audioPort();
+    QtJack::AudioPort audioPort();
 
     QString dragIdentifier();
 
 protected:
-    QJack::AudioPort _audioPort;
+    QtJack::AudioPort _audioPort;
 };

@@ -101,7 +101,7 @@ void StatusWidget::updateStatusItem(StatusItem statusItem, QString value) {
 void StatusWidget::timerEvent(QTimerEvent *timerEvent) {
     Q_UNUSED(timerEvent);
 
-    QJack::Client& client = JackService::instance().client();
+    QtJack::Client& client = JackService::instance().client();
 
     updateStatusItem(SampleRate, QString("%1 Hz").arg(client.sampleRate()));
 
@@ -115,7 +115,7 @@ void StatusWidget::timerEvent(QTimerEvent *timerEvent) {
     updateStatusItem(BufferSize, QString("%1 Samples").arg(client.bufferSize()));
     updateStatusItem(Realtime, client.isRealtime() ? "Yes" : "No");
 
-    QJack::TransportPosition transportPosition = client.transportPosition();
+    QtJack::TransportPosition transportPosition = client.transportPosition();
     updateStatusItem(TransportBBT, transportPosition.bbtDataValid() ?
         QString("%1 | %2 | %3")
             .arg(transportPosition._bbt._bar)
