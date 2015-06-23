@@ -58,7 +58,7 @@ StatusWidget::StatusWidget(QWidget *parent)
     treeWidgetSubItem = new QTreeWidgetItem(ui->statusTreeWidget,
 		QStringList() << s + tr("Transport state") + c << n);
     _treeWidgetItems[TransportState] = treeWidgetSubItem;
-    _treeWidgetItems[TransportTime] = new QTreeWidgetItem(treeWidgetSubItem,
+    _treeWidgetItems[TransportTimeCode] = new QTreeWidgetItem(treeWidgetSubItem,
 		QStringList() << s + tr("Transport Timecode") + c << n);
     _treeWidgetItems[TransportBBT]  = new QTreeWidgetItem(treeWidgetSubItem,
 		QStringList() << s + tr("Transport BBT") + c << n);
@@ -88,7 +88,7 @@ StatusWidget::StatusWidget(QWidget *parent)
     ui->statusTreeWidget->resizeColumnToContents(0);	// Description.
     ui->statusTreeWidget->resizeColumnToContents(1);	// Value.
 
-    startTimer(500);
+    startTimer(100);
 }
 
 StatusWidget::~StatusWidget() {
@@ -114,4 +114,26 @@ void StatusWidget::timerEvent(QTimerEvent *timerEvent) {
 
     updateStatusItem(BufferSize, QString("%1 Samples").arg(client.bufferSize()));
     updateStatusItem(Realtime, client.isRealtime() ? "Yes" : "No");
+
+    QJack::TransportPosition transportPosition = client.transportPosition();
+    updateStatusItem(TransportBBT, transportPosition.bbtDataValid() ?
+        QString("%1 | %2 | %3")
+            .arg(transportPosition._bbt._bar)
+            .arg(transportPosition._bbt._beat)
+            .arg(transportPosition._bbt._tick) :
+        QString("Unavailable")
+    );
+
+    updateStatusItem(TransportBPM, transportPosition.bbtDataValid() ?
+        QString("%1")
+            .arg(transportPosition._bbt._beatsPerMinute) :
+        QString("Unavailable")
+    );
+
+    updateStatusItem(TransportTimeCode, transportPosition.timeCodeValid() ?
+        QString("%1s / %2s")
+            .arg(transportPosition._timeCode._frameTimeSeconds)
+            .arg(transportPosition._timeCode._nextFrameTimeSeconds) :
+        QString("Unavailable")
+    );
 }

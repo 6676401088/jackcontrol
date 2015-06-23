@@ -39,7 +39,7 @@ public:
         BufferSize,
         Realtime,
         TransportState,
-        TransportTime,
+        TransportTimeCode,
         TransportBBT,
         TransportBPM,
         XRunCount,
