@@ -42,6 +42,8 @@ public:
         TransportTimeCode,
         TransportBBT,
         TransportBPM,
+        TicksPerBeat,
+        TimeSignature,
         XRunCount,
         XRunTime,
         XRunLast,

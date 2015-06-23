@@ -64,6 +64,10 @@ StatusWidget::StatusWidget(QWidget *parent)
 		QStringList() << s + tr("Transport BBT") + c << n);
     _treeWidgetItems[TransportBPM]  = new QTreeWidgetItem(treeWidgetSubItem,
 		QStringList() << s + tr("Transport BPM") + c << n);
+    _treeWidgetItems[TicksPerBeat]  = new QTreeWidgetItem(treeWidgetSubItem,
+        QStringList() << s + tr("Ticks per beat") + c << n);
+    _treeWidgetItems[TimeSignature]  = new QTreeWidgetItem(treeWidgetSubItem,
+        QStringList() << s + tr("Time signature") + c << n);
 
     treeWidgetSubItem = new QTreeWidgetItem(ui->statusTreeWidget,
 		QStringList() << s + tr("XRUN count since last server startup") + c << n);
@@ -87,6 +91,7 @@ StatusWidget::StatusWidget(QWidget *parent)
 
     ui->statusTreeWidget->resizeColumnToContents(0);	// Description.
     ui->statusTreeWidget->resizeColumnToContents(1);	// Value.
+    ui->statusTreeWidget->expandAll();
 
     startTimer(100);
 }
@@ -109,11 +114,34 @@ void StatusWidget::timerEvent(QTimerEvent *timerEvent) {
     if(cpuLoad > 5) {
         updateStatusItem(DspLoad, QString("%1 %").arg(QString::number(cpuLoad, 'g', 3)));
     } else {
-        updateStatusItem(DspLoad, "Idle");
+        updateStatusItem(DspLoad, tr("Idle"));
     }
 
     updateStatusItem(BufferSize, QString("%1 Samples").arg(client.bufferSize()));
-    updateStatusItem(Realtime, client.isRealtime() ? "Yes" : "No");
+    updateStatusItem(Realtime, client.isRealtime() ? tr("Yes") : tr("No"));
+
+    QtJack::TransportState transportState = client.transportState();
+    QString transportStateString = tr("Unknown");
+    switch(transportState) {
+        case QtJack::TransportStateStopped:
+            transportStateString = tr("Stopped");
+            break;
+        case QtJack::TransportStateRolling:
+            transportStateString = tr("Rolling");
+            break;
+        case QtJack::TransportStateLooping:
+            transportStateString = tr("Looping");
+            break;
+        case QtJack::TransportStateStarting:
+            transportStateString = tr("Starting");
+            break;
+        case QtJack::TransportStateNetStarting:
+            transportStateString = tr("NetStarting");
+            break;
+        default:
+            break;
+    }
+    updateStatusItem(TransportState, transportStateString);
 
     QtJack::TransportPosition transportPosition = client.transportPosition();
     updateStatusItem(TransportBBT, transportPosition.bbtDataValid() ?
@@ -121,19 +149,32 @@ void StatusWidget::timerEvent(QTimerEvent *timerEvent) {
             .arg(transportPosition._bbt._bar)
             .arg(transportPosition._bbt._beat)
             .arg(transportPosition._bbt._tick) :
-        QString("Unavailable")
+        tr("Unavailable")
     );
 
     updateStatusItem(TransportBPM, transportPosition.bbtDataValid() ?
         QString("%1")
             .arg(transportPosition._bbt._beatsPerMinute) :
-        QString("Unavailable")
+        tr("Unavailable")
     );
 
     updateStatusItem(TransportTimeCode, transportPosition.timeCodeValid() ?
         QString("%1s / %2s")
             .arg(transportPosition._timeCode._frameTimeSeconds)
             .arg(transportPosition._timeCode._nextFrameTimeSeconds) :
-        QString("Unavailable")
+        tr("Unavailable")
+    );
+
+    updateStatusItem(TicksPerBeat, transportPosition.bbtDataValid() ?
+        QString("%1")
+            .arg(transportPosition._bbt._ticksPerBeat) :
+        tr("Unavailable")
+    );
+
+    updateStatusItem(TimeSignature, transportPosition.bbtDataValid() ?
+        QString("%1 / %2")
+            .arg(transportPosition._bbt._timeSignatureNominator)
+            .arg(transportPosition._bbt._timeSignatureDenominator) :
+        tr("Unavailable")
     );
 }
