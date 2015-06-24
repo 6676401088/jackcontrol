@@ -29,9 +29,6 @@
 JackService::JackService(QObject *parent)
     : QObject(parent) {
     setupStdOutRedirect();
-
-    //hw:PCH,0|hw:PCH,0|256|3|44100|0|0|nomon|swmeter|-|32bit
-
 }
 
 void JackService::start() {
@@ -42,14 +39,23 @@ void JackService::start() {
     parameters["rate"].setValue(44100);
     parameters["device"].setValue("hw:PCH,0");
 
-    _jackServer.start(alsaDriver);
+    if(!_jackServer.start(alsaDriver)) {
+        qDebug() << "Could not start JACK server.";
+    } else {
+        qDebug() << "Started JACK server successfully.";
+    }
+
+    qDebug() << _jackClient.disconnectFromServer();
     qDebug() << _jackClient.connectToServer("JACK Control");
     qDebug() << _jackClient.activate();
 }
 
 void JackService::stop() {
-    _jackClient.disconnectFromServer();
-    //_jackServer.stop();
+    if(!_jackServer.stop()) {
+        qDebug() << "Could not stop JACK server.";
+    } else {
+        qDebug() << "Stopped JACK server successfully.";
+    }
 }
 
 QtJack::Client& JackService::client() {
