@@ -93,7 +93,7 @@ StatusWidget::StatusWidget(QWidget *parent)
     ui->statusTreeWidget->resizeColumnToContents(1);	// Value.
     ui->statusTreeWidget->expandAll();
 
-    startTimer(100);
+    startTimer(200);
 }
 
 StatusWidget::~StatusWidget() {
@@ -143,7 +143,7 @@ void StatusWidget::timerEvent(QTimerEvent *timerEvent) {
     }
     updateStatusItem(TransportState, transportStateString);
 
-    QtJack::TransportPosition transportPosition = client.transportPosition();
+    QtJack::TransportPosition transportPosition = client.queryTransportPosition();
     updateStatusItem(TransportBBT, transportPosition.bbtDataValid() ?
         QString("%1 | %2 | %3")
             .arg(transportPosition._bbt._bar)
