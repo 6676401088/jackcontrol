@@ -45,12 +45,14 @@ void JackService::start() {
         qDebug() << "Started JACK server successfully.";
     }
 
-    qDebug() << _jackClient.disconnectFromServer();
-    qDebug() << _jackClient.connectToServer("JACK Control");
-    qDebug() << _jackClient.activate();
+    _jackClient.disconnectFromServer(); // Just in case
+    _jackClient.connectToServer("JACK Control");
+    _jackClient.activate();
 }
 
 void JackService::stop() {
+    _jackClient.disconnectFromServer();
+
     if(!_jackServer.stop()) {
         qDebug() << "Could not stop JACK server.";
     } else {

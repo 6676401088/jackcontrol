@@ -56,6 +56,8 @@ void JackConnectionsDrawer::connectedToServer() {
 }
 
 void JackConnectionsDrawer::disconnectedFromServer() {
+    _sendTreeWidget->clear();
+    _returnTreeWidget->clear();
 }
 
 void JackConnectionsDrawer::connectSelectedItems() {
