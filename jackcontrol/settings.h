@@ -37,8 +37,6 @@ public:
         OperatingMode   _operatingMode;
         QString         _inputDeviceName;
         QString         _outputDeviceName;
-
-        // Drivers
         QString         _audioDriverName;
         QString         _midiDriverName;
 
@@ -50,8 +48,6 @@ public:
         int             _maximumNumberOfPorts;
 
         // Advanced configuration
-        QString serverPrefix;
-        QString serverName;
         bool    softMode;
         bool    monitor;
         bool    shorts;

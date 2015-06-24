@@ -36,8 +36,10 @@ MainWindow::MainWindow(QWidget *parent) :
     _ui(new Ui::MainWindow)
 {
     _ui->setupUi(this);
-    _ui->actionStartJackServer->setEnabled(true);
     _ui->actionStopJackServer->setEnabled(false);
+    _ui->actionStartJackServer->setEnabled(true);
+    _ui->tabConfiguration->setEnabled(true);
+    _ui->tabConnections->setEnabled(false);
 
     connect(&JackService::instance(), SIGNAL(message(QString,JackService::MessageType)),
             this, SLOT(message(QString,JackService::MessageType)));
@@ -51,12 +53,16 @@ void MainWindow::on_actionStartJackServer_triggered() {
     JackService::instance().start();
     _ui->actionStopJackServer->setEnabled(true);
     _ui->actionStartJackServer->setEnabled(false);
+    _ui->tabConfiguration->setEnabled(false);
+    _ui->tabConnections->setEnabled(true);
 }
 
 void MainWindow::on_actionStopJackServer_triggered() {
     JackService::instance().stop();
     _ui->actionStopJackServer->setEnabled(false);
     _ui->actionStartJackServer->setEnabled(true);
+    _ui->tabConfiguration->setEnabled(true);
+    _ui->tabConnections->setEnabled(false);
 }
 
 void MainWindow::on_actionJackSettings_triggered() {

@@ -29,16 +29,16 @@ JackAudioPortTreeWidgetItem::JackAudioPortTreeWidgetItem(QtJack::AudioPort audio
 
     if(_audioPort.isOutput()) {
         if(_audioPort.isPhysical()) {
-            setIcon(0, QIcon("://images/aportlto_64x64.png"));
+            setIcon(0, QIcon("://images/mic.svg"));
         } else {
-            setIcon(0, QIcon("://images/aportlno_64x64.png"));
+            setIcon(0, QIcon("://images/audio_in.svg"));
         }
     } else {
         if(_audioPort.isInput()) {
             if(_audioPort.isPhysical()) {
-                setIcon(0, QIcon("://images/aportpti_64x64.png"));
+                setIcon(0, QIcon("://images/loudspeaker.svg"));
             } else {
-                setIcon(0, QIcon("://images/aportlni_64x64.png"));
+                setIcon(0, QIcon("://images/audio_out.svg"));
             }
         }
     }

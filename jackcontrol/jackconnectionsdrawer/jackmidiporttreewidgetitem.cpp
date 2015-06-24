@@ -28,10 +28,10 @@ JackMidiPortTreeWidgetItem::JackMidiPortTreeWidgetItem(QtJack::MidiPort midiPort
     _midiPort = midiPort;
 
     if(_midiPort.isOutput()) {
-        setIcon(0, QIcon("://images/mporto_64x64.png"));
+        setIcon(0, QIcon("://images/midi_in.svg"));
     } else
     if(_midiPort.isInput()) {
-        setIcon(0, QIcon("://images/mporti_64x64.png"));
+        setIcon(0, QIcon("://images/midi_out.svg"));
     }
 }
 
