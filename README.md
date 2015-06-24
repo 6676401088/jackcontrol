@@ -1,6 +1,8 @@
 JACK Control - JACK Visual Control Interface
 -----------------------------------------------------
 
+![Demo Screenshot](https://github.com/cybercatalyst/qjackctl/blob/master/jackcontrol.png "Demo screenshot")
+
 JACK Control is a simple application to control the JACK sound server
 (http://jackaudio.org). It is based on the original qjackctl, but has undergone
 huge improvements in the code.
