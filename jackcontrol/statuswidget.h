@@ -43,16 +43,7 @@ public:
         TransportBBT,
         TransportBPM,
         TicksPerBeat,
-        TimeSignature,
-        XRunCount,
-        XRunTime,
-        XRunLast,
-        XRunMax,
-        XRunMin,
-        XRunAvg,
-        XRunTotal,
-        ResetTime,
-        MaxDelay
+        TimeSignature
     };
 
     StatusWidget(QWidget *parent = 0);

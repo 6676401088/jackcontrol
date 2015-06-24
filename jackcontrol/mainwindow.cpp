@@ -28,21 +28,19 @@
 // Qt includes
 #include <QDebug>
 #include <QTime>
+#include <QMessageBox>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     _ui(new Ui::MainWindow)
 {
     _ui->setupUi(this);
-    setupStatusTab();
     _ui->actionStartJackServer->setEnabled(true);
     _ui->actionStopJackServer->setEnabled(false);
 
-
     connect(&JackService::instance(), SIGNAL(message(QString,JackService::MessageType)),
             this, SLOT(message(QString,JackService::MessageType)));
-
-    JackService::instance().start();
 }
 
 MainWindow::~MainWindow() {
@@ -51,6 +49,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::on_actionStartJackServer_triggered() {
     JackService::instance().start();
+    _ui->actionStopJackServer->setEnabled(true);
     _ui->actionStartJackServer->setEnabled(false);
 }
 
@@ -92,10 +91,6 @@ void MainWindow::on_actionTransportForward_triggered() {
 
 }
 
-void MainWindow::setupStatusTab() {
-
-}
-
 void MainWindow::message(QString message, JackService::MessageType messageType) {
     QString color;
     QString timeStamp = QTime::currentTime().toString("[hh:mm:ss.zzz]");
@@ -117,3 +112,15 @@ void MainWindow::message(QString message, JackService::MessageType messageType) 
                                  .arg(timeStamp)
                                  .arg(message));
 }
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    if(QMessageBox::warning(this, tr("Closing JACK control"),
+                            tr("Closing JACK control will also close the JACK server and probably affect running client. Are you really sure you want to quit?"),
+                            QMessageBox::Yes,
+                            QMessageBox::Cancel) == QMessageBox::Yes) {
+        QMainWindow::closeEvent(event);
+    } else {
+        event->ignore();
+    }
+}
+

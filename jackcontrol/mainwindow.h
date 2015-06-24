@@ -21,7 +21,6 @@
 #define MAINWINDOW_H
 
 // Own includes
-#include "settings.h"
 #include "jackservice.h"
 
 // Qt includes
@@ -57,13 +56,12 @@ public slots:
     void on_actionTransportStop_triggered();
     void on_actionTransportForward_triggered();
 
-    void setupStatusTab();
-
     void message(QString message, JackService::MessageType messageType);
 
 protected:
+    void closeEvent(QCloseEvent *event);
+
     Ui::MainWindow *_ui;
-    Settings *_setup;
 };
 
 #endif // MAINWINDOW_H

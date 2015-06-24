@@ -21,191 +21,67 @@
 #pragma once
 
 // Qt includes
-#include <QWidget>
 #include <QSettings>
-class QComboBox;
-class QSplitter;
 
-// Own includes
-#include "connectionsdrawer/connectionsdrawer.h"
-
-// Icon size combobox item indexes.
-#define QJACKCTL_ICON_16X16 0
-#define QJACKCTL_ICON_32X32 1
-#define QJACKCTL_ICON_64X64 2
-
-// Server settings preset struct.
-struct Preset {
-    QString serverPrefix;
-    QString serverName;
-    bool    realtime;
-    bool    softMode;
-    bool    monitor;
-    bool    shorts;
-    bool    noMemoryLock;
-    bool    unlockMemory;
-    bool    HWMonitor;
-    bool    HWMeter;
-    bool    ignoreHW;
-    int     priority;
-    int     frames;
-    int     sampleRate;
-    int     periods;
-    int     wordLength;
-    int     wait;
-    int     channels;
-    QString driver;
-    QString interface;
-    int     audio;
-    int     dither;
-    int     timeout;
-    QString inputDevice;
-    QString outputDevice;
-    int     inputChannels;
-    int     outputChannels;
-    int     inputLatency;
-    int     outputLatency;
-    int     startDelay;
-    bool    verbose;
-    int     maximumNumberOfPorts;
-    QString midiDriver;
-    QString serverSuffix;
-};
-
-// Common settings profile class.
 class Settings {
 public:
-    enum AudioMode {
-        AudioModeDuplex = 0,
-        AudioModeCaptureOnly = 1,
-        AudioModePlaybackOnly = 2
+    enum OperatingMode {
+        OperatingModeInput,
+        OperatingModeOutput,
+        OperatingModeDuplex
+    };
+
+    struct JackServerPreset {
+        // Device settings
+        QString         _interfaceName;
+        OperatingMode   _operatingMode;
+        QString         _inputDeviceName;
+        QString         _outputDeviceName;
+
+        // Drivers
+        QString         _audioDriverName;
+        QString         _midiDriverName;
+
+        // Audio processing
+        bool            _realTimeProcessing;
+        int             _samplesPerFrame;
+        int             _samplesPerSecond;
+        int             _bufferSizeMultiplier;
+        int             _maximumNumberOfPorts;
+
+        // Advanced configuration
+        QString serverPrefix;
+        QString serverName;
+        bool    softMode;
+        bool    monitor;
+        bool    shorts;
+        bool    noMemoryLock;
+        bool    unlockMemory;
+        bool    HWMonitor;
+        bool    HWMeter;
+        bool    ignoreHW;
+        int     priority;
+        int     wordLength;
+        int     wait;
+        int     channels;
+
+        QString interface;
+        int     dither;
+        int     timeout;
+
+        int     inputChannels;
+        int     outputChannels;
+        int     inputLatency;
+        int     outputLatency;
+        int     startDelay;
+        bool    verbose;
+        int     maximumNumberOfPorts;
     };
 
     Settings();
     ~Settings();
 
-	// The settings object accessor.
-	QSettings& settings();
-
-	// Explicit I/O methods.
-	void loadSetup();
-	void saveSetup();
-
-	// Command line arguments parser.
-	bool parse_args(const QStringList& args);
-	// Command line usage helper.
-	void print_usage(const QString& arg0);
-
-	// Default (translated) preset name.
-	QString sDefPresetName;
-
-	// Immediate server start options.
-	bool bStartJack;
-	bool bStartJackCmd;
-
-	// Server stop options.
-	bool bStopJack;
-
-	// User supplied command line.
-	QString sCmdLine;
-
-	// Current (default) preset name.
-	QString sDefPreset;
-
-	// Available presets list.
-	QStringList presets;
-
-	// Options...
-	bool    bSingleton;
-	QString sServerName;
-	bool    bStartupScript;
-	QString sStartupScriptShell;
-	bool    bPostStartupScript;
-	QString sPostStartupScriptShell;
-	bool    bShutdownScript;
-	QString sShutdownScriptShell;
-	bool    bPostShutdownScript;
-	QString sPostShutdownScriptShell;
-	bool    bStdoutCapture;
-	QString sXrunRegex;
-	bool    bActivePatchbay;
-	QString sActivePatchbayPath;
-#ifdef CONFIG_AUTO_REFRESH
-	bool    bAutoRefresh;
-	int     iTimeRefresh;
-#endif
-	bool    bMessagesLog;
-	QString sMessagesLogPath;
-	bool    bBezierLines;
-	int     iTimeDisplay;
-	int     iTimeFormat;
-	QString sMessagesFont;
-	bool    bMessagesLimit;
-	int     iMessagesLimitLines;
-	QString sDisplayFont1;
-	QString sDisplayFont2;
-	bool    bDisplayEffect;
-	bool    bDisplayBlink;
-	int     iJackClientPortAlias;
-    int     iConnectionsIconSize;
-	QString sConnectionsFont;
-	bool    bQueryClose;
-	bool    bKeepOnTop;
-	bool    bSystemTray;
-	bool    bStartMinimized;
-	bool    bDelayedSetup;
-	bool    bServerConfig;
-	QString sServerConfigName;
-	bool    bServerConfigTemp;
-	bool    bQueryShutdown;
-	bool    bAlsaSeqEnabled;
-	bool    bDBusEnabled;
-	bool    bAliasesEnabled;
-	bool    bAliasesEditing;
-	bool    bLeftButtons;
-	bool    bRightButtons;
-	bool    bTransportButtons;
-	bool    bTextLabels;
-	int     iBaseFontSize;
-
-	// Defaults...
-	QString sPatchbayPath;
-	// Recent patchbay listing.
-	QStringList patchbays;
-
-	// Recent session directories.
-	QStringList sessionDirs;
-
-	// Last open tab page...
-	int iMessagesStatusTabPage;
-	int iConnectionsTabPage;
-
-	// Last session save type...
-	bool bSessionSaveVersion;
-
-	// Aliases preset management methods.
-	bool loadAliases(const QString& sPreset);
-	bool saveAliases(const QString& sPreset);
-
-	// Preset management methods.
-	bool loadPreset(Preset& preset, const QString& sPreset);
-	bool savePreset(Preset& preset, const QString& sPreset);
-	bool deletePreset(const QString& sPreset);
-
-	// Combo box history persistence helper prototypes.
-	void loadComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
-	void saveComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
-
-	// Splitter widget sizes persistence helper methods.
-	void loadSplitterSizes(QSplitter *pSplitter, QList<int>& sizes);
-	void saveSplitterSizes(QSplitter *pSplitter);
-
-	// Widget geometry persistence helper prototypes.
-	void saveWidgetGeometry(QWidget *pWidget, bool bVisible = false);
-	void loadWidgetGeometry(QWidget *pWidget, bool bVisible = false);
-
 private:
-
-	// Our proper settings profile.
     QSettings _settings;
 };
+

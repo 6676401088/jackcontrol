@@ -35,14 +35,14 @@ JackService::JackService(QObject *parent)
 }
 
 void JackService::start() {
-//    QtJack::DriverMap drivers = _jackServer.availableDrivers();
-//    QtJack::Driver alsaDriver = drivers["alsa"];
+    QtJack::DriverMap drivers = _jackServer.availableDrivers();
+    QtJack::Driver alsaDriver = drivers["alsa"];
 
-//    QtJack::ParameterMap parameters = alsaDriver.parameters();
-//    parameters["rate"].setValue(44100);
-//    parameters["device"].setValue("hw:PCH,0");
+    QtJack::ParameterMap parameters = alsaDriver.parameters();
+    parameters["rate"].setValue(44100);
+    parameters["device"].setValue("hw:PCH,0");
 
-//    _jackServer.start(alsaDriver);
+    _jackServer.start(alsaDriver);
     qDebug() << _jackClient.connectToServer("JACK Control");
     qDebug() << _jackClient.activate();
 }

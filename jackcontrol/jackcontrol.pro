@@ -12,7 +12,6 @@ HEADERS += \
     connectionswidget.h \
     mainwindow.h \
     aboutdialog.h \
-    settings.h \
     jackservice.h \
     connectionsdrawer/clienttreewidgetitem.h \
     connectionsdrawer/portconnectionswidget.h \
@@ -24,7 +23,8 @@ HEADERS += \
     jackconnectionsdrawer/jackclienttreewidgetitem.h \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.h \
     jackconnectionsdrawer/jackmidiporttreewidgetitem.h \
-    settingsdialog.h
+    settingsdialog.h \
+    settings.h
 
 SOURCES += \
     InterfaceComboBox.cpp \
@@ -32,7 +32,6 @@ SOURCES += \
     connectionswidget.cpp \
     mainwindow.cpp \
     aboutdialog.cpp \
-    settings.cpp \
     jackservice.cpp \
     application.cpp \
     connectionsdrawer/clienttreewidgetitem.cpp \
@@ -44,7 +43,8 @@ SOURCES += \
     jackconnectionsdrawer/jackclienttreewidgetitem.cpp \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.cpp \
     jackconnectionsdrawer/jackmidiporttreewidgetitem.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    settings.cpp
 
 FORMS += \
     statuswidget.ui \
