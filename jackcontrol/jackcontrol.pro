@@ -1,37 +1,44 @@
+DEFINES += \
+  SUPPORTS_ALSA \
+  SUPPORTS_SUN \
+  SUPPORTS_OSS \
+  #SUPPORTS_COREAUDIO \
+  #SUPPORTS_PORTAUDIO
+
 TARGET = jackcontrol
-
 TEMPLATE = app
-DEPENDPATH += .
-INCLUDEPATH += .
+QT += widgets
 
-#DEFINES += DEBUG
+contains(DEFINES, SUPPORTS_ALSA) {
+  LIBS += -lasound
+}
+
+INCLUDEPATH += \
+    connectionsdrawer \
+    jackconnectionsdrawer
 
 HEADERS += \
-    InterfaceComboBox.h \
     statuswidget.h \
     connectionswidget.h \
     mainwindow.h \
-    aboutdialog.h \
     jackservice.h \
     connectionsdrawer/clienttreewidgetitem.h \
     connectionsdrawer/portconnectionswidget.h \
     connectionsdrawer/porttreewidgetitem.h \
     connectionsdrawer/connectionsdrawer.h \
-    about.h \
     jackconnectionsdrawer/jackconnectionsdrawer.h \
     connectionsdrawer/clienttreewidget.h \
     jackconnectionsdrawer/jackclienttreewidgetitem.h \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.h \
     jackconnectionsdrawer/jackmidiporttreewidgetitem.h \
-    settingsdialog.h \
-    settings.h
+    settings.h \
+    jackpresetswidget.h \
+    soundcardcombobox.h
 
 SOURCES += \
-    InterfaceComboBox.cpp \
     statuswidget.cpp \
     connectionswidget.cpp \
     mainwindow.cpp \
-    aboutdialog.cpp \
     jackservice.cpp \
     application.cpp \
     connectionsdrawer/clienttreewidgetitem.cpp \
@@ -43,15 +50,15 @@ SOURCES += \
     jackconnectionsdrawer/jackclienttreewidgetitem.cpp \
     jackconnectionsdrawer/jackaudioporttreewidgetitem.cpp \
     jackconnectionsdrawer/jackmidiporttreewidgetitem.cpp \
-    settingsdialog.cpp \
-    settings.cpp
+    settings.cpp \
+    jackpresetswidget.cpp \
+    soundcardcombobox.cpp
 
 FORMS += \
     statuswidget.ui \
     connectionswidget.ui \
     mainwindow.ui \
-    aboutdialog.ui \
-    settingsdialog.ui
+    jackpresetswidget.ui
 
 RESOURCES += \
     resources.qrc
@@ -98,18 +105,5 @@ unix {
 	icon.path = $$DATADIR/icons/hicolor/32x32/apps
 	icon.files += images/$${TARGET}.png 
 }
-
-# XML/DOM support
-QT += xml
-
-
-# QT5 support
-!lessThan(QT_MAJOR_VERSION, 5) {
-        QT += widgets
-}
-
-INCLUDEPATH += \
-    connectionsdrawer \
-    jackconnectionsdrawer
 
 include(../pods.pri)

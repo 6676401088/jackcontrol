@@ -19,8 +19,6 @@
 
 // Own includes
 #include "mainwindow.h"
-#include "aboutdialog.h"
-#include "settingsdialog.h"
 
 // uic includes
 #include "ui_mainwindow.h"
@@ -63,16 +61,6 @@ void MainWindow::on_actionStopJackServer_triggered() {
     _ui->actionStartJackServer->setEnabled(true);
     _ui->tabConfiguration->setEnabled(true);
     _ui->tabConnections->setEnabled(false);
-}
-
-void MainWindow::on_actionJackSettings_triggered() {
-    SettingsDialog settingsDialog;
-    settingsDialog.exec();
-}
-
-void MainWindow::on_actionAbout_triggered() {
-    AboutDialog aboutDialog(this);
-    aboutDialog.exec();
 }
 
 void MainWindow::on_actionTransportRewind_triggered() {

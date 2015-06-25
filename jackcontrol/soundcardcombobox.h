@@ -1,5 +1,6 @@
 /****************************************************************************
-   Copyright (C) 2003-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2013, Arnout Engelen. All rights reserved.
+   Copyright (C) 2003-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2015, Jacob Dawid <jacob@omg-it.works>
 
    This program is free software; you can redistribute it and/or
@@ -20,16 +21,31 @@
 
 #pragma once
 
-#define QJACKCTL_TITLE      ""
-#define QJACKCTL_VERSION    ""
+// Own includes
+#include "settings.h"
 
-#define QJACKCTL_SUBTITLE0  "JACK"
-#define QJACKCTL_SUBTITLE1  QJACKCTL_SUBTITLE0 " Audio Connection Kit"
-#define QJACKCTL_SUBTITLE2  "Qt GUI Interface"
+// Qt includes
+#include <QComboBox>
+#include <QStandardItemModel>
 
-#define QJACKCTL_SUBTITLE   QJACKCTL_SUBTITLE1 " - " QJACKCTL_SUBTITLE2
-#define QJACKCTL_WEBSITE    "http://qjackctl.sourceforge.net"
-#define QJACKCTL_COPYRIGHT  "Copyright (C) 2003-2014, rncbc aka Rui Nuno Capela. All rights reserved."
+class SoundcardComboBox :
+    public QComboBox {
+    Q_OBJECT
+public:
+    SoundcardComboBox(QWidget *parent = 0);
 
-#define QJACKCTL_DOMAIN     "rncbc.org"
+public slots:
+    void setDriverName(QString driverName);
+    void setOperationMode(Settings::OperationMode operationMode);
 
+protected:
+    void addCard(QString name, QString description);
+	void populateModel();
+	void showPopup();
+
+	QStandardItemModel *model() const;
+
+private:
+    QString _driverName;
+    Settings::OperationMode _operationMode;
+};

@@ -1,5 +1,4 @@
 /****************************************************************************
-   Copyright (C) 2003-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2015, Jacob Dawid <jacob@omg-it.works>
 
    This program is free software; you can redistribute it and/or
@@ -19,17 +18,25 @@
 *****************************************************************************/
 
 // Own includes
-#include "settingsdialog.h"
+#include "jackpresetswidget.h"
 
 // UIC includes
-#include "ui_settingsdialog.h"
+#include "ui_jackpresetswidget.h"
 
-SettingsDialog::SettingsDialog(QWidget *parent) :
-    QDialog(parent),
-    _ui(new Ui::JACKSettingsDialog) {
+JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
+    QWidget(parent),
+    _ui(new Ui::JackPresetsWidget) {
     _ui->setupUi(this);
+
+    connect(_ui->audioDriverComboBox, SIGNAL(activated(QString)),
+            this, SLOT(audioDriverNameChanged(QString)));
 }
 
-SettingsDialog::~SettingsDialog() {
+void JackPresetsWidget::audioDriverNameChanged(QString driverName) {
+    _ui->inputDeviceComboBox->setDriverName(driverName);
+    _ui->outputDeviceComboBox->setDriverName(driverName);
+}
+
+JackPresetsWidget::~JackPresetsWidget() {
     delete _ui;
 }

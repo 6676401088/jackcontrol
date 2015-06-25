@@ -19,7 +19,6 @@
 *****************************************************************************/
 
 // Own includes
-#include "about.h"
 #include "statuswidget.h"
 #include "jackservice.h"
 

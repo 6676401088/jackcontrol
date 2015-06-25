@@ -20,9 +20,7 @@
 *****************************************************************************/
 
 // Own includes
-#include "about.h"
-#include "InterfaceComboBox.h"
-//#include "settings.h"
+#include "soundcardcombobox.h"
 
 // Qt includes
 #include <QTreeView>
@@ -31,8 +29,9 @@
 #include <QStandardItemModel>
 #include <QFile>
 #include <QTextStream>
+#include <QDebug>
 
-#ifdef CONFIG_COREAUDIO
+#ifdef SUPPORTS_COREAUDIO
 #include <iostream>
 #include <cstring>
 #include <map>
@@ -40,79 +39,61 @@
 #include <CoreFoundation/CFString.h>
 #endif
 
-#ifdef CONFIG_PORTAUDIO
+#ifdef SUPPORTS_PORTAUDIO
 #include <iostream>
 #include <cstring>
 #include <portaudio.h>
 #endif
 
-#ifdef CONFIG_ALSA_SEQ
+#ifdef SUPPORTS_ALSA
 #include <alsa/asoundlib.h>
 #endif
 
-InterfaceComboBox::InterfaceComboBox ( QWidget *pParent )
-	: QComboBox(pParent)
-{
+SoundcardComboBox::SoundcardComboBox(QWidget *parent ) :
+    QComboBox(parent) {
 	QTreeView *pTreeView = new QTreeView(this);
 	QHeaderView *pHeaderView = pTreeView->header();
 	pHeaderView->hide();
-#if QT_VERSION < 0x050000
-	pHeaderView->setResizeMode(QHeaderView::ResizeToContents);
-#endif
 	pTreeView->setRootIsDecorated(false);
 	pTreeView->setAllColumnsShowFocus(true);
 	pTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	pTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
 	pTreeView->setModel(new QStandardItemModel());
-//	pTreeView->setMinimumWidth(320);
 	QComboBox::setView(pTreeView);
 }
 
-
-void InterfaceComboBox::showPopup ()
-{
+void SoundcardComboBox::showPopup() {
 	populateModel();
-
 	QComboBox::showPopup();
 }
 
-
-QStandardItemModel *InterfaceComboBox::model () const
-{
-	return static_cast<QStandardItemModel *> (QComboBox::model());
+QStandardItemModel *SoundcardComboBox::model() const {
+    return static_cast<QStandardItemModel *>(QComboBox::model());
 }
 
-
-void InterfaceComboBox::setup (
-	QComboBox *pDriverComboBox, int iAudio, const QString& sDefName )
-{
-	m_pDriverComboBox = pDriverComboBox;
-	m_iAudio = iAudio;
-	m_sDefName = sDefName;
+void SoundcardComboBox::setDriverName(QString driverName) {
+    _driverName = driverName.toLower();
 }
 
-
-void InterfaceComboBox::clearCards ()
-{
-	model()->clear();
+void SoundcardComboBox::setOperationMode(Settings::OperationMode operationMode) {
+    _operationMode = operationMode;
 }
 
+void SoundcardComboBox::addCard(
+    QString name,
+    QString description) {
 
-void InterfaceComboBox::addCard (
-	const QString& sName, const QString& sDescription )
-{
+    if(name.isEmpty()) {
+        return;
+    }
+
 	QList<QStandardItem *> items;
-	if (sName == m_sDefName || sName.isEmpty())
-		items.append(new QStandardItem(m_sDefName));
-	else
-		items.append(new QStandardItem(QIcon(":/images/device1.png"), sName));
-	items.append(new QStandardItem(sDescription));
+    items.append(new QStandardItem(QIcon(":/images/device1.png"), name));
+    items.append(new QStandardItem(description));
 	model()->appendRow(items);
 }
 
-
-void InterfaceComboBox::populateModel ()
-{
+void SoundcardComboBox::populateModel () {
 	bool bBlockSignals = QComboBox::blockSignals(true);
 
 	QComboBox::setUpdatesEnabled(false);
@@ -121,90 +102,84 @@ void InterfaceComboBox::populateModel ()
 	QLineEdit *pLineEdit = QComboBox::lineEdit();
 
 	// FIXME: Only valid for ALSA, Sun and OSS devices,
-	// for the time being... and also CoreAudio ones too.
-	const QString& sDriver = m_pDriverComboBox->currentText();
-	bool bAlsa      = (sDriver == "alsa");
-	bool bSun       = (sDriver == "sun");
-	bool bOss       = (sDriver == "oss");
-#ifdef CONFIG_COREAUDIO
-	bool bCoreaudio = (sDriver == "coreaudio");
-	std::map<QString, AudioDeviceID> coreaudioIdMap;
-#endif
-#ifdef CONFIG_PORTAUDIO
-	bool bPortaudio = (sDriver == "portaudio");
-#endif
+    // for the time being... and also CoreAudio ones too.
 	QString sCurName = pLineEdit->text();
-	QString sName, sSubName;
-	
+    QString soundcardName;
 	int iCards = 0;
+    int iCurCard = -1;
 
-	clearCards();
+    model()->clear();
 
-	int iCurCard = -1;
-
-	if (bAlsa) {
-#ifdef CONFIG_ALSA_SEQ
-		// Enumerate the ALSA cards and PCM harfware devices...
-		snd_ctl_t *handle;
-		snd_ctl_card_info_t *info;
-		snd_pcm_info_t *pcminfo;
-		snd_ctl_card_info_alloca(&info);
+    if (_driverName == "alsa") {
+#ifdef SUPPORTS_ALSA
+        // Enumerate the ALSA cards and PCM hardware devices.
+        snd_ctl_t           *soundcardHandle;
+        snd_ctl_card_info_t *soundcardInfo;
+        snd_pcm_info_t      *pcminfo;
+        snd_ctl_card_info_alloca(&soundcardInfo);
 		snd_pcm_info_alloca(&pcminfo);
-		const QString sPrefix("hw:%1");
-		const QString sSuffix(" (%1)");
-		const QString sSubSuffix("%1,%2");
-		QString sName2, sSubName2;
-		bool bCapture, bPlayback;
-		int iCard = -1;
-		while (snd_card_next(&iCard) >= 0 && iCard >= 0) {
-			sName = sPrefix.arg(iCard);
-			if (snd_ctl_open(&handle, sName.toUtf8().constData(), 0) >= 0
-				&& snd_ctl_card_info(handle, info) >= 0) {
-				sName2 = sPrefix.arg(snd_ctl_card_info_get_id(info));
-				addCard(sName2, snd_ctl_card_info_get_name(info) + sSuffix.arg(sName));
-				if (sCurName == sName || sCurName == sName2)
+
+        const QString soundcardPrefix("hw:%1");
+        const QString soundcardSuffix(" (%1)");
+        const QString soundcardSubSuffix(" %1, %2");
+
+        QString sName2, sSubName2;
+        int soundcardIndex = -1;
+
+        // Query the next soundcard if available.
+        while(snd_card_next(&soundcardIndex) >= 0
+           && soundcardIndex >= 0) {
+            soundcardName = soundcardPrefix.arg(soundcardIndex);
+
+            if(snd_ctl_open(&soundcardHandle, soundcardName.toUtf8().constData(), 0) >= 0
+            && snd_ctl_card_info(soundcardHandle, soundcardInfo) >= 0) {
+                sName2 = soundcardPrefix.arg(snd_ctl_card_info_get_id(soundcardInfo));
+                addCard(sName2, snd_ctl_card_info_get_name(soundcardInfo) + soundcardSuffix.arg(soundcardName));
+                if (sCurName == soundcardName || sCurName == sName2)
 					iCurCard = iCards;
 				++iCards;
 				int iDevice = -1;
-				while (snd_ctl_pcm_next_device(handle, &iDevice) >= 0
+                while (snd_ctl_pcm_next_device(soundcardHandle, &iDevice) >= 0
 					&& iDevice >= 0) {
+                    bool isCapturingDevice, isPlaybackDevice;
 					// Capture devices..
-					bCapture = false;
-					if (m_iAudio == Settings::AudioModeCaptureOnly ||
-						m_iAudio == Settings::AudioModeDuplex) {
+                    isCapturingDevice = false;
+                    if (_operationMode == Settings::OperationModeCapture ||
+                        _operationMode == Settings::OperationModeDuplex) {
 						snd_pcm_info_set_device(pcminfo, iDevice);
 						snd_pcm_info_set_subdevice(pcminfo, 0);
 						snd_pcm_info_set_stream(pcminfo, SND_PCM_STREAM_CAPTURE);
-						bCapture = (snd_ctl_pcm_info(handle, pcminfo) >= 0);
+                        isCapturingDevice = (snd_ctl_pcm_info(soundcardHandle, pcminfo) >= 0);
 					}
 					// Playback devices..
-					bPlayback = false;
-					if (m_iAudio == Settings::AudioModePlaybackOnly ||
-						m_iAudio == Settings::AudioModeDuplex) {
+                    isPlaybackDevice = false;
+                    if (_operationMode == Settings::OperationModePlayback ||
+                        _operationMode == Settings::OperationModeDuplex) {
 						snd_pcm_info_set_device(pcminfo, iDevice);
 						snd_pcm_info_set_subdevice(pcminfo, 0);
 						snd_pcm_info_set_stream(pcminfo, SND_PCM_STREAM_PLAYBACK);
-						bPlayback = (snd_ctl_pcm_info(handle, pcminfo) >= 0);
+                        isPlaybackDevice = (snd_ctl_pcm_info(soundcardHandle, pcminfo) >= 0);
 					}
-					// List iif compliant with the audio mode criteria...
-					if ((m_iAudio == Settings::AudioModeCaptureOnly && bCapture && !bPlayback) ||
-						(m_iAudio == Settings::AudioModePlaybackOnly && !bCapture && bPlayback) ||
-						(m_iAudio == Settings::AudioModeDuplex && bCapture && bPlayback)) {
-						sSubName  = sSubSuffix.arg(sName).arg(iDevice);
-						sSubName2 = sSubSuffix.arg(sName2).arg(iDevice);
-						addCard(sSubName2, snd_pcm_info_get_name(pcminfo) + sSuffix.arg(sSubName));
+                    // List if compliant with the audio mode criteria...
+                    if ((_operationMode == Settings::OperationModeCapture && isCapturingDevice && !isPlaybackDevice) ||
+                        (_operationMode == Settings::OperationModePlayback && !isCapturingDevice && isPlaybackDevice) ||
+                        (_operationMode == Settings::OperationModeDuplex && isCapturingDevice && isPlaybackDevice)) {
+                        QString sSubName  = soundcardSubSuffix.arg(soundcardName).arg(iDevice);
+                        sSubName2 = soundcardSubSuffix.arg(sName2).arg(iDevice);
+                        addCard(sSubName2, snd_pcm_info_get_name(pcminfo) + soundcardSuffix.arg(sSubName));
 						if (sCurName == sSubName || sCurName == sSubName2)
 							iCurCard = iCards;
 						++iCards;
 					}
 				}
-				snd_ctl_close(handle);
+                snd_ctl_close(soundcardHandle);
 			}
 		}
-#endif 	// CONFIG_ALSA_SEQ
-	}
-	else
-	if (bSun) {
+#else
+        qDebug() << "This application has been compiled without ALSA support.";
+#endif 	// SUPPORTS_ALSA
+    } else if(_driverName == "sun") {
+#ifdef SUPPORTS_SUN
 		QFile file("/var/run/dmesg.boot");
 		if (file.open(QIODevice::ReadOnly)) {
 			QTextStream stream(&file);
@@ -213,18 +188,20 @@ void InterfaceComboBox::populateModel ()
 			while (!stream.atEnd()) {
 				sLine = stream.readLine();
 				if (rxDevice.exactMatch(sLine)) {
-					sName = "/dev/audio" + rxDevice.cap(1);
-					addCard(sName, rxDevice.cap(2));
-					if (sCurName == sName)
+                    soundcardName = "/dev/audio" + rxDevice.cap(1);
+                    addCard(soundcardName, rxDevice.cap(2));
+                    if (sCurName == soundcardName)
 						iCurCard = iCards;
 					++iCards;
 				}
 			}
 			file.close();
 		}
-	}
-	else
-	if (bOss) {
+#else
+        qDebug() << "This application has been compiled without SUN support.";
+#endif // SUPPORTS_SUN
+    } else if(_driverName == "oss") {
+#ifdef SUPPORTS_OSS
 		// Enumerate the OSS Audio devices...
 		QFile file("/dev/sndstat");
 		if (file.open(QIODevice::ReadOnly)) {
@@ -237,9 +214,9 @@ void InterfaceComboBox::populateModel ()
 				sLine = stream.readLine();
 				if (bAudioDevices) {
 					if (rxDevice.exactMatch(sLine)) {
-						sName = "/dev/dsp" + rxDevice.cap(1);
-						addCard(sName, rxDevice.cap(2));
-						if (sCurName == sName)
+                        soundcardName = "/dev/dsp" + rxDevice.cap(1);
+                        addCard(soundcardName, rxDevice.cap(2));
+                        if (sCurName == soundcardName)
 							iCurCard = iCards;
 						++iCards;
 					}
@@ -250,9 +227,13 @@ void InterfaceComboBox::populateModel ()
 			}
 			file.close();
 		}
-	}
-#ifdef CONFIG_COREAUDIO
-	else if (bCoreaudio) {
+#else
+        qDebug() << "This application has been compiled without OSS support.";
+#endif
+    } else if(_driverName == "coreaudio") {
+#ifdef SUPPORTS_COREAUDIO
+        std::map<QString, AudioDeviceID> coreaudioIdMap;
+
 		// Find out how many Core Audio devices are there, if any...
 		// (code snippet gently "borrowed" from Stephane Letz jackdmp;)
 		OSStatus err;
@@ -304,11 +285,12 @@ void InterfaceComboBox::populateModel ()
 				}
 			}
 			delete [] coreDeviceIDs;
-		}
-	}
-#endif 	// CONFIG_COREAUDIO
-//#ifdef CONFIG_PORTAUDIO
-//	else if (bPortaudio) {
+        }
+#else
+        qDebug() << "This application has been compiled without core audio support.";
+#endif 	// SUPPORTS_COREAUDIO
+    } else if(_driverName == "portaudio") {
+#ifdef SUPPORTS_PORTAUDIO
 //		if (Pa_Initialize() == paNoError) {
 //			// Fill hostapi info...
 //			PaHostApiIndex iNumHostApi = Pa_GetHostApiCount();
@@ -328,13 +310,10 @@ void InterfaceComboBox::populateModel ()
 //			}
 //			Pa_Terminate();
 //		}
-//	}
-//#endif  // CONFIG_PORTAUDIO
-
-	addCard(m_sDefName, QString());
-	if (sCurName == m_sDefName || sCurName.isEmpty())
-		iCurCard = iCards;
-	++iCards;
+#else
+        qDebug() << "This application has been compiled without port audio support.";
+#endif  // SUPPORTS_PORTAUDIO
+    }
 
 	QTreeView *pTreeView = static_cast<QTreeView *> (QComboBox::view());
 	pTreeView->setMinimumWidth(

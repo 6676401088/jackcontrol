@@ -19,7 +19,6 @@
 *****************************************************************************/
 
 // Own includes
-#include "about.h"
 #include "connectionsdrawer.h"
 #include "clienttreewidget.h"
 #include "portconnectionswidget.h"

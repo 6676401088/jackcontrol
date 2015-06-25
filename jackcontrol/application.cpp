@@ -19,8 +19,6 @@
 *****************************************************************************/
 
 // Own includes
-#include "about.h"
-//#include "settings.h"
 #include "mainwindow.h"
 
 // Qt includes

@@ -25,16 +25,16 @@
 
 class Settings {
 public:
-    enum OperatingMode {
-        OperatingModeInput,
-        OperatingModeOutput,
-        OperatingModeDuplex
+    enum OperationMode {
+        OperationModeCapture,
+        OperationModePlayback,
+        OperationModeDuplex
     };
 
     struct JackServerPreset {
         // Device settings
         QString         _interfaceName;
-        OperatingMode   _operatingMode;
+        OperationMode   _operatingMode;
         QString         _inputDeviceName;
         QString         _outputDeviceName;
         QString         _audioDriverName;

@@ -42,12 +42,9 @@ public:
     ~MainWindow();
 
 public slots:
-    void on_actionAbout_triggered();
-
     // JACK toolbar
     void on_actionStartJackServer_triggered();
     void on_actionStopJackServer_triggered();
-    void on_actionJackSettings_triggered();
 
     // Transport toolbar
     void on_actionTransportRewind_triggered();

@@ -20,20 +20,23 @@
 #pragma once
 
 // Qt includes
-#include <QDialog>
+#include <QWidget>
 
 namespace Ui {
-class JACKSettingsDialog;
+class JackPresetsWidget;
 }
 
-class SettingsDialog :
-    public QDialog {
+class JackPresetsWidget :
+    public QWidget {
     Q_OBJECT
 
 public:
-    explicit SettingsDialog(QWidget *parent = 0);
-    ~SettingsDialog();
+    explicit JackPresetsWidget(QWidget *parent = 0);
+    ~JackPresetsWidget();
+
+protected slots:
+    void audioDriverNameChanged(QString driverName);
 
 private:
-    Ui::JACKSettingsDialog *_ui;
+    Ui::JackPresetsWidget *_ui;
 };
