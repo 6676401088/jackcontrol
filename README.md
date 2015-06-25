@@ -1,3 +1,8 @@
+Support this and other free software projects of mine by donating bitcoins:
+```cpp
+1HdLeSj4SfRC77tb6pDUPqeXGiw3T2RqrG
+```
+
 JACK Control - JACK Visual Control Interface
 -----------------------------------------------------
 
