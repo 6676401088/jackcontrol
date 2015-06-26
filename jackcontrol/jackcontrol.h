@@ -1,6 +1,4 @@
 /****************************************************************************
-   Copyright (C) 2013, Arnout Engelen. All rights reserved.
-   Copyright (C) 2003-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2015, Jacob Dawid <jacob@omg-it.works>
 
    This program is free software; you can redistribute it and/or
@@ -21,33 +19,38 @@
 
 #pragma once
 
+// Qt includes
+#include <QApplication>
+#include <QObject>
+
 // Own includes
 #include "settings.h"
 
-// Qt includes
-#include <QComboBox>
-#include <QTreeView>
-#include <QStandardItemModel>
-
-class SoundcardComboBox :
-    public QComboBox {
+class JackControl :
+    public QObject {
     Q_OBJECT
 public:
-    SoundcardComboBox(QWidget *parent = 0);
+    static JackControl& instance() {
+        static JackControl jackControl;
+        return jackControl;
+    }
 
-public slots:
-    void setDriverName(QString driverName);
-    void setOperationModeFilter(Settings::OperationMode operationMode);
+    ~JackControl() {
+    }
 
-    void update();
+    void initialize(int& argc, char **argv);
+    int run();
 
-protected:
-	void populateModel();
-	void showPopup();
-
-    QString alsaDeviceIdentifier(int soundcardIndex, int pcmDeviceIndex = -1);
+    void setCurrentPreset(Settings::JackServerPreset jackServerPreset);
+    Settings::JackServerPreset currentPreset();
 
 private:
-    QString _driverName;
-    Settings::OperationMode _operationModeFilter;
+    JackControl() :
+        QObject() {
+    }
+
+    QApplication *_application;
+
+    Settings::JackServerPreset _currentPreset;
 };
+

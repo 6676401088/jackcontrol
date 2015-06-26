@@ -21,6 +21,7 @@
 
 // Own includes
 #include "settings.h"
+#include "jackcontrol.h"
 
 // Qt includes
 #include <QWidget>
@@ -40,6 +41,11 @@ public:
 protected slots:
     void audioDriverNameChanged(QString driverName);
     void audioOperationModeChanged(int operationMode);
+
+    void inputDeviceActivated(int index);
+    void outputDeviceActivated(int index);
+
+    void sampleRateActivated(QString sampleRate);
 
 private:
     Ui::JackPresetsWidget *_ui;

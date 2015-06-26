@@ -19,6 +19,7 @@
 
 // Own includes
 #include "jackservice.h"
+#include "jackcontrol.h"
 
 #include <QDebug>
 
@@ -31,32 +32,40 @@ JackService::JackService(QObject *parent)
     setupStdOutRedirect();
 }
 
-void JackService::start() {
+bool JackService::startServer() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+
     QtJack::DriverMap drivers = _jackServer.availableDrivers();
-    QtJack::Driver alsaDriver = drivers["alsa"];
+    if(drivers.contains(preset._audioDriverName)) {
+        QtJack::Driver driver = drivers[preset._audioDriverName];
+        QtJack::ParameterMap driverParameters = driver.parameters();
+        driverParameters["rate"].setValue(preset._samplesPerSecond);
+        driverParameters["device"].setValue(preset._inputDeviceName);
 
-    QtJack::ParameterMap parameters = alsaDriver.parameters();
-    parameters["rate"].setValue(44100);
-    parameters["device"].setValue("hw:PCH,0");
+        if(!_jackServer.start(driver)) {
+            qDebug() << "Could not start JACK server.";
+            return false;
+        } else {
+            qDebug() << "Started JACK server successfully.";
+        }
 
-    if(!_jackServer.start(alsaDriver)) {
-        qDebug() << "Could not start JACK server.";
-    } else {
-        qDebug() << "Started JACK server successfully.";
+        _jackClient.disconnectFromServer(); // Just in case
+        _jackClient.connectToServer("JACK Control");
+        _jackClient.activate();
+
+        return true;
     }
-
-    _jackClient.disconnectFromServer(); // Just in case
-    _jackClient.connectToServer("JACK Control");
-    _jackClient.activate();
 }
 
-void JackService::stop() {
+bool JackService::stopServer() {
     _jackClient.disconnectFromServer();
 
     if(!_jackServer.stop()) {
         qDebug() << "Could not stop JACK server.";
+        return false;
     } else {
         qDebug() << "Stopped JACK server successfully.";
+        return true;
     }
 }
 

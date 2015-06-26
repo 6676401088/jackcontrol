@@ -33,14 +33,14 @@ HEADERS += \
     jackconnectionsdrawer/jackmidiporttreewidgetitem.h \
     settings.h \
     jackpresetswidget.h \
-    soundcardcombobox.h
+    soundcardcombobox.h \
+    jackcontrol.h
 
 SOURCES += \
     statuswidget.cpp \
     connectionswidget.cpp \
     mainwindow.cpp \
     jackservice.cpp \
-    application.cpp \
     connectionsdrawer/clienttreewidgetitem.cpp \
     connectionsdrawer/portconnectionswidget.cpp \
     connectionsdrawer/porttreewidgetitem.cpp \
@@ -52,7 +52,8 @@ SOURCES += \
     jackconnectionsdrawer/jackmidiporttreewidgetitem.cpp \
     settings.cpp \
     jackpresetswidget.cpp \
-    soundcardcombobox.cpp
+    soundcardcombobox.cpp \
+    jackcontrol.cpp
 
 FORMS += \
     statuswidget.ui \

@@ -1,5 +1,4 @@
 /****************************************************************************
-   Copyright (C) 2013, Arnout Engelen. All rights reserved.
    Copyright (C) 2003-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2015, Jacob Dawid <jacob@omg-it.works>
 
@@ -19,35 +18,30 @@
 
 *****************************************************************************/
 
-#pragma once
-
 // Own includes
-#include "settings.h"
+#include "jackcontrol.h"
+#include "mainwindow.h"
 
-// Qt includes
-#include <QComboBox>
-#include <QTreeView>
-#include <QStandardItemModel>
+void JackControl::initialize(int& argc, char **argv) {
+    _application = new QApplication(argc, argv);
+}
 
-class SoundcardComboBox :
-    public QComboBox {
-    Q_OBJECT
-public:
-    SoundcardComboBox(QWidget *parent = 0);
+int JackControl::run() {
+    MainWindow mainWindow;
+    mainWindow.show();
 
-public slots:
-    void setDriverName(QString driverName);
-    void setOperationModeFilter(Settings::OperationMode operationMode);
+    return _application->exec();
+}
 
-    void update();
+void JackControl::setCurrentPreset(Settings::JackServerPreset jackServerPreset) {
+    _currentPreset = jackServerPreset;
+}
 
-protected:
-	void populateModel();
-	void showPopup();
+Settings::JackServerPreset JackControl::currentPreset() {
+    return _currentPreset;
+}
 
-    QString alsaDeviceIdentifier(int soundcardIndex, int pcmDeviceIndex = -1);
-
-private:
-    QString _driverName;
-    Settings::OperationMode _operationModeFilter;
-};
+int main(int argc, char **argv) {
+    JackControl::instance().initialize(argc, argv);
+    return JackControl::instance().run();
+}

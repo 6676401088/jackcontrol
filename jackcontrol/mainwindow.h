@@ -17,8 +17,7 @@
 
 *****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 // Own includes
 #include "jackservice.h"
@@ -60,5 +59,3 @@ protected:
 
     Ui::MainWindow *_ui;
 };
-
-#endif // MAINWINDOW_H

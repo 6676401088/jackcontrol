@@ -49,8 +49,8 @@ public:
         MessageTypeStdOut
     };
 
-    void start();
-    void stop();
+    bool startServer();
+    bool stopServer();
 
     QtJack::Client& client();
     QtJack::Server& server();

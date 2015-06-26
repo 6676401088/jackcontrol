@@ -33,12 +33,12 @@ public:
 
     struct JackServerPreset {
         // Device settings
-        QString         _interfaceName;
-        OperationMode   _operatingMode;
-        QString         _inputDeviceName;
-        QString         _outputDeviceName;
         QString         _audioDriverName;
         QString         _midiDriverName;
+        QString         _interfaceName;
+        OperationMode   _operationMode;
+        QString         _inputDeviceName;
+        QString         _outputDeviceName;
 
         // Audio processing
         bool            _realTimeProcessing;
@@ -61,7 +61,6 @@ public:
         int     wait;
         int     channels;
 
-        QString interface;
         int     dither;
         int     timeout;
 

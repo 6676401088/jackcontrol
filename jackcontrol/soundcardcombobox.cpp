@@ -74,6 +74,12 @@ void SoundcardComboBox::update() {
     populateModel();
 }
 
+QString SoundcardComboBox::alsaDeviceIdentifier(int soundcardIndex, int pcmDeviceIndex) {
+    return QString("hw:%1%2")
+        .arg(soundcardIndex)
+        .arg(pcmDeviceIndex >= 0 ? QString(",%1").arg(pcmDeviceIndex) : "");
+}
+
 void SoundcardComboBox::populateModel () {
     clear();
 
@@ -94,19 +100,18 @@ void SoundcardComboBox::populateModel () {
 
             // Access the soundcard in order to grab informations about it.
             if(snd_ctl_open(&soundcardHandle,
-                            QString("hw:%1")
-                                .arg(soundcardIndex)
-                                .toUtf8()
-                                .constData(),
+                            alsaDeviceIdentifier(soundcardIndex).toUtf8().constData(),
                             0) >= 0
             && snd_ctl_card_info(soundcardHandle, soundcardInfo) >= 0) {
                 QString soundCardId = snd_ctl_card_info_get_id(soundcardInfo);
                 QString soundCardName = snd_ctl_card_info_get_longname(soundcardInfo);
 
                 addItem(QIcon(":/images/jockey.svg"),
-                        QString("%1: %3")
+                        QString("%1: %2 [%3]")
                             .arg(soundCardId)
-                            .arg(soundCardName));
+                            .arg(soundCardName)
+                            .arg(alsaDeviceIdentifier(soundcardIndex)),
+                        alsaDeviceIdentifier(soundcardIndex));
 
                 int pcmDeviceIndex = -1;
                 while (snd_ctl_pcm_next_device(soundcardHandle, &pcmDeviceIndex) >= 0 && pcmDeviceIndex >= 0) {
@@ -134,9 +139,11 @@ void SoundcardComboBox::populateModel () {
                         (_operationModeFilter == Settings::OperationModeDuplex && probeIsCapturingDevice && probeIsPlaybackDevice)) {
                         QString pcmDeviceName = snd_pcm_info_get_name(pcmDeviceInfo);
                         addItem(QIcon(":/images/audio-x-wav.svg"),
-                                QString("%1: %3")
+                                QString("%1: %2 [%3]")
                                     .arg(soundCardId)
-                                    .arg(pcmDeviceName));
+                                    .arg(pcmDeviceName)
+                                    .arg(alsaDeviceIdentifier(soundcardIndex, pcmDeviceIndex)),
+                                alsaDeviceIdentifier(soundcardIndex, pcmDeviceIndex));
                     }
 				}
                 snd_ctl_close(soundcardHandle);

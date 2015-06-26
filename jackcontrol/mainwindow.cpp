@@ -48,19 +48,21 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::on_actionStartJackServer_triggered() {
-    JackService::instance().start();
-    _ui->actionStopJackServer->setEnabled(true);
-    _ui->actionStartJackServer->setEnabled(false);
-    _ui->tabConfiguration->setEnabled(false);
-    _ui->tabConnections->setEnabled(true);
+    if(JackService::instance().startServer()) {
+        _ui->actionStopJackServer->setEnabled(true);
+        _ui->actionStartJackServer->setEnabled(false);
+        _ui->tabConfiguration->setEnabled(false);
+        _ui->tabConnections->setEnabled(true);
+    }
 }
 
 void MainWindow::on_actionStopJackServer_triggered() {
-    JackService::instance().stop();
-    _ui->actionStopJackServer->setEnabled(false);
-    _ui->actionStartJackServer->setEnabled(true);
-    _ui->tabConfiguration->setEnabled(true);
-    _ui->tabConnections->setEnabled(false);
+    if(JackService::instance().stopServer()) {
+        _ui->actionStopJackServer->setEnabled(false);
+        _ui->actionStartJackServer->setEnabled(true);
+        _ui->tabConfiguration->setEnabled(true);
+        _ui->tabConnections->setEnabled(false);
+    }
 }
 
 void MainWindow::on_actionTransportRewind_triggered() {
