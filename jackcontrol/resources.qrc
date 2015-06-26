@@ -37,5 +37,7 @@
         <file>images/midi_out.svg</file>
         <file>images/midi_in.svg</file>
         <file>images/client.svg</file>
+        <file>images/jockey.svg</file>
+        <file>images/audio-x-wav.svg</file>
     </qresource>
 </RCC>

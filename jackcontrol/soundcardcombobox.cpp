@@ -51,15 +51,8 @@
 
 SoundcardComboBox::SoundcardComboBox(QWidget *parent ) :
     QComboBox(parent) {
-	QTreeView *pTreeView = new QTreeView(this);
-	QHeaderView *pHeaderView = pTreeView->header();
-	pHeaderView->hide();
-	pTreeView->setRootIsDecorated(false);
-	pTreeView->setAllColumnsShowFocus(true);
-	pTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
-	pTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
-	pTreeView->setModel(new QStandardItemModel());
-	QComboBox::setView(pTreeView);
+    _driverName = "";
+    _operationModeFilter = Settings::OperationModeDuplex;
 }
 
 void SoundcardComboBox::showPopup() {
@@ -67,110 +60,84 @@ void SoundcardComboBox::showPopup() {
 	QComboBox::showPopup();
 }
 
-QStandardItemModel *SoundcardComboBox::model() const {
-    return static_cast<QStandardItemModel *>(QComboBox::model());
-}
-
 void SoundcardComboBox::setDriverName(QString driverName) {
     _driverName = driverName.toLower();
+    populateModel();
 }
 
-void SoundcardComboBox::setOperationMode(Settings::OperationMode operationMode) {
-    _operationMode = operationMode;
+void SoundcardComboBox::setOperationModeFilter(Settings::OperationMode operationMode) {
+    _operationModeFilter = operationMode;
+    populateModel();
 }
 
-void SoundcardComboBox::addCard(
-    QString name,
-    QString description) {
-
-    if(name.isEmpty()) {
-        return;
-    }
-
-	QList<QStandardItem *> items;
-    items.append(new QStandardItem(QIcon(":/images/device1.png"), name));
-    items.append(new QStandardItem(description));
-	model()->appendRow(items);
+void SoundcardComboBox::update() {
+    populateModel();
 }
 
 void SoundcardComboBox::populateModel () {
-	bool bBlockSignals = QComboBox::blockSignals(true);
-
-	QComboBox::setUpdatesEnabled(false);
-	QComboBox::setDuplicatesEnabled(false);
-
-	QLineEdit *pLineEdit = QComboBox::lineEdit();
-
-	// FIXME: Only valid for ALSA, Sun and OSS devices,
-    // for the time being... and also CoreAudio ones too.
-	QString sCurName = pLineEdit->text();
-    QString soundcardName;
-	int iCards = 0;
-    int iCurCard = -1;
-
-    model()->clear();
+    clear();
 
     if (_driverName == "alsa") {
 #ifdef SUPPORTS_ALSA
         // Enumerate the ALSA cards and PCM hardware devices.
         snd_ctl_t           *soundcardHandle;
         snd_ctl_card_info_t *soundcardInfo;
-        snd_pcm_info_t      *pcminfo;
+        snd_pcm_info_t      *pcmDeviceInfo;
         snd_ctl_card_info_alloca(&soundcardInfo);
-		snd_pcm_info_alloca(&pcminfo);
+        snd_pcm_info_alloca(&pcmDeviceInfo);
 
-        const QString soundcardPrefix("hw:%1");
-        const QString soundcardSuffix(" (%1)");
-        const QString soundcardSubSuffix(" %1, %2");
-
-        QString sName2, sSubName2;
         int soundcardIndex = -1;
 
         // Query the next soundcard if available.
         while(snd_card_next(&soundcardIndex) >= 0
            && soundcardIndex >= 0) {
-            soundcardName = soundcardPrefix.arg(soundcardIndex);
 
-            if(snd_ctl_open(&soundcardHandle, soundcardName.toUtf8().constData(), 0) >= 0
+            // Access the soundcard in order to grab informations about it.
+            if(snd_ctl_open(&soundcardHandle,
+                            QString("hw:%1")
+                                .arg(soundcardIndex)
+                                .toUtf8()
+                                .constData(),
+                            0) >= 0
             && snd_ctl_card_info(soundcardHandle, soundcardInfo) >= 0) {
-                sName2 = soundcardPrefix.arg(snd_ctl_card_info_get_id(soundcardInfo));
-                addCard(sName2, snd_ctl_card_info_get_name(soundcardInfo) + soundcardSuffix.arg(soundcardName));
-                if (sCurName == soundcardName || sCurName == sName2)
-					iCurCard = iCards;
-				++iCards;
-				int iDevice = -1;
-                while (snd_ctl_pcm_next_device(soundcardHandle, &iDevice) >= 0
-					&& iDevice >= 0) {
-                    bool isCapturingDevice, isPlaybackDevice;
-					// Capture devices..
-                    isCapturingDevice = false;
-                    if (_operationMode == Settings::OperationModeCapture ||
-                        _operationMode == Settings::OperationModeDuplex) {
-						snd_pcm_info_set_device(pcminfo, iDevice);
-						snd_pcm_info_set_subdevice(pcminfo, 0);
-						snd_pcm_info_set_stream(pcminfo, SND_PCM_STREAM_CAPTURE);
-                        isCapturingDevice = (snd_ctl_pcm_info(soundcardHandle, pcminfo) >= 0);
+                QString soundCardId = snd_ctl_card_info_get_id(soundcardInfo);
+                QString soundCardName = snd_ctl_card_info_get_longname(soundcardInfo);
+
+                addItem(QIcon(":/images/jockey.svg"),
+                        QString("%1: %3")
+                            .arg(soundCardId)
+                            .arg(soundCardName));
+
+                int pcmDeviceIndex = -1;
+                while (snd_ctl_pcm_next_device(soundcardHandle, &pcmDeviceIndex) >= 0 && pcmDeviceIndex >= 0) {
+
+                    bool probeIsCapturingDevice = false;
+                    if (_operationModeFilter == Settings::OperationModeCapture ||
+                        _operationModeFilter == Settings::OperationModeDuplex) {
+                        snd_pcm_info_set_device(pcmDeviceInfo, pcmDeviceIndex);
+                        snd_pcm_info_set_subdevice(pcmDeviceInfo, 0);
+                        snd_pcm_info_set_stream(pcmDeviceInfo, SND_PCM_STREAM_CAPTURE);
+                        probeIsCapturingDevice = (snd_ctl_pcm_info(soundcardHandle, pcmDeviceInfo) >= 0);
 					}
-					// Playback devices..
-                    isPlaybackDevice = false;
-                    if (_operationMode == Settings::OperationModePlayback ||
-                        _operationMode == Settings::OperationModeDuplex) {
-						snd_pcm_info_set_device(pcminfo, iDevice);
-						snd_pcm_info_set_subdevice(pcminfo, 0);
-						snd_pcm_info_set_stream(pcminfo, SND_PCM_STREAM_PLAYBACK);
-                        isPlaybackDevice = (snd_ctl_pcm_info(soundcardHandle, pcminfo) >= 0);
+
+                    bool probeIsPlaybackDevice = false;
+                    if (_operationModeFilter == Settings::OperationModePlayback ||
+                        _operationModeFilter == Settings::OperationModeDuplex) {
+                        snd_pcm_info_set_device(pcmDeviceInfo, pcmDeviceIndex);
+                        snd_pcm_info_set_subdevice(pcmDeviceInfo, 0);
+                        snd_pcm_info_set_stream(pcmDeviceInfo, SND_PCM_STREAM_PLAYBACK);
+                        probeIsPlaybackDevice = (snd_ctl_pcm_info(soundcardHandle, pcmDeviceInfo) >= 0);
 					}
-                    // List if compliant with the audio mode criteria...
-                    if ((_operationMode == Settings::OperationModeCapture && isCapturingDevice && !isPlaybackDevice) ||
-                        (_operationMode == Settings::OperationModePlayback && !isCapturingDevice && isPlaybackDevice) ||
-                        (_operationMode == Settings::OperationModeDuplex && isCapturingDevice && isPlaybackDevice)) {
-                        QString sSubName  = soundcardSubSuffix.arg(soundcardName).arg(iDevice);
-                        sSubName2 = soundcardSubSuffix.arg(sName2).arg(iDevice);
-                        addCard(sSubName2, snd_pcm_info_get_name(pcminfo) + soundcardSuffix.arg(sSubName));
-						if (sCurName == sSubName || sCurName == sSubName2)
-							iCurCard = iCards;
-						++iCards;
-					}
+
+                    if ((_operationModeFilter == Settings::OperationModeCapture && probeIsCapturingDevice && !probeIsPlaybackDevice) ||
+                        (_operationModeFilter == Settings::OperationModePlayback && !probeIsCapturingDevice && probeIsPlaybackDevice) ||
+                        (_operationModeFilter == Settings::OperationModeDuplex && probeIsCapturingDevice && probeIsPlaybackDevice)) {
+                        QString pcmDeviceName = snd_pcm_info_get_name(pcmDeviceInfo);
+                        addItem(QIcon(":/images/audio-x-wav.svg"),
+                                QString("%1: %3")
+                                    .arg(soundCardId)
+                                    .arg(pcmDeviceName));
+                    }
 				}
                 snd_ctl_close(soundcardHandle);
 			}
@@ -188,11 +155,7 @@ void SoundcardComboBox::populateModel () {
 			while (!stream.atEnd()) {
 				sLine = stream.readLine();
 				if (rxDevice.exactMatch(sLine)) {
-                    soundcardName = "/dev/audio" + rxDevice.cap(1);
-                    addCard(soundcardName, rxDevice.cap(2));
-                    if (sCurName == soundcardName)
-						iCurCard = iCards;
-					++iCards;
+                    addItem(QIcon(":/images/jockey.svg"), "/dev/audio" + rxDevice.cap(1) + " (" + rxDevice.cap(2) + ")");
 				}
 			}
 			file.close();
@@ -214,11 +177,7 @@ void SoundcardComboBox::populateModel () {
 				sLine = stream.readLine();
 				if (bAudioDevices) {
 					if (rxDevice.exactMatch(sLine)) {
-                        soundcardName = "/dev/dsp" + rxDevice.cap(1);
-                        addCard(soundcardName, rxDevice.cap(2));
-                        if (sCurName == soundcardName)
-							iCurCard = iCards;
-						++iCards;
+                        addItem(QIcon(":/images/jockey.svg"), "/dev/dsp" + rxDevice.cap(1) + " (" + rxDevice.cap(2) + ")");
 					}
 					else break;
 				}
@@ -315,14 +274,5 @@ void SoundcardComboBox::populateModel () {
 #endif  // SUPPORTS_PORTAUDIO
     }
 
-	QTreeView *pTreeView = static_cast<QTreeView *> (QComboBox::view());
-	pTreeView->setMinimumWidth(
-		pTreeView->sizeHint().width() + QComboBox::iconSize().width());
-
-	QComboBox::setCurrentIndex(iCurCard);
-
-	pLineEdit->setText(sCurName);
-
-	QComboBox::setUpdatesEnabled(true);
-	QComboBox::blockSignals(bBlockSignals);
+    setCurrentIndex(0);
 }

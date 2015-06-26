@@ -19,6 +19,9 @@
 
 #pragma once
 
+// Own includes
+#include "settings.h"
+
 // Qt includes
 #include <QWidget>
 
@@ -36,6 +39,7 @@ public:
 
 protected slots:
     void audioDriverNameChanged(QString driverName);
+    void audioOperationModeChanged(int operationMode);
 
 private:
     Ui::JackPresetsWidget *_ui;

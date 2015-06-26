@@ -227,56 +227,6 @@
            <property name="editable">
             <bool>false</bool>
            </property>
-           <item>
-            <property name="text">
-             <string>Dummy</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>SUN</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>OSS</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ALSA</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>PortAudio</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>CoreAudio</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>FreeBob</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Firewire</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Net</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>NetOne</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item row="1" column="0">
@@ -365,6 +315,9 @@
            <property name="toolTip">
             <string>Provide either audio capture, playback or both</string>
            </property>
+           <property name="editable">
+            <bool>false</bool>
+           </property>
            <item>
             <property name="text">
              <string>Duplex</string>
@@ -416,33 +369,8 @@
             <string>Alternate input device for capture</string>
            </property>
            <property name="editable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
-           <item>
-            <property name="text">
-             <string>(default)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>hw:0</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>plughw:0</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>/dev/audio</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>/dev/dsp</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item row="4" column="0">
@@ -491,33 +419,8 @@
             <string>Alternate output device for playback</string>
            </property>
            <property name="editable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
-           <item>
-            <property name="text">
-             <string>(default)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>hw:0</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>plughw:0</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>/dev/audio</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>/dev/dsp</string>
-            </property>
-           </item>
           </widget>
          </item>
         </layout>

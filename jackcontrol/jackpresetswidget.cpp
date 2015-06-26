@@ -19,6 +19,7 @@
 
 // Own includes
 #include "jackpresetswidget.h"
+#include "jackservice.h"
 
 // UIC includes
 #include "ui_jackpresetswidget.h"
@@ -30,11 +31,39 @@ JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
 
     connect(_ui->audioDriverComboBox, SIGNAL(activated(QString)),
             this, SLOT(audioDriverNameChanged(QString)));
+    connect(_ui->operationModeComboBox, SIGNAL(activated(int)),
+            this, SLOT(audioOperationModeChanged(int)));
+
+    _ui->inputDeviceComboBox->setOperationModeFilter(Settings::OperationModeCapture);
+    _ui->outputDeviceComboBox->setOperationModeFilter(Settings::OperationModePlayback);
+
+    QtJack::DriverMap drivers = JackService::instance().server().availableDrivers();
+    foreach(QtJack::Driver driver, drivers) {
+        _ui->audioDriverComboBox->addItem(driver.name());
+    }
 }
 
 void JackPresetsWidget::audioDriverNameChanged(QString driverName) {
     _ui->inputDeviceComboBox->setDriverName(driverName);
     _ui->outputDeviceComboBox->setDriverName(driverName);
+}
+
+void JackPresetsWidget::audioOperationModeChanged(int operationMode) {
+    Q_UNUSED(operationMode);
+    switch(operationMode) {
+    case 0:
+        _ui->inputDeviceComboBox->setEnabled(true);
+        _ui->outputDeviceComboBox->setEnabled(true);
+        break;
+    case 1:
+        _ui->inputDeviceComboBox->setEnabled(true);
+        _ui->outputDeviceComboBox->setEnabled(false);
+        break;
+    case 2:
+        _ui->inputDeviceComboBox->setEnabled(false);
+        _ui->outputDeviceComboBox->setEnabled(true);
+        break;
+    }
 }
 
 JackPresetsWidget::~JackPresetsWidget() {

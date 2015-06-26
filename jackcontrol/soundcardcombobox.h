@@ -26,6 +26,7 @@
 
 // Qt includes
 #include <QComboBox>
+#include <QTreeView>
 #include <QStandardItemModel>
 
 class SoundcardComboBox :
@@ -36,16 +37,15 @@ public:
 
 public slots:
     void setDriverName(QString driverName);
-    void setOperationMode(Settings::OperationMode operationMode);
+    void setOperationModeFilter(Settings::OperationMode operationMode);
+
+    void update();
 
 protected:
-    void addCard(QString name, QString description);
 	void populateModel();
 	void showPopup();
 
-	QStandardItemModel *model() const;
-
 private:
     QString _driverName;
-    Settings::OperationMode _operationMode;
+    Settings::OperationMode _operationModeFilter;
 };
