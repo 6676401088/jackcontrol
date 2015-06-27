@@ -41,8 +41,13 @@ public:
     void initialize(int& argc, char **argv);
     int run();
 
-    void setCurrentPreset(Settings::JackServerPreset jackServerPreset);
     Settings::JackServerPreset currentPreset();
+
+public slots:
+    void setCurrentPreset(Settings::JackServerPreset jackServerPreset);
+
+signals:
+    void currentPresetChanged(Settings::JackServerPreset preset);
 
 private:
     JackControl() :

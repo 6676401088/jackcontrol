@@ -39,6 +39,8 @@ public:
     ~JackPresetsWidget();
 
 protected slots:
+    void updateWithPreset(Settings::JackServerPreset preset, QStringList *errorReport = 0);
+
     void audioDriverNameChanged(QString driverName);
     void audioOperationModeChanged(int operationMode);
 

@@ -40,7 +40,7 @@ bool JackService::startServer() {
         QtJack::Driver driver = drivers[preset._audioDriverName];
         QtJack::ParameterMap driverParameters = driver.parameters();
         driverParameters["rate"].setValue(preset._samplesPerSecond);
-        driverParameters["device"].setValue(preset._inputDeviceName);
+        driverParameters["device"].setValue(preset._inputDeviceIdentifier);
 
         if(!_jackServer.start(driver)) {
             qDebug() << "Could not start JACK server.";
@@ -55,6 +55,8 @@ bool JackService::startServer() {
 
         return true;
     }
+
+    return false;
 }
 
 bool JackService::stopServer() {

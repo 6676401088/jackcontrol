@@ -21,7 +21,7 @@
 #pragma once
 
 // Qt includes
-#include <QSettings>
+#include <QString>
 
 class Settings {
 public:
@@ -32,13 +32,14 @@ public:
     };
 
     struct JackServerPreset {
+        int             _version;
+
         // Device settings
         QString         _audioDriverName;
         QString         _midiDriverName;
-        QString         _interfaceName;
         OperationMode   _operationMode;
-        QString         _inputDeviceName;
-        QString         _outputDeviceName;
+        QString         _inputDeviceIdentifier;
+        QString         _outputDeviceIdentifier;
 
         // Audio processing
         bool            _realTimeProcessing;
@@ -76,7 +77,8 @@ public:
     Settings();
     ~Settings();
 
-private:
-    QSettings _settings;
+    JackServerPreset loadPreset(QString fileName, bool *ok = 0);
+    bool savePreset(QString fileName, JackServerPreset preset);
+
 };
 

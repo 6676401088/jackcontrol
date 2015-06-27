@@ -53,6 +53,10 @@ void MainWindow::on_actionStartJackServer_triggered() {
         _ui->actionStartJackServer->setEnabled(false);
         _ui->tabConfiguration->setEnabled(false);
         _ui->tabConnections->setEnabled(true);
+
+        _ui->tabWidget->setCurrentWidget(_ui->tabConnections);
+    } else {
+        _ui->tabWidget->setCurrentWidget(_ui->tabMessages);
     }
 }
 

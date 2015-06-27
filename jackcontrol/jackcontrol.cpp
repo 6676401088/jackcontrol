@@ -35,6 +35,7 @@ int JackControl::run() {
 
 void JackControl::setCurrentPreset(Settings::JackServerPreset jackServerPreset) {
     _currentPreset = jackServerPreset;
+    emit currentPresetChanged(_currentPreset);
 }
 
 Settings::JackServerPreset JackControl::currentPreset() {

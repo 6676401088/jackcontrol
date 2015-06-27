@@ -21,9 +21,69 @@
 // Own includes
 #include "settings.h"
 
+// Qt includes
+#include <QSettings>
+
 Settings::Settings() {
 }
 
 Settings::~Settings() {
+}
+
+Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
+    QSettings settings(fileName, QSettings::IniFormat);
+    JackServerPreset preset;
+    QString operationMode;
+    QStringList keys = settings.allKeys();
+    if(keys.contains("version")) {
+        switch(settings.value("version").toInt()) {
+            case 1:
+                if(ok) { (*ok) = true; }
+
+                preset._version = 1;
+
+                // Device settings
+                preset._audioDriverName = settings.value("audioDriverName").toString();
+                preset._midiDriverName = settings.value("audioDriverName").toString();
+
+                operationMode = settings.value("audioDriverName").toString().toLower();
+                if(operationMode == "duplex") {
+                    preset._operationMode = Settings::OperationModeDuplex;
+                } else
+                if(operationMode == "capture") {
+                    preset._operationMode = Settings::OperationModeCapture;
+                } else
+                if(operationMode == "playback") {
+                    preset._operationMode = Settings::OperationModePlayback;
+                }
+
+                preset._inputDeviceIdentifier = settings.value("audioDriverName").toString();
+                preset._outputDeviceIdentifier = settings.value("audioDriverName").toString();
+
+                // Audio processing
+                preset._realTimeProcessing = settings.value("audioDriverName").toBool();
+                preset._samplesPerFrame = settings.value("audioDriverName").toInt();
+                preset._samplesPerSecond = settings.value("audioDriverName").toInt();
+                preset._bufferSizeMultiplier = settings.value("audioDriverName").toInt();
+                preset._maximumNumberOfPorts = settings.value("audioDriverName").toInt();
+                break;
+            default:
+                if(ok) { (*ok) = false; }
+                break;
+        }
+    } else {
+        if(ok) { (*ok) = false; }
+    }
+    return preset;
+}
+
+bool Settings::savePreset(QString fileName, JackServerPreset preset) {
+    switch (preset._version) {
+    default:
+    case 1:
+        break;
+    }
+
+    return true;
 }
 
