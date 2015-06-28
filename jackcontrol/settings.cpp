@@ -38,15 +38,13 @@ Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
     if(keys.contains("version")) {
         switch(settings.value("version").toInt()) {
             case 1:
-                if(ok) { (*ok) = true; }
-
                 preset._version = 1;
 
                 // Device settings
                 preset._audioDriverName = settings.value("audioDriverName").toString();
-                preset._midiDriverName = settings.value("audioDriverName").toString();
+                preset._midiDriverName = settings.value("midiDriverName").toString();
 
-                operationMode = settings.value("audioDriverName").toString().toLower();
+                operationMode = settings.value("operationMode").toString().toLower();
                 if(operationMode == "duplex") {
                     preset._operationMode = Settings::OperationModeDuplex;
                 } else
@@ -57,15 +55,17 @@ Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
                     preset._operationMode = Settings::OperationModePlayback;
                 }
 
-                preset._inputDeviceIdentifier = settings.value("audioDriverName").toString();
-                preset._outputDeviceIdentifier = settings.value("audioDriverName").toString();
+                preset._inputDeviceIdentifier = settings.value("inputDeviceIdentifier").toString();
+                preset._outputDeviceIdentifier = settings.value("outputDeviceIdentifier").toString();
 
                 // Audio processing
-                preset._realTimeProcessing = settings.value("audioDriverName").toBool();
-                preset._samplesPerFrame = settings.value("audioDriverName").toInt();
-                preset._samplesPerSecond = settings.value("audioDriverName").toInt();
-                preset._bufferSizeMultiplier = settings.value("audioDriverName").toInt();
-                preset._maximumNumberOfPorts = settings.value("audioDriverName").toInt();
+                preset._realTimeProcessing = settings.value("realTimeProcessing").toBool();
+                preset._samplesPerFrame = settings.value("samplesPerFrame").toInt();
+                preset._samplesPerSecond = settings.value("samplesPerSecond").toInt();
+                preset._bufferSizeMultiplier = settings.value("bufferSizeMultiplier").toInt();
+                preset._maximumNumberOfPorts = settings.value("maximumNumberOfPorts").toInt();
+
+                if(ok) { (*ok) = true; }
                 break;
             default:
                 if(ok) { (*ok) = false; }
@@ -78,9 +78,35 @@ Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
 }
 
 bool Settings::savePreset(QString fileName, JackServerPreset preset) {
+    QSettings settings(fileName, QSettings::IniFormat);
     switch (preset._version) {
     default:
     case 1:
+        // Device settings
+        settings.setValue("audioDriverName", preset._audioDriverName);
+        settings.setValue("midiDriverName", preset._midiDriverName);
+
+        switch(preset._operationMode) {
+            case OperationModeDuplex:
+                settings.setValue("operationMode", "duplex");
+                break;
+            case OperationModeCapture:
+                settings.setValue("operationMode", "capture");
+                break;
+            case OperationModePlayback:
+                settings.setValue("operationMode", "playback");
+                break;
+        }
+
+        settings.setValue("inputDeviceIdentifier", preset._inputDeviceIdentifier);
+        settings.setValue("outputDeviceIdentigier", preset._outputDeviceIdentifier);
+
+        // Audio processing
+        settings.setValue("realTimeProcessing", preset._realTimeProcessing);
+        settings.setValue("samplesPerFrame", preset._samplesPerFrame);
+        settings.setValue("samplesPerSecond", preset._samplesPerSecond);
+        settings.setValue("bufferSizeMultiplier", preset._bufferSizeMultiplier);
+        settings.setValue("maximumNumberOfPorts", preset._maximumNumberOfPorts);
         break;
     }
 
