@@ -24,6 +24,8 @@
 
 // Qt includes
 #include <QMainWindow>
+#include <QCloseEvent>
+#include <QTimerEvent>
 
 namespace Ui {
     class MainWindow;
@@ -56,6 +58,7 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *event);
+    void timerEvent(QTimerEvent *event);
 
     Ui::MainWindow *_ui;
 };

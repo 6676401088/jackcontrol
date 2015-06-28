@@ -28,12 +28,25 @@
 #include <QTime>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QFontDatabase>
+#include <QFont>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     _ui(new Ui::MainWindow)
 {
     _ui->setupUi(this);
+
+    QFontDatabase::addApplicationFont(":/fonts/digital-dream/DIGITALDREAM.ttf");
+    QFont fieldNameFont("Digital Dream", 12, 400, true);
+    QFont valueFont("Digital Dream", 18);
+    _ui->transportDisplayLabel->setFont(fieldNameFont);
+    _ui->transportValueDisplayLabel->setFont(valueFont);
+    _ui->cpuLoadDisplayLabel->setFont(fieldNameFont);
+    _ui->cpuLoadValueDisplayLabel->setFont(valueFont);
+    _ui->serverStateDisplayLabel->setFont(fieldNameFont);
+    _ui->serverStateValueDisplayLabel->setFont(valueFont);
+
     _ui->actionStopJackServer->setEnabled(false);
     _ui->actionStartJackServer->setEnabled(true);
     _ui->tabConfiguration->setEnabled(true);
@@ -41,6 +54,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&JackService::instance(), SIGNAL(message(QString,JackService::MessageType)),
             this, SLOT(message(QString,JackService::MessageType)));
+
+    startTimer(100);
 }
 
 MainWindow::~MainWindow() {
@@ -124,3 +139,27 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     }
 }
 
+void MainWindow::timerEvent(QTimerEvent *event) {
+    Q_UNUSED(event);
+    QtJack::Client& client = JackService::instance().client();
+    if(client.isValid()) {
+        QtJack::TransportPosition transportPosition = client.queryTransportPosition();
+
+        if(transportPosition.bbtDataValid()) {
+            _ui->transportValueDisplayLabel->setText(
+                QString("%1:%2:%3")
+                    .arg(QString("%1").arg(transportPosition._bbt._bar), 2, QChar('0'))
+                    .arg(QString("%1").arg(transportPosition._bbt._beat), 2, QChar('0'))
+                    .arg(QString("%1").arg(transportPosition._bbt._tick), 4, QChar('0'))
+            );
+        } else {
+            _ui->transportValueDisplayLabel->setText("--:--:----");
+        }
+
+        int cpuLoad = (int)client.cpuLoad();
+        _ui->cpuLoadValueDisplayLabel->setText(QString("%1 %").arg(QString("%1").arg(cpuLoad), 3, QChar('0')));
+    } else {
+        _ui->cpuLoadValueDisplayLabel->setText("--- %");
+        _ui->transportValueDisplayLabel->setText("--:--:----");
+    }
+}

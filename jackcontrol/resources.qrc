@@ -39,5 +39,20 @@
         <file>images/client.svg</file>
         <file>images/jockey.svg</file>
         <file>images/audio-x-wav.svg</file>
+        <file>fonts/digital-dream/DIGITALDREAMFATSKEWNARROW.ttf</file>
+        <file>fonts/digital-dream/DIGITALDREAMFATNARROW.ttf</file>
+        <file>fonts/digital-dream/DIGITALDREAMSKEWNARROW.ttf</file>
+        <file>fonts/digital-dream/DIGITALDREAMNARROW.ttf</file>
+        <file>fonts/digital-dream/DIGITALDREAMFATSKEW.ttf</file>
+        <file>fonts/digital-dream/DIGITALDREAMFAT.ttf</file>
+        <file>fonts/digital-dream/DIGITALDREAMSKEW.ttf</file>
+        <file>fonts/digital-dream/DIGITALDREAM.ttf</file>
+        <file>images/media-skip-forward.svg</file>
+        <file>images/media-skip-backward.svg</file>
+        <file>images/media-playback-stop.svg</file>
+        <file>images/media-playback-start.svg</file>
+        <file>images/media-playback-pause.svg</file>
+        <file>images/media-playback-start-2.svg</file>
+        <file>images/media-playback-stop-2.svg</file>
     </qresource>
 </RCC>
