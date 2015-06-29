@@ -22,6 +22,7 @@
 
 // Qt includes
 #include <QString>
+#include <QSettings>
 
 class Settings {
 public:
@@ -29,6 +30,11 @@ public:
         OperationModeCapture,
         OperationModePlayback,
         OperationModeDuplex
+    };
+
+    struct JackControlSettings {
+        int             _version;
+
     };
 
     struct JackServerPreset {
@@ -75,10 +81,19 @@ public:
         int     maximumNumberOfPorts;
     };
 
+    static JackControlSettings loadJackControlSettings(QString fileName, bool *ok = 0);
+    static bool saveJackControlSettings(QString fileName, JackControlSettings jackControlSettings);
+
     static JackServerPreset loadPreset(QString fileName, bool *ok = 0);
     static bool savePreset(QString fileName, JackServerPreset preset);
 
 private:
+    static bool loadJackControlSettingsVersion1(QSettings& settings, JackControlSettings& jackControlSettings);
+    static bool saveJackControlSettingsVersion1(QSettings& settings, JackControlSettings& JackControlSettings);
+
+    static bool loadJackServerPresetVersion1(QSettings& settings, JackServerPreset& jackServerPreset);
+    static bool saveJackServerPresetVersion1(QSettings& settings, JackServerPreset& jackServerPreset);
+
     Settings();
     ~Settings();
 };

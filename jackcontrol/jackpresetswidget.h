@@ -41,7 +41,6 @@ public:
 protected slots:
     void on_importPresetPushButton_clicked();
     void on_exportPresetPushButton_clicked();
-    void on_savePresetPushButton_clicked();
     void on_deletePresetPushButton_clicked();
 
     void on_enableRealtimeProcessingCheckBox_clicked();

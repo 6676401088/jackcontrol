@@ -22,7 +22,6 @@
 #include "settings.h"
 
 // Qt includes
-#include <QSettings>
 #include <QFileInfo>
 
 Settings::Settings() {
@@ -31,92 +30,170 @@ Settings::Settings() {
 Settings::~Settings() {
 }
 
-Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
+Settings::JackControlSettings Settings::loadJackControlSettings(
+    QString fileName,
+    bool *ok) {
     QSettings settings(fileName, QSettings::IniFormat);
-    JackServerPreset preset;
+    JackControlSettings jackControlSettings;
 
-    QFileInfo fileInfo(fileName);
-    preset._presetName = fileInfo.fileName();
-
-    QString operationMode;
+    bool success = false;
     QStringList keys = settings.allKeys();
     if(keys.contains("version")) {
-        switch(settings.value("version").toInt()) {
+        jackControlSettings._version = settings.value("version").toInt();
+        switch(jackControlSettings._version) {
             case 1:
-                preset._version                 = 1;
-
-                // Device settings
-                preset._audioDriverName         = settings.value("audioDriverName").toString();
-                preset._midiDriverName          = settings.value("midiDriverName").toString();
-
-                operationMode = settings.value("operationMode").toString().toLower();
-                if(operationMode == "duplex") {
-                    preset._operationMode = Settings::OperationModeDuplex;
-                } else
-                if(operationMode == "capture") {
-                    preset._operationMode = Settings::OperationModeCapture;
-                } else
-                if(operationMode == "playback") {
-                    preset._operationMode = Settings::OperationModePlayback;
-                }
-
-                preset._inputDeviceIdentifier   = settings.value("inputDeviceIdentifier").toString();
-                preset._outputDeviceIdentifier  = settings.value("outputDeviceIdentifier").toString();
-
-                // Audio processing
-                preset._realTimeProcessing      = settings.value("realTimeProcessing").toBool();
-                preset._samplesPerFrame         = settings.value("samplesPerFrame").toInt();
-                preset._samplesPerSecond        = settings.value("samplesPerSecond").toInt();
-                preset._bufferSizeMultiplier    = settings.value("bufferSizeMultiplier").toInt();
-                preset._maximumNumberOfPorts    = settings.value("maximumNumberOfPorts").toInt();
-
-                if(ok) { (*ok) = true; }
+                success = loadJackControlSettingsVersion1(settings, jackControlSettings);
+                if(ok) { (*ok) = success; }
                 break;
             default:
+                // Deny all unknown versions
                 if(ok) { (*ok) = false; }
                 break;
         }
     } else {
         if(ok) { (*ok) = false; }
     }
-    return preset;
+    return jackControlSettings;
 }
 
-bool Settings::savePreset(QString fileName, JackServerPreset preset) {
+bool Settings::loadJackControlSettingsVersion1(
+    QSettings& settings,
+    Settings::JackControlSettings& jackControlSettings) {
+    bool ok = true;
+
+
+    return ok;
+}
+
+bool Settings::saveJackControlSettings(
+    QString fileName,
+    Settings::JackControlSettings jackControlSettings) {
     QSettings settings(fileName, QSettings::IniFormat);
-    switch (preset._version) {
-    default:
+    switch (jackControlSettings._version) {
+    default: // If there is no version number provided, save as version 1
     case 1:
-        settings.setValue("version",                1);
-
-        // Device settings
-        settings.setValue("audioDriverName",        preset._audioDriverName);
-        settings.setValue("midiDriverName",         preset._midiDriverName);
-
-        switch(preset._operationMode) {
-            case OperationModeDuplex:
-                settings.setValue("operationMode", "duplex");
-                break;
-            case OperationModeCapture:
-                settings.setValue("operationMode", "capture");
-                break;
-            case OperationModePlayback:
-                settings.setValue("operationMode", "playback");
-                break;
-        }
-
-        settings.setValue("inputDeviceIdentifier",  preset._inputDeviceIdentifier);
-        settings.setValue("outputDeviceIdentifier", preset._outputDeviceIdentifier);
-
-        // Audio processing
-        settings.setValue("realTimeProcessing",     preset._realTimeProcessing);
-        settings.setValue("samplesPerFrame",        preset._samplesPerFrame);
-        settings.setValue("samplesPerSecond",       preset._samplesPerSecond);
-        settings.setValue("bufferSizeMultiplier",   preset._bufferSizeMultiplier);
-        settings.setValue("maximumNumberOfPorts",   preset._maximumNumberOfPorts);
+        return saveJackControlSettingsVersion1(settings, jackControlSettings);
         break;
     }
 
+    return false;
+}
+
+bool Settings::saveJackControlSettingsVersion1(
+    QSettings& settings,
+    Settings::JackControlSettings& JackControlSettings) {
+    // Settings versioning
+    settings.setValue("version",                1);
+
+    settings.sync();
+    return true;
+}
+
+Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
+    QSettings settings(fileName, QSettings::IniFormat);
+    JackServerPreset jackServerPreset;
+
+    QFileInfo fileInfo(fileName);
+    jackServerPreset._presetName = fileInfo.fileName();
+
+    bool success = false;
+    QStringList keys = settings.allKeys();
+    if(keys.contains("version")) {
+        jackServerPreset._version = settings.value("version").toInt();
+        switch(jackServerPreset._version) {
+            case 1:
+                success = loadJackServerPresetVersion1(
+                    settings,
+                    jackServerPreset
+                );
+                if(ok) { (*ok) = success; }
+                break;
+            default:
+                // Deny all unknown versions
+                if(ok) { (*ok) = false; }
+                break;
+        }
+    } else {
+        if(ok) { (*ok) = false; }
+    }
+    return jackServerPreset;
+}
+
+bool Settings::loadJackServerPresetVersion1(
+    QSettings& settings,
+    Settings::JackServerPreset& jackServerPreset) {
+    QString operationMode;
+
+    // Device settings
+    jackServerPreset._audioDriverName         = settings.value("audioDriverName").toString();
+    jackServerPreset._midiDriverName          = settings.value("midiDriverName").toString();
+
+    operationMode = settings.value("operationMode").toString().toLower();
+    if(operationMode == "duplex") {
+        jackServerPreset._operationMode = Settings::OperationModeDuplex;
+    } else
+    if(operationMode == "capture") {
+        jackServerPreset._operationMode = Settings::OperationModeCapture;
+    } else
+    if(operationMode == "playback") {
+        jackServerPreset._operationMode = Settings::OperationModePlayback;
+    }
+
+    jackServerPreset._inputDeviceIdentifier   = settings.value("inputDeviceIdentifier").toString();
+    jackServerPreset._outputDeviceIdentifier  = settings.value("outputDeviceIdentifier").toString();
+
+    // Audio processing
+    jackServerPreset._realTimeProcessing      = settings.value("realTimeProcessing").toBool();
+    jackServerPreset._samplesPerFrame         = settings.value("samplesPerFrame").toInt();
+    jackServerPreset._samplesPerSecond        = settings.value("samplesPerSecond").toInt();
+    jackServerPreset._bufferSizeMultiplier    = settings.value("bufferSizeMultiplier").toInt();
+    jackServerPreset._maximumNumberOfPorts    = settings.value("maximumNumberOfPorts").toInt();
+}
+
+bool Settings::savePreset(QString fileName, JackServerPreset jackServerPreset) {
+    QSettings settings(fileName, QSettings::IniFormat);
+    switch (jackServerPreset._version) {
+    default: // If there is no version number provided, save as version 1
+    case 1:
+        return saveJackServerPresetVersion1(settings, jackServerPreset);
+        break;
+    }
+
+    return false;
+}
+
+bool Settings::saveJackServerPresetVersion1(
+    QSettings& settings,
+    Settings::JackServerPreset& jackServerPreset) {
+    // Settings versioning
+    settings.setValue("version",                1);
+
+    // Device settings
+    settings.setValue("audioDriverName",        jackServerPreset._audioDriverName);
+    settings.setValue("midiDriverName",         jackServerPreset._midiDriverName);
+
+    switch(jackServerPreset._operationMode) {
+        case OperationModeDuplex:
+            settings.setValue("operationMode", "duplex");
+            break;
+        case OperationModeCapture:
+            settings.setValue("operationMode", "capture");
+            break;
+        case OperationModePlayback:
+            settings.setValue("operationMode", "playback");
+            break;
+    }
+
+    settings.setValue("inputDeviceIdentifier",  jackServerPreset._inputDeviceIdentifier);
+    settings.setValue("outputDeviceIdentifier", jackServerPreset._outputDeviceIdentifier);
+
+    // Audio processing
+    settings.setValue("realTimeProcessing",     jackServerPreset._realTimeProcessing);
+    settings.setValue("samplesPerFrame",        jackServerPreset._samplesPerFrame);
+    settings.setValue("samplesPerSecond",       jackServerPreset._samplesPerSecond);
+    settings.setValue("bufferSizeMultiplier",   jackServerPreset._bufferSizeMultiplier);
+    settings.setValue("maximumNumberOfPorts",   jackServerPreset._maximumNumberOfPorts);
+    settings.sync();
     return true;
 }
 

@@ -31,13 +31,23 @@ void JackControl::initialize(int& argc, char **argv) {
 }
 
 int JackControl::run() {
+    // Load and show GUI
     MainWindow mainWindow;
     mainWindow.show();
 
-    setCurrentPreset(Settings::loadPreset(QDir::home().filePath(".config/jackcontrol/default.preset")));
+    // Load current preset
+    setCurrentPreset(Settings::loadPreset(QDir::home().filePath(".config/jackcontrol/presets/default.preset")));
+
+    // Run application
     int status = _application->exec();
 
-    Settings::savePreset(QDir::home().filePath(".config/jackcontrol/default.preset"), _currentPreset);
+    // Save current preset
+    if(_currentPreset._presetName.isEmpty()) {
+        _currentPreset._presetName = "default.preset";
+    }
+    Settings::savePreset(QDir::home().filePath(QString(".config/jackcontrol/presets/%1").arg(_currentPreset._presetName)), _currentPreset);
+
+    // Exit
     return status;
 }
 

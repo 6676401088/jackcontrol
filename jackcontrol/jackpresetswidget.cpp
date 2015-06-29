@@ -17,6 +17,10 @@
 
 *****************************************************************************/
 
+// Qt includes
+#include <QFileDialog>
+#include <QMessageBox>
+
 // Own includes
 #include "jackpresetswidget.h"
 #include "jackservice.h"
@@ -66,15 +70,37 @@ JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
 }
 
 void JackPresetsWidget::on_importPresetPushButton_clicked() {
-
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Import preset"), QDir::homePath(), tr("JACK Control presets (*.preset)"));
+    if(!fileName.isEmpty()) {
+        bool ok;
+        Settings::JackServerPreset preset = Settings::loadPreset(fileName, &ok);
+        if(ok) {
+            JackControl::instance().setCurrentPreset(preset);
+            QStringList errorReport;
+            updateWithPreset(preset, &errorReport);
+            if(!errorReport.isEmpty()) {
+                QString report = tr("The preset has been imported, but please note:\n");
+                foreach(QString reportLine, errorReport) {
+                    report.append(reportLine + "\n");
+                }
+                QMessageBox::warning(this, tr("Import partially successful"), report);
+            }
+        } else {
+            QMessageBox::critical(this, tr("Importing preset failed"), tr("An error occured during the export of the preset"));
+        }
+    }
 }
 
 void JackPresetsWidget::on_exportPresetPushButton_clicked() {
-
-}
-
-void JackPresetsWidget::on_savePresetPushButton_clicked() {
-
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export preset"), QDir::homePath(), tr("JACK Control presets (*.preset)"));
+    if(!fileName.isEmpty()) {
+        if(!fileName.endsWith(".preset")) {
+            fileName.append(".preset");
+        }
+        if(!Settings::savePreset(fileName, JackControl::instance().currentPreset())) {
+            QMessageBox::critical(this, tr("Exporting preset failed"), tr("An error occurred during the export of the preset."));
+        }
+    }
 }
 
 void JackPresetsWidget::on_deletePresetPushButton_clicked() {
