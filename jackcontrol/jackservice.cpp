@@ -35,12 +35,55 @@ JackService::JackService(QObject *parent)
 bool JackService::startServer() {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
 
+    QtJack::ParameterMap serverParameters = server().parameters();
+    serverParameters["realtime"].setValue(preset._realTimeProcessing);
+    serverParameters["port-max"].setValue(preset._maximumNumberOfPorts);
+
+    // Server parameters:
+    // port-max
+    // realtime
+
+    // client-timeout
+    // clock-source
+    // name
+    // realtime-priority
+    // replace-registry
+    // self-connect-mode
+    // sync
+    // temporary
+    // verbose
+
     QtJack::DriverMap drivers = _jackServer.availableDrivers();
     if(drivers.contains(preset._audioDriverName)) {
         QtJack::Driver driver = drivers[preset._audioDriverName];
         QtJack::ParameterMap driverParameters = driver.parameters();
+        driverParameters["capture"].setValue(preset._inputDeviceIdentifier);
+        driverParameters["device"].setValue(preset._outputDeviceIdentifier);
         driverParameters["rate"].setValue(preset._samplesPerSecond);
-        driverParameters["device"].setValue(preset._inputDeviceIdentifier);
+        driverParameters["period"].setValue(preset._samplesPerFrame);
+        driverParameters["nperiods"].setValue(preset._bufferSizeMultiplier);
+
+        // Driver parameters:
+        // capture
+        // device
+        // period
+        // rate
+        // nperiods
+
+        // dither
+        // duplex
+        // hwmeter
+        // hwmon
+
+        // midi-driver
+        // monitor
+
+        // inchannels
+        // input-latency
+        // outchannels
+        // output-latency
+        // shorts
+        // softmode
 
         if(!_jackServer.start(driver)) {
             qDebug() << "Could not start JACK server.";

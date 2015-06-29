@@ -32,6 +32,7 @@ public:
     };
 
     struct JackServerPreset {
+        QString         _presetName;
         int             _version;
 
         // Device settings
@@ -74,11 +75,11 @@ public:
         int     maximumNumberOfPorts;
     };
 
+    static JackServerPreset loadPreset(QString fileName, bool *ok = 0);
+    static bool savePreset(QString fileName, JackServerPreset preset);
+
+private:
     Settings();
     ~Settings();
-
-    JackServerPreset loadPreset(QString fileName, bool *ok = 0);
-    bool savePreset(QString fileName, JackServerPreset preset);
-
 };
 

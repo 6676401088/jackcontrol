@@ -39,6 +39,17 @@ public:
     ~JackPresetsWidget();
 
 protected slots:
+    void on_importPresetPushButton_clicked();
+    void on_exportPresetPushButton_clicked();
+    void on_savePresetPushButton_clicked();
+    void on_deletePresetPushButton_clicked();
+
+    void on_enableRealtimeProcessingCheckBox_clicked();
+    void on_sampleRateComboBox_currentTextChanged(QString text);
+    void on_samplesPerFrameComboBox_currentTextChanged(QString text);
+    void on_numberOfBuffersSpinBox_valueChanged(int value);
+    void on_maximumNumberOfPortsComboBox_currentTextChanged(QString text);
+
     void updateWithPreset(Settings::JackServerPreset preset, QStringList *errorReport = 0);
 
     void audioDriverNameChanged(QString driverName);

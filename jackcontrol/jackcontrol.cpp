@@ -21,6 +21,10 @@
 // Own includes
 #include "jackcontrol.h"
 #include "mainwindow.h"
+#include "settings.h"
+
+// Qt includes
+#include <QDir>
 
 void JackControl::initialize(int& argc, char **argv) {
     _application = new QApplication(argc, argv);
@@ -30,7 +34,11 @@ int JackControl::run() {
     MainWindow mainWindow;
     mainWindow.show();
 
-    return _application->exec();
+    setCurrentPreset(Settings::loadPreset(QDir::home().filePath(".config/jackcontrol/default.preset")));
+    int status = _application->exec();
+
+    Settings::savePreset(QDir::home().filePath(".config/jackcontrol/default.preset"), _currentPreset);
+    return status;
 }
 
 void JackControl::setCurrentPreset(Settings::JackServerPreset jackServerPreset) {

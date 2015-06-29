@@ -63,11 +63,57 @@ JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
     _ui->outputDeviceComboBox->setOperationModeFilter(Settings::OperationModePlayback);
 
     _ui->operationModeComboBox->setCurrentIndex(0);
+}
 
+void JackPresetsWidget::on_importPresetPushButton_clicked() {
+
+}
+
+void JackPresetsWidget::on_exportPresetPushButton_clicked() {
+
+}
+
+void JackPresetsWidget::on_savePresetPushButton_clicked() {
+
+}
+
+void JackPresetsWidget::on_deletePresetPushButton_clicked() {
+
+}
+
+void JackPresetsWidget::on_enableRealtimeProcessingCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._realTimeProcessing = _ui->enableRealtimeProcessingCheckBox->checkState() == Qt::Checked;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_sampleRateComboBox_currentTextChanged(QString text) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._samplesPerSecond = text.toInt();
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_samplesPerFrameComboBox_currentTextChanged(QString text) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._samplesPerFrame = text.toInt();
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_numberOfBuffersSpinBox_valueChanged(int value) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._bufferSizeMultiplier = value;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_maximumNumberOfPortsComboBox_currentTextChanged(QString text) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._maximumNumberOfPorts = text.toInt();
+    JackControl::instance().setCurrentPreset(preset);
 }
 
 void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStringList *errorReport) {
 
+    _ui->presetComboBox->setCurrentText(preset._presetName);
     // Device settings
     int numberOfAvailableAudioDrivers = _ui->audioDriverComboBox->count();
     bool foundAudioDriver = false;

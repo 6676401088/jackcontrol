@@ -23,6 +23,7 @@
 
 // Qt includes
 #include <QSettings>
+#include <QFileInfo>
 
 Settings::Settings() {
 }
@@ -33,16 +34,20 @@ Settings::~Settings() {
 Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
     QSettings settings(fileName, QSettings::IniFormat);
     JackServerPreset preset;
+
+    QFileInfo fileInfo(fileName);
+    preset._presetName = fileInfo.fileName();
+
     QString operationMode;
     QStringList keys = settings.allKeys();
     if(keys.contains("version")) {
         switch(settings.value("version").toInt()) {
             case 1:
-                preset._version = 1;
+                preset._version                 = 1;
 
                 // Device settings
-                preset._audioDriverName = settings.value("audioDriverName").toString();
-                preset._midiDriverName = settings.value("midiDriverName").toString();
+                preset._audioDriverName         = settings.value("audioDriverName").toString();
+                preset._midiDriverName          = settings.value("midiDriverName").toString();
 
                 operationMode = settings.value("operationMode").toString().toLower();
                 if(operationMode == "duplex") {
@@ -55,15 +60,15 @@ Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
                     preset._operationMode = Settings::OperationModePlayback;
                 }
 
-                preset._inputDeviceIdentifier = settings.value("inputDeviceIdentifier").toString();
-                preset._outputDeviceIdentifier = settings.value("outputDeviceIdentifier").toString();
+                preset._inputDeviceIdentifier   = settings.value("inputDeviceIdentifier").toString();
+                preset._outputDeviceIdentifier  = settings.value("outputDeviceIdentifier").toString();
 
                 // Audio processing
-                preset._realTimeProcessing = settings.value("realTimeProcessing").toBool();
-                preset._samplesPerFrame = settings.value("samplesPerFrame").toInt();
-                preset._samplesPerSecond = settings.value("samplesPerSecond").toInt();
-                preset._bufferSizeMultiplier = settings.value("bufferSizeMultiplier").toInt();
-                preset._maximumNumberOfPorts = settings.value("maximumNumberOfPorts").toInt();
+                preset._realTimeProcessing      = settings.value("realTimeProcessing").toBool();
+                preset._samplesPerFrame         = settings.value("samplesPerFrame").toInt();
+                preset._samplesPerSecond        = settings.value("samplesPerSecond").toInt();
+                preset._bufferSizeMultiplier    = settings.value("bufferSizeMultiplier").toInt();
+                preset._maximumNumberOfPorts    = settings.value("maximumNumberOfPorts").toInt();
 
                 if(ok) { (*ok) = true; }
                 break;
@@ -82,9 +87,11 @@ bool Settings::savePreset(QString fileName, JackServerPreset preset) {
     switch (preset._version) {
     default:
     case 1:
+        settings.setValue("version",                1);
+
         // Device settings
-        settings.setValue("audioDriverName", preset._audioDriverName);
-        settings.setValue("midiDriverName", preset._midiDriverName);
+        settings.setValue("audioDriverName",        preset._audioDriverName);
+        settings.setValue("midiDriverName",         preset._midiDriverName);
 
         switch(preset._operationMode) {
             case OperationModeDuplex:
@@ -98,15 +105,15 @@ bool Settings::savePreset(QString fileName, JackServerPreset preset) {
                 break;
         }
 
-        settings.setValue("inputDeviceIdentifier", preset._inputDeviceIdentifier);
-        settings.setValue("outputDeviceIdentigier", preset._outputDeviceIdentifier);
+        settings.setValue("inputDeviceIdentifier",  preset._inputDeviceIdentifier);
+        settings.setValue("outputDeviceIdentifier", preset._outputDeviceIdentifier);
 
         // Audio processing
-        settings.setValue("realTimeProcessing", preset._realTimeProcessing);
-        settings.setValue("samplesPerFrame", preset._samplesPerFrame);
-        settings.setValue("samplesPerSecond", preset._samplesPerSecond);
-        settings.setValue("bufferSizeMultiplier", preset._bufferSizeMultiplier);
-        settings.setValue("maximumNumberOfPorts", preset._maximumNumberOfPorts);
+        settings.setValue("realTimeProcessing",     preset._realTimeProcessing);
+        settings.setValue("samplesPerFrame",        preset._samplesPerFrame);
+        settings.setValue("samplesPerSecond",       preset._samplesPerSecond);
+        settings.setValue("bufferSizeMultiplier",   preset._bufferSizeMultiplier);
+        settings.setValue("maximumNumberOfPorts",   preset._maximumNumberOfPorts);
         break;
     }
 
