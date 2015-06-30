@@ -26,56 +26,55 @@ MessagesHighlighter::MessagesHighlighter(QTextDocument *document) :
 
     QStringList errorPatterns;
     errorPatterns
-       << ".*[Cc]{1}ould not.*"
-       << ".*[Cc]{1}annot.*"
-       << ".*[Ff]{1}ail.*"
-       << ".*[Ee]{1}rror.*";
+            << ".*[Cc]{1}ould not.*"
+            << ".*[Cc]{1}annot.*"
+            << ".*[Ff]{1}ail.*"
+            << ".*[Ee]{1}rror.*";
 
-     QStringList keywordPatterns;
-     keywordPatterns
-        << "\\bALSA:"
-        << "Started JACK server successfully."
-        << "Stopped JACK server successfully."
-        << "Server is not running"
-        << "\\brealtime mode\\b"
-        << "\\bnon-realtime mode\\b"
-        << "bit\\b"
-        << "Hz\\b"
-        << "\\bperiod\\b"
-        << "\\bperiods\\b"
-        << "\\bframes\\b"
-        << "\\bbuffer\\b"
-        << "\\b .*\\|.*\\b";
+    QStringList keywordPatterns;
+    keywordPatterns
+            << "\\bALSA:"
+            << "Started JACK server successfully."
+            << "Stopped JACK server successfully."
+            << "Server is not running"
+            << "\\brealtime mode\\b"
+            << "\\bnon-realtime mode\\b"
+            << "bit\\b"
+            << "Hz\\b"
+            << "\\bperiod\\b"
+            << "\\bperiods\\b"
+            << "\\bframes\\b"
+            << "\\bbuffer\\b"
+            << "\\b .*\\|.*\\b";
 
-     _errorFormat.setForeground(Qt::red);
-     foreach(QString pattern, errorPatterns) {
-         rule.pattern = QRegExp(pattern);
-         rule.format = _errorFormat;
-         highlightingRules.append(rule);
-     }
-     _keywordFormat.setFontWeight(QFont::Bold);
-     foreach(QString pattern, keywordPatterns) {
-         rule.pattern = QRegExp(pattern);
-         rule.format = _keywordFormat;
-         highlightingRules.append(rule);
-     }
+    _errorFormat.setForeground(Qt::red);
+    foreach(QString pattern, errorPatterns) {
+        rule.pattern = QRegExp(pattern);
+        rule.format = _errorFormat;
+        highlightingRules.append(rule);
+    }
 
+    _keywordFormat.setFontWeight(QFont::Bold);
+    foreach(QString pattern, keywordPatterns) {
+        rule.pattern = QRegExp(pattern);
+        rule.format = _keywordFormat;
+        highlightingRules.append(rule);
+    }
 
+    _numberFormat.setFontWeight(QFont::Bold);
+    rule.pattern = QRegExp("\\b[-0-9\\.\\,]+");
+    rule.format = _numberFormat;
+    highlightingRules.append(rule);
 
-     _numberFormat.setFontWeight(QFont::Bold);
-     rule.pattern = QRegExp("\\b[-0-9\\.\\,]+");
-     rule.format = _numberFormat;
-     highlightingRules.append(rule);
+    _quotationFormat.setFontWeight(QFont::Bold);
+    rule.pattern = QRegExp("\".*\"");
+    rule.format = _quotationFormat;
+    highlightingRules.append(rule);
 
-     _quotationFormat.setFontWeight(QFont::Bold);
-     rule.pattern = QRegExp("\".*\"");
-     rule.format = _quotationFormat;
-     highlightingRules.append(rule);
-
-     _timestampFormat.setForeground(Qt::gray);
-     rule.pattern = QRegExp("\\[.*\\]");
-     rule.format = _timestampFormat;
-     highlightingRules.append(rule);
+    _timestampFormat.setForeground(Qt::gray);
+    rule.pattern = QRegExp("\\[.*\\]");
+    rule.format = _timestampFormat;
+    highlightingRules.append(rule);
 }
 
 MessagesHighlighter::~MessagesHighlighter() {

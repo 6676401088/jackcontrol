@@ -23,6 +23,7 @@
 
 // Qt includes
 #include <QFileInfo>
+#include <QStringList>
 
 Settings::Settings() {
 }

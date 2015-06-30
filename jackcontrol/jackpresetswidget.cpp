@@ -20,6 +20,7 @@
 // Qt includes
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QLineEdit>
 
 // Own includes
 #include "jackpresetswidget.h"
@@ -56,8 +57,8 @@ JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
     }
 
     if(drivers.size() > 0) {
-        _ui->inputDeviceComboBox->setDriverName(drivers.first().name());
-        _ui->outputDeviceComboBox->setDriverName(drivers.first().name());
+        _ui->inputDeviceComboBox->setDriverName(drivers[0].name());
+        _ui->outputDeviceComboBox->setDriverName(drivers[0].name());
 
         _ui->inputDeviceComboBox->update();
         _ui->outputDeviceComboBox->update();
@@ -138,8 +139,7 @@ void JackPresetsWidget::on_maximumNumberOfPortsComboBox_currentTextChanged(QStri
 }
 
 void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStringList *errorReport) {
-
-    _ui->presetComboBox->setCurrentText(preset._presetName);
+    _ui->presetComboBox->lineEdit()->setText(preset._presetName);
     // Device settings
     int numberOfAvailableAudioDrivers = _ui->audioDriverComboBox->count();
     bool foundAudioDriver = false;
@@ -237,7 +237,7 @@ void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStr
                 errorReport->append(tr("Samples per frame is %1, but must be 4096 or less.").arg(preset._samplesPerFrame));
             }
         } else {
-            _ui->samplesPerFrameComboBox->setCurrentText(QString("%1").arg(preset._samplesPerFrame));
+            _ui->samplesPerFrameComboBox->lineEdit()->setText(QString("%1").arg(preset._samplesPerFrame));
         }
     }
 
@@ -270,7 +270,7 @@ void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStr
             errorReport->append(tr("Maximum number of ports is %1, but must be 1 or greater.").arg(preset._maximumNumberOfPorts));
         }
     } else {
-        _ui->maximumNumberOfPortsComboBox->setCurrentText(QString("%1").arg(preset._maximumNumberOfPorts));
+        _ui->maximumNumberOfPortsComboBox->lineEdit()->setText(QString("%1").arg(preset._maximumNumberOfPorts));
     }
 
     // Advanced configuration

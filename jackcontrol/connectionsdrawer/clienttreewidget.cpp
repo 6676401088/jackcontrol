@@ -42,8 +42,8 @@ ClientTreeWidget::ClientTreeWidget(QWidget *parent)
     : QTreeWidget(parent) {
     QHeaderView *headerView = QTreeWidget::header();
     headerView->setDefaultAlignment(Qt::AlignLeft);
-    headerView->setSectionsMovable(false);
-    headerView->setSectionsClickable(true);
+    //headerView->setSectionsMovable(false);
+    //headerView->setSectionsClickable(true);
 
     headerView->setSortIndicatorShown(true);
     headerView->setStretchLastSection(true);
