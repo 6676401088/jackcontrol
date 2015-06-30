@@ -44,7 +44,7 @@ JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
 
     connect(_ui->inputDeviceComboBox, SIGNAL(activated(int)),
             this, SLOT(inputDeviceActivated(int)));
-    connect(_ui->inputDeviceComboBox, SIGNAL(activated(int)),
+    connect(_ui->outputDeviceComboBox, SIGNAL(activated(int)),
             this, SLOT(outputDeviceActivated(int)));
 
     connect(_ui->sampleRateComboBox, SIGNAL(activated(QString)),

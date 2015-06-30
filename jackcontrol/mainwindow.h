@@ -54,7 +54,9 @@ public slots:
     void on_actionTransportStop_triggered();
     void on_actionTransportForward_triggered();
 
-    void message(QString message, JackService::MessageType messageType);
+    void on_exportLogPushButton_clicked();
+
+    void message(QString message);
 
 protected:
     void closeEvent(QCloseEvent *event);

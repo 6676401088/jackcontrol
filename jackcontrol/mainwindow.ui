@@ -16,12 +16,20 @@
     <height>740</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>FreeSans</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>JACK Control</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
     <normaloff>:/images/audio_out.svg</normaloff>:/images/audio_out.svg</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -434,13 +442,44 @@
          <widget class="QTextEdit" name="messagesTextEdit">
           <property name="font">
            <font>
-            <family>Ubuntu Mono</family>
+            <family>FreeSans</family>
+            <pointsize>12</pointsize>
+            <stylestrategy>PreferAntialias</stylestrategy>
+            <kerning>false</kerning>
            </font>
           </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
          </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <spacer name="horizontalSpacer_8">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="exportLogPushButton">
+            <property name="text">
+             <string>Export</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resources.qrc">
+              <normaloff>:/images/document-export.svg</normaloff>:/images/document-export.svg</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>

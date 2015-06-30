@@ -1,5 +1,4 @@
 /****************************************************************************
-   Copyright (C) 2003-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2015, Jacob Dawid <jacob@omg-it.works>
 
    This program is free software; you can redistribute it and/or

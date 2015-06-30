@@ -17,12 +17,6 @@
 
 *****************************************************************************/
 
-// Own includes
-#include "mainwindow.h"
-
-// uic includes
-#include "ui_mainwindow.h"
-
 // Qt includes
 #include <QDebug>
 #include <QTime>
@@ -30,6 +24,15 @@
 #include <QCloseEvent>
 #include <QFontDatabase>
 #include <QFont>
+#include <QFileDialog>
+#include <QFile>
+
+// Own includes
+#include "mainwindow.h"
+#include "messageshighlighter.h"
+
+// uic includes
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -52,8 +55,12 @@ MainWindow::MainWindow(QWidget *parent) :
     _ui->tabConfiguration->setEnabled(true);
     _ui->tabConnections->setEnabled(false);
 
-    connect(&JackService::instance(), SIGNAL(message(QString,JackService::MessageType)),
-            this, SLOT(message(QString,JackService::MessageType)));
+    _ui->serverStateValueDisplayLabel->setText("UNKNOWN");
+
+    new MessagesHighlighter(_ui->messagesTextEdit->document());
+
+    connect(&JackService::instance(), SIGNAL(message(QString)),
+            this, SLOT(message(QString)));
 
     startTimer(100);
 }
@@ -70,8 +77,12 @@ void MainWindow::on_actionStartJackServer_triggered() {
         _ui->tabConnections->setEnabled(true);
 
         _ui->tabWidget->setCurrentWidget(_ui->tabConnections);
+
+        _ui->serverStateValueDisplayLabel->setText("RUNNING");
     } else {
         _ui->tabWidget->setCurrentWidget(_ui->tabMessages);
+
+        _ui->serverStateValueDisplayLabel->setText("ERROR");
     }
 }
 
@@ -81,6 +92,7 @@ void MainWindow::on_actionStopJackServer_triggered() {
         _ui->actionStartJackServer->setEnabled(true);
         _ui->tabConfiguration->setEnabled(true);
         _ui->tabConnections->setEnabled(false);
+        _ui->serverStateValueDisplayLabel->setText("STOPPED");
     }
 }
 
@@ -106,24 +118,34 @@ void MainWindow::on_actionTransportForward_triggered() {
 
 }
 
-void MainWindow::message(QString message, JackService::MessageType messageType) {
-    QString color;
-    QString timeStamp = QTime::currentTime().toString("[hh:mm:ss.zzz]");
+void MainWindow::on_exportLogPushButton_clicked() {
+    QString logFileName = QFileDialog::getSaveFileName(
+        this,
+        tr("Export log file"),
+        QDir::homePath(),
+        tr("Logfile (*.log)"));
 
-    switch (messageType) {
-    case JackService::MessageTypeNormal:
-        color = "#888888";
-        break;
-    case JackService::MessageTypeError:
-        color = "#ff3333";
-        break;
-    case JackService::MessageTypeStdOut:
-        color = "#229922";
-        break;
+    if(!logFileName.isEmpty()) {
+        if(!logFileName.endsWith(".log")) {
+            logFileName.append(".log");
+        }
+        QFile logFile(logFileName);
+        logFile.open(QFile::ReadWrite);
+        if(logFile.isOpen()) {
+            logFile.write(_ui->messagesTextEdit->toPlainText().toUtf8());
+            logFile.close();
+        } else {
+            QMessageBox::critical(
+                this,
+                tr("Could not write log file"),
+                tr("The targetted log file could not be opened for writing. You probably do not have the permissions to write to that file."));
+        }
     }
-    message.replace("\n", "<br />");
-    _ui->messagesTextEdit->append(QString("<font color=\"%1\">%2 %3</font>")
-                                 .arg(color)
+}
+
+void MainWindow::message(QString message) {
+    QString timeStamp = QTime::currentTime().toString("[hh:mm:ss.zzz]");
+    _ui->messagesTextEdit->append(QString("%1 %2")
                                  .arg(timeStamp)
                                  .arg(message));
 }

@@ -127,7 +127,7 @@ void JackService::stdOutActivated(int fileDescriptor) {
     int  cchBuffer = ::read(fileDescriptor, achBuffer, sizeof(achBuffer) - 1);
     if (cchBuffer > 0) {
         achBuffer[cchBuffer] = (char) 0;
-        emit message(achBuffer, MessageTypeStdOut);
+        emit message(achBuffer);
     }
 }
 

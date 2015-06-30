@@ -20,48 +20,29 @@
 #pragma once
 
 // Qt includes
-#include <QObject>
-#include <QSocketNotifier>
+#include <QSyntaxHighlighter>
+#include <QTextDocument>
 
-// QtJack includes
-#include <System>
-#include <Server>
-#include <Client>
-
-/**
- * @brief Central JACK service class
- * @author Jacob Dawid <jacob@omg-it.works>
- * Singleton. This class is used to represent this application as a JACK client
- * to the server.
- */
-class JackService :
-    public QObject {
-    Q_OBJECT
+class MessagesHighlighter :
+    public QSyntaxHighlighter {
 public:
-    static JackService& instance() {
-        static JackService jackService;
-        return jackService;
-    }
+    MessagesHighlighter(QTextDocument *document);
+    ~MessagesHighlighter();
 
-    bool startServer();
-    bool stopServer();
-
-    QtJack::Client& client();
-    QtJack::Server& server();
-
-signals:
-    void message(QString message);
-
-private slots:
-    void stdOutActivated(int fileDescriptor);
+protected:
+    void highlightBlock(const QString &text);
 
 private:
-    void setupStdOutRedirect();
+    struct HighlightingRule {
+        QRegExp pattern;
+        QTextCharFormat format;
+    };
 
-private:
-    JackService(QObject *parent = 0);
+    QVector<HighlightingRule> highlightingRules;
 
-    QSocketNotifier *_stdOutSocketNotifier;
-    QtJack::Server _jackServer;
-    QtJack::Client _jackClient;
+    QTextCharFormat _keywordFormat;
+    QTextCharFormat _errorFormat;
+    QTextCharFormat _timestampFormat;
+    QTextCharFormat _quotationFormat;
+    QTextCharFormat _numberFormat;
 };

@@ -34,7 +34,8 @@ HEADERS += \
     settings.h \
     jackpresetswidget.h \
     soundcardcombobox.h \
-    jackcontrol.h
+    jackcontrol.h \
+    messageshighlighter.h
 
 SOURCES += \
     statuswidget.cpp \
@@ -53,7 +54,8 @@ SOURCES += \
     settings.cpp \
     jackpresetswidget.cpp \
     soundcardcombobox.cpp \
-    jackcontrol.cpp
+    jackcontrol.cpp \
+    messageshighlighter.cpp
 
 FORMS += \
     statuswidget.ui \
