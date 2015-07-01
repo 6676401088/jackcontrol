@@ -36,7 +36,7 @@ bool JackService::startServer() {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
 
     QtJack::ParameterMap serverParameters = server().parameters();
-    serverParameters["realtime"].setValue(preset._realTimeProcessing);
+    serverParameters["realtime"].setValue(preset._enableRealtimeProcessing);
     serverParameters["port-max"].setValue(preset._maximumNumberOfPorts);
 
     // Server parameters:
@@ -60,43 +60,42 @@ bool JackService::startServer() {
         switch(preset._operationMode) {
         default:
         case Settings::OperationModeDuplex:
-            driverParameters["duplex"].setValue(true);
-            driverParameters["capture"].setValue(preset._inputDeviceIdentifier);
+            driverParameters["duplex"]  .setValue(true);
+            driverParameters["capture"] .setValue(preset._inputDeviceIdentifier);
             driverParameters["playback"].setValue(preset._outputDeviceIdentifier);
             break;
         case Settings::OperationModeCapture:
-            driverParameters["duplex"].setValue(false);
-            driverParameters["capture"].setValue(preset._inputDeviceIdentifier);
+            driverParameters["duplex"]  .setValue(false);
+            driverParameters["capture"] .setValue(preset._inputDeviceIdentifier);
             driverParameters["playback"].setValue("none");
             break;
         case Settings::OperationModePlayback:
-            driverParameters["duplex"].setValue(false);
-            driverParameters["capture"].setValue("none");
+            driverParameters["duplex"]  .setValue(false);
+            driverParameters["capture"] .setValue("none");
             driverParameters["playback"].setValue(preset._outputDeviceIdentifier);
             break;
         }
 
-        driverParameters["rate"].setValue(preset._samplesPerSecond);
-        driverParameters["period"].setValue(preset._samplesPerFrame);
+        driverParameters["rate"]    .setValue(preset._samplesPerSecond);
+        driverParameters["period"]  .setValue(preset._samplesPerFrame);
         driverParameters["nperiods"].setValue(preset._bufferSizeMultiplier);
+        driverParameters["hwmeter"] .setValue(preset._enableHardwareMetering);
+        driverParameters["hwmon"]   .setValue(preset._enableHardwareMonitoring);
+        driverParameters["monitor"] .setValue(preset._provideMonitorPorts);
 
         // Driver parameters:
         // capture
+        // duplex
         // device
         // period
         // rate
         // nperiods
-        driverParameters["dither"].setValue("triangular");
-
-
-        // dither
-        // duplex
         // hwmeter
         // hwmon
-
-        // midi-driver
         // monitor
 
+        // dither
+        // midi-driver
         // inchannels
         // input-latency
         // outchannels

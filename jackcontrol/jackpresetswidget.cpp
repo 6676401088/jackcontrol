@@ -38,19 +38,6 @@ JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
     connect(&JackControl::instance(), SIGNAL(currentPresetChanged(Settings::JackServerPreset)),
             this, SLOT(updateWithPreset(Settings::JackServerPreset)));
 
-    connect(_ui->audioDriverComboBox, SIGNAL(activated(QString)),
-            this, SLOT(audioDriverNameChanged(QString)));
-    connect(_ui->operationModeComboBox, SIGNAL(activated(int)),
-            this, SLOT(audioOperationModeChanged(int)));
-
-    connect(_ui->inputDeviceComboBox, SIGNAL(activated(int)),
-            this, SLOT(inputDeviceActivated(int)));
-    connect(_ui->outputDeviceComboBox, SIGNAL(activated(int)),
-            this, SLOT(outputDeviceActivated(int)));
-
-    connect(_ui->sampleRateComboBox, SIGNAL(activated(QString)),
-            this, SLOT(sampleRateActivated(QString)));
-
     QtJack::DriverMap drivers = JackService::instance().server().availableDrivers();
     foreach(QtJack::Driver driver, drivers) {
         _ui->audioDriverComboBox->addItem(driver.name());
@@ -66,7 +53,6 @@ JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
 
     _ui->inputDeviceComboBox->setOperationModeFilter(Settings::OperationModeCapture);
     _ui->outputDeviceComboBox->setOperationModeFilter(Settings::OperationModePlayback);
-
     _ui->operationModeComboBox->setCurrentIndex(0);
 }
 
@@ -110,7 +96,7 @@ void JackPresetsWidget::on_deletePresetPushButton_clicked() {
 
 void JackPresetsWidget::on_enableRealtimeProcessingCheckBox_clicked() {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
-    preset._realTimeProcessing = _ui->enableRealtimeProcessingCheckBox->checkState() == Qt::Checked;
+    preset._enableRealtimeProcessing = _ui->enableRealtimeProcessingCheckBox->checkState() == Qt::Checked;
     JackControl::instance().setCurrentPreset(preset);
 }
 
@@ -135,6 +121,28 @@ void JackPresetsWidget::on_numberOfBuffersSpinBox_valueChanged(int value) {
 void JackPresetsWidget::on_maximumNumberOfPortsComboBox_currentIndexChanged(int index) {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
     preset._maximumNumberOfPorts = _ui->maximumNumberOfPortsComboBox->itemText(index).toInt();
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_ditherComboBox_currentIndexChanged(int index) {
+
+}
+
+void JackPresetsWidget::on_enableHardwareMonitoringCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._enableHardwareMonitoring = _ui->enableHardwareMonitoringCheckBox->checkState() == Qt::Checked;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_enableHardwareMeteringCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._enableHardwareMetering = _ui->enableHardwareMeteringCheckBox->checkState() == Qt::Checked;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_provideMonitorPortsCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._provideMonitorPorts = _ui->provideMonitorPortsCheckBox->checkState() == Qt::Checked;
     JackControl::instance().setCurrentPreset(preset);
 }
 
@@ -237,7 +245,7 @@ void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStr
         }
     }
 
-    _ui->enableRealtimeProcessingCheckBox->setChecked(preset._realTimeProcessing);
+    _ui->enableRealtimeProcessingCheckBox->setChecked(preset._enableRealtimeProcessing);
 
     // Audio processing
     if(preset._samplesPerFrame < 1) {
@@ -312,7 +320,7 @@ void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStr
 //    int     maximumNumberOfPorts;
 }
 
-void JackPresetsWidget::audioDriverNameChanged(QString driverName) {
+void JackPresetsWidget::on_audioDriverComboBox_activated(QString driverName) {
     _ui->inputDeviceComboBox->setDriverName(driverName);
     _ui->outputDeviceComboBox->setDriverName(driverName);
 
@@ -321,7 +329,7 @@ void JackPresetsWidget::audioDriverNameChanged(QString driverName) {
     JackControl::instance().setCurrentPreset(preset);
 }
 
-void JackPresetsWidget::audioOperationModeChanged(int operationMode) {
+void JackPresetsWidget::on_operationModeComboBox_activated(int operationMode) {
     Q_UNUSED(operationMode);
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
     switch(operationMode) {
@@ -344,19 +352,19 @@ void JackPresetsWidget::audioOperationModeChanged(int operationMode) {
     JackControl::instance().setCurrentPreset(preset);
 }
 
-void JackPresetsWidget::inputDeviceActivated(int index) {
+void JackPresetsWidget::on_inputDeviceComboBox_activated(int index) {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
     preset._inputDeviceIdentifier = _ui->inputDeviceComboBox->itemData(index).toString();
     JackControl::instance().setCurrentPreset(preset);
 }
 
-void JackPresetsWidget::outputDeviceActivated(int index) {
+void JackPresetsWidget::on_outputDeviceComboBox_activated(int index) {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
     preset._outputDeviceIdentifier = _ui->outputDeviceComboBox->itemData(index).toString();
     JackControl::instance().setCurrentPreset(preset);
 }
 
-void JackPresetsWidget::sampleRateActivated(QString sampleRate) {
+void JackPresetsWidget::on_sampleRateComboBox_activated(QString sampleRate) {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
     preset._samplesPerFrame = sampleRate.toInt();
     JackControl::instance().setCurrentPreset(preset);

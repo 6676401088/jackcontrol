@@ -418,7 +418,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="2" column="0">
-          <widget class="QLabel" name="PeriodsTextLabel">
+          <widget class="QLabel" name="periodsTextLabel">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -504,7 +504,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="SampleRateTextLabel">
+          <widget class="QLabel" name="sampleRateTextLabel">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -532,21 +532,21 @@
           </widget>
          </item>
          <item row="1" column="2">
-          <widget class="QLabel" name="label_12">
+          <widget class="QLabel" name="hzTextLabel">
            <property name="text">
             <string>Hz</string>
            </property>
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="QLabel" name="label_11">
+          <widget class="QLabel" name="samplesTextLabel">
            <property name="text">
             <string>Samples</string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QLabel" name="PortMaxTextLabel">
+          <widget class="QLabel" name="portMaxTextLabel">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -642,7 +642,7 @@
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QLabel" name="FramesTextLabel">
+          <widget class="QLabel" name="framesTextLabel">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -715,7 +715,7 @@
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="DitherTextLabel">
+          <widget class="QLabel" name="ditherTextLabel">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -740,7 +740,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QComboBox" name="DitherComboBox">
+          <widget class="QComboBox" name="ditherComboBox">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -806,7 +806,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QCheckBox" name="HWMonCheckBox">
+          <widget class="QCheckBox" name="enableHardwareMonitoringCheckBox">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -825,7 +825,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QCheckBox" name="HWMeterCheckBox">
+          <widget class="QCheckBox" name="enableHardwareMeteringCheckBox">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -844,7 +844,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QCheckBox" name="MonitorCheckBox">
+          <widget class="QCheckBox" name="provideMonitorPortsCheckBox">
            <property name="font">
             <font>
              <weight>50</weight>

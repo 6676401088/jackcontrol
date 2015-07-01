@@ -32,9 +32,15 @@ public:
         OperationModeDuplex
     };
 
+    enum DitherMode {
+        DitherModeNone,
+        DitherModeRectangular,
+        DitherModeShaped,
+        DitherModeTriangular
+    };
+
     struct JackControlSettings {
         int             _version;
-
     };
 
     struct JackServerPreset {
@@ -49,36 +55,33 @@ public:
         QString         _outputDeviceIdentifier;
 
         // Audio processing
-        bool            _realTimeProcessing;
+        bool            _enableRealtimeProcessing;
         int             _samplesPerFrame;
         int             _samplesPerSecond;
         int             _bufferSizeMultiplier;
         int             _maximumNumberOfPorts;
+        bool            _provideMonitorPorts;
+        bool            _enableHardwareMonitoring;
+        bool            _enableHardwareMetering;
+        DitherMode   _ditherMode;
 
         // Advanced configuration
         bool    softMode;
-        bool    monitor;
         bool    shorts;
         bool    noMemoryLock;
         bool    unlockMemory;
-        bool    HWMonitor;
-        bool    HWMeter;
         bool    ignoreHW;
         int     priority;
         int     wordLength;
         int     wait;
         int     channels;
-
-        int     dither;
         int     timeout;
 
         int     inputChannels;
         int     outputChannels;
         int     inputLatency;
         int     outputLatency;
-        int     startDelay;
         bool    verbose;
-        int     maximumNumberOfPorts;
     };
 
     static JackControlSettings loadJackControlSettings(QString fileName, bool *ok = 0);

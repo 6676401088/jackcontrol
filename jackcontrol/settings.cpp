@@ -140,15 +140,32 @@ bool Settings::loadJackServerPresetVersion1(
         jackServerPreset._operationMode = Settings::OperationModePlayback;
     }
 
-    jackServerPreset._inputDeviceIdentifier   = settings.value("inputDeviceIdentifier").toString();
-    jackServerPreset._outputDeviceIdentifier  = settings.value("outputDeviceIdentifier").toString();
+    QString ditherMode = settings.value("ditherMode").toString().toLower();
+    if(ditherMode == "none") {
+        jackServerPreset._ditherMode = Settings::DitherModeNone;
+    } else
+    if(ditherMode == "triangular") {
+        jackServerPreset._ditherMode = Settings::DitherModeTriangular;
+    } else
+    if(ditherMode == "shaped") {
+        jackServerPreset._ditherMode = Settings::DitherModeShaped;
+    } else
+    if(ditherMode == "rectangular") {
+        jackServerPreset._ditherMode = Settings::DitherModeRectangular;
+    }
+
+    jackServerPreset._inputDeviceIdentifier     = settings.value("inputDeviceIdentifier").toString();
+    jackServerPreset._outputDeviceIdentifier    = settings.value("outputDeviceIdentifier").toString();
 
     // Audio processing
-    jackServerPreset._realTimeProcessing      = settings.value("realTimeProcessing").toBool();
-    jackServerPreset._samplesPerFrame         = settings.value("samplesPerFrame").toInt();
-    jackServerPreset._samplesPerSecond        = settings.value("samplesPerSecond").toInt();
-    jackServerPreset._bufferSizeMultiplier    = settings.value("bufferSizeMultiplier").toInt();
-    jackServerPreset._maximumNumberOfPorts    = settings.value("maximumNumberOfPorts").toInt();
+    jackServerPreset._enableRealtimeProcessing  = settings.value("enableRealtimeProcessing").toBool();
+    jackServerPreset._samplesPerFrame           = settings.value("samplesPerFrame").toInt();
+    jackServerPreset._samplesPerSecond          = settings.value("samplesPerSecond").toInt();
+    jackServerPreset._bufferSizeMultiplier      = settings.value("bufferSizeMultiplier").toInt();
+    jackServerPreset._maximumNumberOfPorts      = settings.value("maximumNumberOfPorts").toInt();
+    jackServerPreset._enableHardwareMetering    = settings.value("enableHardwareMetering").toBool();
+    jackServerPreset._enableHardwareMonitoring  = settings.value("enableHardwareMonitoring").toBool();
+    jackServerPreset._provideMonitorPorts       = settings.value("provideMonitorPorts").toBool();
     return true;
 }
 
@@ -186,15 +203,33 @@ bool Settings::saveJackServerPresetVersion1(
             break;
     }
 
-    settings.setValue("inputDeviceIdentifier",  jackServerPreset._inputDeviceIdentifier);
-    settings.setValue("outputDeviceIdentifier", jackServerPreset._outputDeviceIdentifier);
+    switch(jackServerPreset._ditherMode) {
+        case DitherModeNone:
+            settings.setValue("ditherMode", "none");
+            break;
+        case DitherModeTriangular:
+            settings.setValue("ditherMode", "triangular");
+            break;
+        case DitherModeShaped:
+            settings.setValue("ditherMode", "shaped");
+            break;
+        case DitherModeRectangular:
+            settings.setValue("ditherMode", "rectangular");
+            break;
+    }
+
+    settings.setValue("inputDeviceIdentifier",      jackServerPreset._inputDeviceIdentifier);
+    settings.setValue("outputDeviceIdentifier",     jackServerPreset._outputDeviceIdentifier);
 
     // Audio processing
-    settings.setValue("realTimeProcessing",     jackServerPreset._realTimeProcessing);
-    settings.setValue("samplesPerFrame",        jackServerPreset._samplesPerFrame);
-    settings.setValue("samplesPerSecond",       jackServerPreset._samplesPerSecond);
-    settings.setValue("bufferSizeMultiplier",   jackServerPreset._bufferSizeMultiplier);
-    settings.setValue("maximumNumberOfPorts",   jackServerPreset._maximumNumberOfPorts);
+    settings.setValue("enableRealtimeProcessing",   jackServerPreset._enableRealtimeProcessing);
+    settings.setValue("samplesPerFrame",            jackServerPreset._samplesPerFrame);
+    settings.setValue("samplesPerSecond",           jackServerPreset._samplesPerSecond);
+    settings.setValue("bufferSizeMultiplier",       jackServerPreset._bufferSizeMultiplier);
+    settings.setValue("maximumNumberOfPorts",       jackServerPreset._maximumNumberOfPorts);
+    settings.setValue("enableHardwareMetering",     jackServerPreset._enableHardwareMetering);
+    settings.setValue("enableHardwareMetering",     jackServerPreset._enableHardwareMonitoring);
+    settings.setValue("provideMonitorPorts",        jackServerPreset._provideMonitorPorts);
     settings.sync();
     return true;
 }

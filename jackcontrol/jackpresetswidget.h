@@ -48,16 +48,20 @@ protected slots:
     void on_samplesPerFrameComboBox_currentIndexChanged(int index);
     void on_numberOfBuffersSpinBox_valueChanged(int value);
     void on_maximumNumberOfPortsComboBox_currentIndexChanged(int index);
+    void on_ditherComboBox_currentIndexChanged(int index);
+    void on_enableHardwareMonitoringCheckBox_clicked();
+    void on_enableHardwareMeteringCheckBox_clicked();
+    void on_provideMonitorPortsCheckBox_clicked();
 
     void updateWithPreset(Settings::JackServerPreset preset, QStringList *errorReport = 0);
 
-    void audioDriverNameChanged(QString driverName);
-    void audioOperationModeChanged(int operationMode);
+    void on_audioDriverComboBox_activated(QString driverName);
+    void on_operationModeComboBox_activated(int operationMode);
 
-    void inputDeviceActivated(int index);
-    void outputDeviceActivated(int index);
+    void on_inputDeviceComboBox_activated(int index);
+    void on_outputDeviceComboBox_activated(int index);
 
-    void sampleRateActivated(QString sampleRate);
+    void on_sampleRateComboBox_activated(QString sampleRate);
 
 private:
     Ui::JackPresetsWidget *_ui;
