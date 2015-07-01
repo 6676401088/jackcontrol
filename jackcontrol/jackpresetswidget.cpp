@@ -146,6 +146,13 @@ void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStr
     for(int i = 0; i < numberOfAvailableAudioDrivers; i++) {
         if(_ui->audioDriverComboBox->itemText(i) == preset._audioDriverName) {
             _ui->audioDriverComboBox->setCurrentIndex(i);
+
+            // Repopulate devices after audio driver has changed
+            _ui->inputDeviceComboBox->setDriverName(preset._audioDriverName);
+            _ui->outputDeviceComboBox->setDriverName(preset._audioDriverName);
+            _ui->inputDeviceComboBox->update();
+            _ui->outputDeviceComboBox->update();
+
             foundAudioDriver = true;
             break;
         }
@@ -176,12 +183,18 @@ void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStr
     switch(preset._operationMode) {
     case Settings::OperationModeDuplex:
         _ui->operationModeComboBox->setCurrentIndex(0);
+        _ui->inputDeviceComboBox->setEnabled(true);
+        _ui->outputDeviceComboBox->setEnabled(true);
         break;
     case Settings::OperationModeCapture:
         _ui->operationModeComboBox->setCurrentIndex(1);
+        _ui->inputDeviceComboBox->setEnabled(true);
+        _ui->outputDeviceComboBox->setEnabled(false);
         break;
     case Settings::OperationModePlayback:
         _ui->operationModeComboBox->setCurrentIndex(2);
+        _ui->inputDeviceComboBox->setEnabled(false);
+        _ui->outputDeviceComboBox->setEnabled(true);
         break;
     default:
         if(errorReport) {

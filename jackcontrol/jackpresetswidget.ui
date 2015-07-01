@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>739</width>
-    <height>623</height>
+    <height>541</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -417,8 +417,30 @@
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="1">
-          <widget class="QComboBox" name="sampleRateComboBox">
+         <item row="2" column="0">
+          <widget class="QLabel" name="PeriodsTextLabel">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Number of buffers:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+           <property name="buddy">
+            <cstring>numberOfBuffersSpinBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="samplesPerFrameComboBox">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -426,44 +448,57 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Sample rate in frames per second</string>
+            <string>Frames per period between process() calls</string>
            </property>
            <property name="editable">
-            <bool>false</bool>
+            <bool>true</bool>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
            </property>
            <item>
             <property name="text">
-             <string>22050</string>
+             <string>16</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>32000</string>
+             <string>32</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>44100</string>
+             <string>64</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>48000</string>
+             <string>128</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>88200</string>
+             <string>256</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>96000</string>
+             <string>512</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>192000</string>
+             <string>1024</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2048</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>4096</string>
             </property>
            </item>
           </widget>
@@ -496,28 +531,6 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="PeriodsTextLabel">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Number of buffers:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>false</bool>
-           </property>
-           <property name="buddy">
-            <cstring>numberOfBuffersSpinBox</cstring>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="2">
           <widget class="QLabel" name="label_12">
            <property name="text">
@@ -525,8 +538,15 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="FramesTextLabel">
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Samples</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="PortMaxTextLabel">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -534,7 +554,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Samples per frame:</string>
+            <string>Maximum number of ports:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -543,7 +563,7 @@
             <bool>false</bool>
            </property>
            <property name="buddy">
-            <cstring>samplesPerFrameComboBox</cstring>
+            <cstring>maximumNumberOfPortsComboBox</cstring>
            </property>
           </widget>
          </item>
@@ -621,15 +641,8 @@
            </item>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>Samples</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="PortMaxTextLabel">
+         <item row="0" column="0">
+          <widget class="QLabel" name="FramesTextLabel">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -637,7 +650,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Maximum number of ports:</string>
+            <string>Samples per frame:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -646,12 +659,12 @@
             <bool>false</bool>
            </property>
            <property name="buddy">
-            <cstring>maximumNumberOfPortsComboBox</cstring>
+            <cstring>samplesPerFrameComboBox</cstring>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="samplesPerFrameComboBox">
+         <item row="1" column="1">
+          <widget class="QComboBox" name="sampleRateComboBox">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -659,288 +672,49 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Frames per period between process() calls</string>
+            <string>Sample rate in frames per second</string>
            </property>
            <property name="editable">
-            <bool>true</bool>
-           </property>
-           <property name="frame">
-            <bool>true</bool>
-           </property>
-           <item>
-            <property name="text">
-             <string>16</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>32</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>64</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>128</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>256</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>512</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1024</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2048</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>4096</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="enableRealtimeProcessingCheckBox">
-         <property name="font">
-          <font>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string>Use realtime scheduling</string>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Enable &amp;realtime processing mode</string>
-         </property>
-         <property name="shortcut">
-          <string>Alt+R</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabAdvancedParametersAndTweaks">
-      <attribute name="icon">
-       <iconset resource="resources.qrc">
-        <normaloff>:/images/emblem-important.svg</normaloff>:/images/emblem-important.svg</iconset>
-      </attribute>
-      <attribute name="title">
-       <string>Advanced parameters and tweaks</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_8">
-       <item>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="1" column="2">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>ms</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QSpinBox" name="ChanSpinBox">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Maximum number of audio channels to allocate</string>
-           </property>
-           <property name="specialValueText">
-            <string>(default)</string>
-           </property>
-           <property name="maximum">
-            <number>999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Maximum number of hardware input channels:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="WaitTextLabel">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Dummy driver processing delay:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-           <property name="wordWrap">
             <bool>false</bool>
            </property>
-           <property name="buddy">
-            <cstring>WaitComboBox</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="2">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>Samples</string>
-           </property>
+           <item>
+            <property name="text">
+             <string>22050</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>32000</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>44100</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>48000</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>88200</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>96000</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>192000</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Maximum number of hardware output channels:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>External output latency:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSpinBox" name="InChannelsSpinBox">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Maximum input audio hardware channels to allocate</string>
-           </property>
-           <property name="specialValueText">
-            <string>(default)</string>
-           </property>
-           <property name="maximum">
-            <number>999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="2">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Samples</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="2">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>μs</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QSpinBox" name="OutChannelsSpinBox">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Maximum output audio hardware channels to allocate</string>
-           </property>
-           <property name="specialValueText">
-            <string>(default)</string>
-           </property>
-           <property name="maximum">
-            <number>999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QSpinBox" name="InLatencySpinBox">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>External input latency (frames)</string>
-           </property>
-           <property name="specialValueText">
-            <string>(default)</string>
-           </property>
-           <property name="maximum">
-            <number>9999999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="TimeoutTextLabel">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Plain</enum>
-           </property>
-           <property name="text">
-            <string>Client &amp;timeout:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>false</bool>
-           </property>
-           <property name="buddy">
-            <cstring>TimeoutComboBox</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
           <widget class="QLabel" name="DitherTextLabel">
            <property name="font">
             <font>
@@ -955,7 +729,7 @@
             <enum>QFrame::Plain</enum>
            </property>
            <property name="text">
-            <string>Dit&amp;hering:</string>
+            <string>Dithering:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -963,12 +737,9 @@
            <property name="wordWrap">
             <bool>false</bool>
            </property>
-           <property name="buddy">
-            <cstring>DitherComboBox</cstring>
-           </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item row="4" column="1">
           <widget class="QComboBox" name="DitherComboBox">
            <property name="font">
             <font>
@@ -1001,7 +772,177 @@
            </item>
           </widget>
          </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="enableRealtimeProcessingCheckBox">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Use realtime scheduling</string>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="text">
+            <string>Enable &amp;realtime processing mode</string>
+           </property>
+           <property name="shortcut">
+            <string>Alt+R</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="HWMonCheckBox">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Enable hardware monitoring of capture ports</string>
+           </property>
+           <property name="text">
+            <string>Hardware monitoring</string>
+           </property>
+           <property name="shortcut">
+            <string>Alt+O</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="HWMeterCheckBox">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Enable hardware metering on cards that support it</string>
+           </property>
+           <property name="text">
+            <string>Hardware metering</string>
+           </property>
+           <property name="shortcut">
+            <string>Alt+W</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="1">
+          <widget class="QCheckBox" name="MonitorCheckBox">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Provide output monitor ports</string>
+           </property>
+           <property name="text">
+            <string>Provide &amp;monitor ports</string>
+           </property>
+           <property name="shortcut">
+            <string>Alt+M</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabAdvancedParametersAndTweaks">
+      <attribute name="icon">
+       <iconset resource="resources.qrc">
+        <normaloff>:/images/emblem-important.svg</normaloff>:/images/emblem-important.svg</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Advanced parameters and tweaks</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="4" column="1">
+          <widget class="QSpinBox" name="InLatencySpinBox">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>External input latency (frames)</string>
+           </property>
+           <property name="specialValueText">
+            <string>(default)</string>
+           </property>
+           <property name="maximum">
+            <number>9999999</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Maximum number of hardware output channels:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Maximum number of hardware input channels:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QSpinBox" name="OutLatencySpinBox">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>External output latency (frames)</string>
+           </property>
+           <property name="specialValueText">
+            <string>(default)</string>
+           </property>
+           <property name="maximum">
+            <number>9999999</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
           <widget class="QComboBox" name="TimeoutComboBox">
            <property name="font">
             <font>
@@ -1051,14 +992,14 @@
           </widget>
          </item>
          <item row="5" column="0">
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>External input latency:</string>
+            <string>External output latency:</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
-          <widget class="QSpinBox" name="OutLatencySpinBox">
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="ChanSpinBox">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -1066,71 +1007,17 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>External output latency (frames)</string>
+            <string>Maximum number of audio channels to allocate</string>
            </property>
            <property name="specialValueText">
             <string>(default)</string>
            </property>
            <property name="maximum">
-            <number>9999999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Maximum number of audio channels:</string>
+            <number>999</number>
            </property>
           </widget>
          </item>
          <item row="7" column="1">
-          <widget class="QComboBox" name="WaitComboBox">
-           <property name="font">
-            <font>
-             <family>Sans Serif</family>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="acceptDrops">
-            <bool>false</bool>
-           </property>
-           <property name="toolTip">
-            <string>Number of microseconds to wait between engine processes (dummy)</string>
-           </property>
-           <property name="editable">
-            <bool>true</bool>
-           </property>
-           <item>
-            <property name="text">
-             <string>21333</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="WordLengthTextLabel">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>&amp;Word Length:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>false</bool>
-           </property>
-           <property name="buddy">
-            <cstring>WordLengthComboBox</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
           <widget class="QComboBox" name="WordLengthComboBox">
            <property name="font">
             <font>
@@ -1164,10 +1051,188 @@
            </item>
           </widget>
          </item>
-         <item row="8" column="2">
+         <item row="5" column="2">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Samples</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="WaitTextLabel">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Dummy driver processing delay:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+           <property name="buddy">
+            <cstring>WaitComboBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>ms</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Maximum number of audio channels:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>External input latency:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Samples</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QSpinBox" name="OutChannelsSpinBox">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Maximum output audio hardware channels to allocate</string>
+           </property>
+           <property name="specialValueText">
+            <string>(default)</string>
+           </property>
+           <property name="maximum">
+            <number>999</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="TimeoutTextLabel">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="text">
+            <string>Client &amp;timeout:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+           <property name="buddy">
+            <cstring>TimeoutComboBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="2">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>μs</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QComboBox" name="WaitComboBox">
+           <property name="font">
+            <font>
+             <family>Sans Serif</family>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="acceptDrops">
+            <bool>false</bool>
+           </property>
+           <property name="toolTip">
+            <string>Number of microseconds to wait between engine processes (dummy)</string>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>21333</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="7" column="2">
           <widget class="QLabel" name="label_10">
            <property name="text">
             <string>Bit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="WordLengthTextLabel">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>&amp;Word Length:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+           <property name="buddy">
+            <cstring>WordLengthComboBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="InChannelsSpinBox">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Maximum input audio hardware channels to allocate</string>
+           </property>
+           <property name="specialValueText">
+            <string>(default)</string>
+           </property>
+           <property name="maximum">
+            <number>999</number>
            </property>
           </widget>
          </item>
@@ -1181,7 +1246,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0">
+        <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
           <widget class="QCheckBox" name="NoMemLockCheckBox">
            <property name="font">
@@ -1201,8 +1266,8 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QCheckBox" name="VerboseCheckBox">
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="IgnoreHWCheckBox">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -1210,18 +1275,18 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Whether to give verbose output on messages</string>
+            <string>Ignore hardware period/buffer size</string>
            </property>
            <property name="text">
-            <string>&amp;Verbose messages</string>
+            <string>&amp;Ignore hardware buffer size</string>
            </property>
            <property name="shortcut">
-            <string>Alt+V</string>
+            <string>Alt+I</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
-          <widget class="QCheckBox" name="HWMonCheckBox">
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="UnlockMemCheckBox">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -1229,13 +1294,13 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Enable hardware monitoring of capture ports</string>
+            <string>Unlock memory of common toolkit libraries (GTK+, QT, FLTK, Wine)</string>
            </property>
            <property name="text">
-            <string>H/W M&amp;onitor</string>
+            <string>&amp;Unlock Memory</string>
            </property>
            <property name="shortcut">
-            <string>Alt+O</string>
+            <string>Alt+U</string>
            </property>
           </widget>
          </item>
@@ -1277,8 +1342,8 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <widget class="QCheckBox" name="HWMeterCheckBox">
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="VerboseCheckBox">
            <property name="font">
             <font>
              <weight>50</weight>
@@ -1286,70 +1351,13 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Enable hardware metering on cards that support it</string>
+            <string>Whether to give verbose output on messages</string>
            </property>
            <property name="text">
-            <string>H/&amp;W Meter</string>
+            <string>&amp;Verbose messages</string>
            </property>
            <property name="shortcut">
-            <string>Alt+W</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="UnlockMemCheckBox">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Unlock memory of common toolkit libraries (GTK+, QT, FLTK, Wine)</string>
-           </property>
-           <property name="text">
-            <string>&amp;Unlock Memory</string>
-           </property>
-           <property name="shortcut">
-            <string>Alt+U</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QCheckBox" name="MonitorCheckBox">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Provide output monitor ports</string>
-           </property>
-           <property name="text">
-            <string>&amp;Monitor</string>
-           </property>
-           <property name="shortcut">
-            <string>Alt+M</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QCheckBox" name="IgnoreHWCheckBox">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="toolTip">
-            <string>Ignore hardware period/buffer size</string>
-           </property>
-           <property name="text">
-            <string>&amp;Ignore H/W</string>
-           </property>
-           <property name="shortcut">
-            <string>Alt+I</string>
+            <string>Alt+V</string>
            </property>
           </widget>
          </item>
