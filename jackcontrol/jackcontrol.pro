@@ -5,6 +5,9 @@ DEFINES += \
   #SUPPORTS_COREAUDIO \
   #SUPPORTS_PORTAUDIO
 
+# Enable this if you want to build with JACK2
+#DEFINES += QTJACK_JACK2_SUPPORT
+
 TARGET = jackcontrol
 TEMPLATE = app
 QT += widgets
