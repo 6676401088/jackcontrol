@@ -114,15 +114,15 @@ void JackPresetsWidget::on_enableRealtimeProcessingCheckBox_clicked() {
     JackControl::instance().setCurrentPreset(preset);
 }
 
-void JackPresetsWidget::on_sampleRateComboBox_currentTextChanged(QString text) {
+void JackPresetsWidget::on_sampleRateComboBox_currentIndexChanged(int index) {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
-    preset._samplesPerSecond = text.toInt();
+    preset._samplesPerSecond = _ui->sampleRateComboBox->itemText(index).toInt();
     JackControl::instance().setCurrentPreset(preset);
 }
 
-void JackPresetsWidget::on_samplesPerFrameComboBox_currentTextChanged(QString text) {
+void JackPresetsWidget::on_samplesPerFrameComboBox_currentIndexChanged(int index) {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
-    preset._samplesPerFrame = text.toInt();
+    preset._samplesPerFrame = _ui->samplesPerFrameComboBox->itemText(index).toInt();
     JackControl::instance().setCurrentPreset(preset);
 }
 
@@ -132,9 +132,9 @@ void JackPresetsWidget::on_numberOfBuffersSpinBox_valueChanged(int value) {
     JackControl::instance().setCurrentPreset(preset);
 }
 
-void JackPresetsWidget::on_maximumNumberOfPortsComboBox_currentTextChanged(QString text) {
+void JackPresetsWidget::on_maximumNumberOfPortsComboBox_currentIndexChanged(int index) {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
-    preset._maximumNumberOfPorts = text.toInt();
+    preset._maximumNumberOfPorts = _ui->maximumNumberOfPortsComboBox->itemText(index).toInt();
     JackControl::instance().setCurrentPreset(preset);
 }
 

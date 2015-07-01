@@ -149,6 +149,7 @@ bool Settings::loadJackServerPresetVersion1(
     jackServerPreset._samplesPerSecond        = settings.value("samplesPerSecond").toInt();
     jackServerPreset._bufferSizeMultiplier    = settings.value("bufferSizeMultiplier").toInt();
     jackServerPreset._maximumNumberOfPorts    = settings.value("maximumNumberOfPorts").toInt();
+    return true;
 }
 
 bool Settings::savePreset(QString fileName, JackServerPreset jackServerPreset) {

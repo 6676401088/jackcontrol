@@ -44,10 +44,10 @@ protected slots:
     void on_deletePresetPushButton_clicked();
 
     void on_enableRealtimeProcessingCheckBox_clicked();
-    void on_sampleRateComboBox_currentTextChanged(QString text);
-    void on_samplesPerFrameComboBox_currentTextChanged(QString text);
+    void on_sampleRateComboBox_currentIndexChanged(int index);
+    void on_samplesPerFrameComboBox_currentIndexChanged(int index);
     void on_numberOfBuffersSpinBox_valueChanged(int value);
-    void on_maximumNumberOfPortsComboBox_currentTextChanged(QString text);
+    void on_maximumNumberOfPortsComboBox_currentIndexChanged(int index);
 
     void updateWithPreset(Settings::JackServerPreset preset, QStringList *errorReport = 0);
 
