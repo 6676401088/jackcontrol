@@ -20,8 +20,11 @@ Requirements
 ------------
 
 In contradiction to qjackctl, JACK Control does not use the autotools build
-system anymore. Also, it is based on Qt5, not Qt4. You will need Qt5, libjack,
-libjackserver and libjacknet to build.
+system anymore. It can be build with Qt4 as well as Qt5. You will need Qt and
+either the JACK1 or JACK2 libraries to build. For JACK2, please enable the
+following line you jackcontrol.pro:
+
+`#DEFINES += QTJACK_JACK2_SUPPORT`
 
 How to build
 ------------
