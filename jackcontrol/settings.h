@@ -63,25 +63,25 @@ public:
         bool            _provideMonitorPorts;
         bool            _enableHardwareMonitoring;
         bool            _enableHardwareMetering;
-        DitherMode   _ditherMode;
+        DitherMode      _ditherMode;
+        int             _realtimePriority;
 
         // Advanced configuration
-        bool    softMode;
-        bool    shorts;
-        bool    noMemoryLock;
-        bool    unlockMemory;
-        bool    ignoreHW;
-        int     priority;
-        int     wordLength;
-        int     wait;
-        int     channels;
-        int     timeout;
+        int             _clientTimeout;
+        int             _numberOfAudioChannels;
+        int             _numberOfHardwareInputChannels;
+        int             _numberOfHardwareOutputChannels;
+        int             _externalInputLatency;
+        int             _externalOutputLatency;
+        int             _dummyDriverProcessingDelay;
+        int             _wordLength;
 
-        int     inputChannels;
-        int     outputChannels;
-        int     inputLatency;
-        int     outputLatency;
-        bool    verbose;
+        bool            _noMemoryLock;
+        bool            _unlockMemory;
+        bool            _force16BitWordLength;
+        bool            _ignoreHardwareBufferSize;
+        bool            _enableSoftMode;
+        bool            _showVerboseMessages;
     };
 
     static JackControlSettings loadJackControlSettings(QString fileName, bool *ok = 0);

@@ -36,8 +36,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    _ui(new Ui::MainWindow)
-{
+    _ui(new Ui::MainWindow) {
     _ui->setupUi(this);
 
     QFontDatabase::addApplicationFont(":/fonts/digital-dream/DIGITALDREAM.ttf");
@@ -62,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&JackService::instance(), SIGNAL(message(QString)),
             this, SLOT(message(QString)));
 
-    startTimer(100);
+    startTimer(200);
 }
 
 MainWindow::~MainWindow() {
