@@ -916,10 +916,16 @@
             <string>External input latency (frames)</string>
            </property>
            <property name="specialValueText">
-            <string>default</string>
+            <string>any</string>
+           </property>
+           <property name="minimum">
+            <number>-1</number>
            </property>
            <property name="maximum">
             <number>9999999</number>
+           </property>
+           <property name="value">
+            <number>-1</number>
            </property>
           </widget>
          </item>
@@ -949,10 +955,16 @@
             <string>External output latency (frames)</string>
            </property>
            <property name="specialValueText">
-            <string>default</string>
+            <string>any</string>
+           </property>
+           <property name="minimum">
+            <number>-1</number>
            </property>
            <property name="maximum">
             <number>9999999</number>
+           </property>
+           <property name="value">
+            <number>-1</number>
            </property>
           </widget>
          </item>
@@ -1024,10 +1036,16 @@
             <string>Maximum number of audio channels to allocate</string>
            </property>
            <property name="specialValueText">
-            <string>default</string>
+            <string>does not apply</string>
+           </property>
+           <property name="minimum">
+            <number>-1</number>
            </property>
            <property name="maximum">
             <number>999</number>
+           </property>
+           <property name="value">
+            <number>-1</number>
            </property>
           </widget>
          </item>
@@ -1134,10 +1152,16 @@
             <string>Maximum output audio hardware channels to allocate</string>
            </property>
            <property name="specialValueText">
-            <string>default</string>
+            <string>does not apply</string>
+           </property>
+           <property name="minimum">
+            <number>-1</number>
            </property>
            <property name="maximum">
             <number>999</number>
+           </property>
+           <property name="value">
+            <number>-1</number>
            </property>
           </widget>
          </item>
@@ -1243,10 +1267,16 @@
             <string>Maximum input audio hardware channels to allocate</string>
            </property>
            <property name="specialValueText">
-            <string>default</string>
+            <string>does not apply</string>
+           </property>
+           <property name="minimum">
+            <number>-1</number>
            </property>
            <property name="maximum">
             <number>999</number>
+           </property>
+           <property name="value">
+            <number>-1</number>
            </property>
           </widget>
          </item>

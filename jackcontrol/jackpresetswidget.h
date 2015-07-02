@@ -39,29 +39,47 @@ public:
     ~JackPresetsWidget();
 
 protected slots:
+    // Preset management
     void on_importPresetPushButton_clicked();
     void on_exportPresetPushButton_clicked();
     void on_deletePresetPushButton_clicked();
 
-    void on_enableRealtimeProcessingCheckBox_clicked();
-    void on_sampleRateComboBox_currentIndexChanged(int index);
+    // Audio system
+    void on_audioDriverComboBox_activated(QString driverName);
+    // -- stub: midi driver --
+    void on_operationModeComboBox_activated(int operationMode);
+    void on_inputDeviceComboBox_activated(int index);
+    void on_outputDeviceComboBox_activated(int index);
+
+    // Audio processing
     void on_samplesPerFrameComboBox_currentIndexChanged(int index);
+    void on_sampleRateComboBox_currentIndexChanged(int index);
     void on_numberOfBuffersSpinBox_valueChanged(int value);
     void on_maximumNumberOfPortsComboBox_currentIndexChanged(int index);
     void on_ditherComboBox_currentIndexChanged(int index);
+    void on_realtimePrioritySpinBox_valueChanged(int value);
+    void on_enableRealtimeProcessingCheckBox_clicked();
     void on_enableHardwareMonitoringCheckBox_clicked();
     void on_enableHardwareMeteringCheckBox_clicked();
     void on_provideMonitorPortsCheckBox_clicked();
 
+    // Advanced parameters and tweaks
+    void on_clientTimeoutComboBox_currentIndexChanged(int index);
+    void on_maximumNumberOfAudioChannelsSpinBox_valueChanged(int value);
+    void on_maximumNumberOfHardwareInputChannelsSpinBox_valueChanged(int value);
+    void on_maximumNumberOfHardwareOutputChannelsSpinBox_valueChanged(int value);
+    void on_externalInputLatencySpinBox_valueChanged(int value);
+    void on_externalOutputLatencySpinBox_valueChanged(int value);
+    void on_dummyDriverProcessingDelayComboBox_currentIndexChanged(int index);
+    void on_wordLengthComboBox_currentIndexChanged(int index);
+    void on_noMemoryLockCheckBox_clicked();
+    void on_ignoreHardwareBufferSizeCheckBox_clicked();
+    void on_unlockMemoryCheckBox_clicked();
+    void on_enableSoftModeCheckBox_clicked();
+    void on_force16BitWordLengthCheckBox_clicked();
+    void on_showVerboseMessagesCheckBox_clicked();
+
     void updateWithPreset(Settings::JackServerPreset preset, QStringList *errorReport = 0);
-
-    void on_audioDriverComboBox_activated(QString driverName);
-    void on_operationModeComboBox_activated(int operationMode);
-
-    void on_inputDeviceComboBox_activated(int index);
-    void on_outputDeviceComboBox_activated(int index);
-
-    void on_sampleRateComboBox_activated(QString sampleRate);
 
 private:
     Ui::JackPresetsWidget *_ui;

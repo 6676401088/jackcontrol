@@ -68,9 +68,9 @@ public:
 
         // Advanced configuration
         int             _clientTimeout;
-        int             _numberOfAudioChannels;
-        int             _numberOfHardwareInputChannels;
-        int             _numberOfHardwareOutputChannels;
+        int             _maximumNumberOfAudioChannels;
+        int             _maximumNumberOfHardwareInputChannels;
+        int             _maximumNumberOfHardwareOutputChannels;
         int             _externalInputLatency;
         int             _externalOutputLatency;
         int             _dummyDriverProcessingDelay;

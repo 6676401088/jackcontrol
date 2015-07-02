@@ -171,9 +171,9 @@ bool Settings::loadJackServerPresetVersion1(
 
     // Advanced settings
     jackServerPreset._clientTimeout                     = settings.value("clientTimeout").toInt();
-    jackServerPreset._numberOfAudioChannels             = settings.value("numberOfAudioChannels").toInt();
-    jackServerPreset._numberOfHardwareInputChannels     = settings.value("numberOfHardwareInputChannels").toInt();
-    jackServerPreset._numberOfHardwareOutputChannels    = settings.value("numberOfHardwareOutputChannels").toInt();
+    jackServerPreset._maximumNumberOfAudioChannels             = settings.value("maximumNumberOfAudioChannels").toInt();
+    jackServerPreset._maximumNumberOfHardwareInputChannels     = settings.value("maximumNumberOfHardwareInputChannels").toInt();
+    jackServerPreset._maximumNumberOfHardwareOutputChannels    = settings.value("maximumNumberOfHardwareOutputChannels").toInt();
     jackServerPreset._externalInputLatency              = settings.value("externalInputLatency").toInt();
     jackServerPreset._externalOutputLatency             = settings.value("externalOutputLatency").toInt();
     jackServerPreset._dummyDriverProcessingDelay        = settings.value("dummyDriverProcessingDelay").toInt();
@@ -254,9 +254,9 @@ bool Settings::saveJackServerPresetVersion1(
 
     // Advanced settings
     settings.setValue("clientTimeout",                  jackServerPreset._clientTimeout);
-    settings.setValue("numberOfAudioChannels",          jackServerPreset._numberOfAudioChannels);
-    settings.setValue("numberOfHardwareInputChannels",  jackServerPreset._numberOfHardwareInputChannels);
-    settings.setValue("numberOfHardwareOutputChannels", jackServerPreset._numberOfHardwareOutputChannels);
+    settings.setValue("maximumNumberOfAudioChannels",          jackServerPreset._maximumNumberOfAudioChannels);
+    settings.setValue("maximumNumberOfHardwareInputChannels",  jackServerPreset._maximumNumberOfHardwareInputChannels);
+    settings.setValue("maximumNumberOfHardwareOutputChannels", jackServerPreset._maximumNumberOfHardwareOutputChannels);
     settings.setValue("externalInputLatency",           jackServerPreset._externalInputLatency);
     settings.setValue("externalOutputLatency",          jackServerPreset._externalOutputLatency);
     settings.setValue("dummyDriverProcessingDelay",     jackServerPreset._dummyDriverProcessingDelay);

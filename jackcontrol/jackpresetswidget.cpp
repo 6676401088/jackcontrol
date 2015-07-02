@@ -94,6 +94,50 @@ void JackPresetsWidget::on_deletePresetPushButton_clicked() {
 
 }
 
+void JackPresetsWidget::on_audioDriverComboBox_activated(QString driverName) {
+    _ui->inputDeviceComboBox->setDriverName(driverName);
+    _ui->outputDeviceComboBox->setDriverName(driverName);
+
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._audioDriverName = driverName;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_operationModeComboBox_activated(int operationMode) {
+    Q_UNUSED(operationMode);
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    switch(operationMode) {
+    case 0:
+        _ui->inputDeviceComboBox->setEnabled(true);
+        _ui->outputDeviceComboBox->setEnabled(true);
+        preset._operationMode = Settings::OperationModeDuplex;
+        break;
+    case 1:
+        _ui->inputDeviceComboBox->setEnabled(true);
+        _ui->outputDeviceComboBox->setEnabled(false);
+        preset._operationMode = Settings::OperationModeCapture;
+        break;
+    case 2:
+        _ui->inputDeviceComboBox->setEnabled(false);
+        _ui->outputDeviceComboBox->setEnabled(true);
+        preset._operationMode = Settings::OperationModePlayback;
+        break;
+    }
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_inputDeviceComboBox_activated(int index) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._inputDeviceIdentifier = _ui->inputDeviceComboBox->itemData(index).toString();
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_outputDeviceComboBox_activated(int index) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._outputDeviceIdentifier = _ui->outputDeviceComboBox->itemData(index).toString();
+    JackControl::instance().setCurrentPreset(preset);
+}
+
 void JackPresetsWidget::on_enableRealtimeProcessingCheckBox_clicked() {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
     preset._enableRealtimeProcessing = _ui->enableRealtimeProcessingCheckBox->checkState() == Qt::Checked;
@@ -128,6 +172,12 @@ void JackPresetsWidget::on_ditherComboBox_currentIndexChanged(int index) {
 
 }
 
+void JackPresetsWidget::on_realtimePrioritySpinBox_valueChanged(int value) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._realtimePriority = value;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
 void JackPresetsWidget::on_enableHardwareMonitoringCheckBox_clicked() {
     Settings::JackServerPreset preset = JackControl::instance().currentPreset();
     preset._enableHardwareMonitoring = _ui->enableHardwareMonitoringCheckBox->checkState() == Qt::Checked;
@@ -146,20 +196,106 @@ void JackPresetsWidget::on_provideMonitorPortsCheckBox_clicked() {
     JackControl::instance().setCurrentPreset(preset);
 }
 
+void JackPresetsWidget::on_clientTimeoutComboBox_currentIndexChanged(int index) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._clientTimeout = _ui->clientTimeoutComboBox->itemText(index).toInt();
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_maximumNumberOfAudioChannelsSpinBox_valueChanged(int value) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._maximumNumberOfAudioChannels = value;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_maximumNumberOfHardwareInputChannelsSpinBox_valueChanged(int value) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._maximumNumberOfHardwareInputChannels = value;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_maximumNumberOfHardwareOutputChannelsSpinBox_valueChanged(int value) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._maximumNumberOfHardwareOutputChannels = value;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_externalInputLatencySpinBox_valueChanged(int value) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._externalInputLatency = value;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_externalOutputLatencySpinBox_valueChanged(int value) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._externalOutputLatency = value;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_dummyDriverProcessingDelayComboBox_currentIndexChanged(int index) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._dummyDriverProcessingDelay = _ui->dummyDriverProcessingDelayComboBox->itemText(index).toInt();
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_wordLengthComboBox_currentIndexChanged(int index) {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._wordLength = _ui->wordLengthComboBox->itemText(index).toInt();
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_noMemoryLockCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._noMemoryLock = _ui->noMemoryLockCheckBox->checkState() == Qt::Checked;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_ignoreHardwareBufferSizeCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._ignoreHardwareBufferSize = _ui->ignoreHardwareBufferSizeCheckBox->checkState() == Qt::Checked;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_unlockMemoryCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._unlockMemory = _ui->unlockMemoryCheckBox->checkState() == Qt::Checked;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_enableSoftModeCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._enableSoftMode = _ui->enableSoftModeCheckBox->checkState() == Qt::Checked;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_force16BitWordLengthCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._force16BitWordLength = _ui->force16BitWordLengthCheckBox->checkState() == Qt::Checked;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
+void JackPresetsWidget::on_showVerboseMessagesCheckBox_clicked() {
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    preset._showVerboseMessages = _ui->showVerboseMessagesCheckBox->checkState() == Qt::Checked;
+    JackControl::instance().setCurrentPreset(preset);
+}
+
 void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStringList *errorReport) {
+    // Preset management
     _ui->presetComboBox->lineEdit()->setText(preset._presetName);
-    // Device settings
+
+    // Audio settings
     int numberOfAvailableAudioDrivers = _ui->audioDriverComboBox->count();
     bool foundAudioDriver = false;
     for(int i = 0; i < numberOfAvailableAudioDrivers; i++) {
         if(_ui->audioDriverComboBox->itemText(i) == preset._audioDriverName) {
-            _ui->audioDriverComboBox->setCurrentIndex(i);
+            _ui->audioDriverComboBox    ->setCurrentIndex(i);
 
             // Repopulate devices after audio driver has changed
-            _ui->inputDeviceComboBox->setDriverName(preset._audioDriverName);
-            _ui->outputDeviceComboBox->setDriverName(preset._audioDriverName);
-            _ui->inputDeviceComboBox->update();
-            _ui->outputDeviceComboBox->update();
+            _ui->inputDeviceComboBox    ->setDriverName(preset._audioDriverName);
+            _ui->outputDeviceComboBox   ->setDriverName(preset._audioDriverName);
+            _ui->inputDeviceComboBox    ->update();
+            _ui->outputDeviceComboBox   ->update();
 
             foundAudioDriver = true;
             break;
@@ -190,19 +326,19 @@ void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStr
 
     switch(preset._operationMode) {
     case Settings::OperationModeDuplex:
-        _ui->operationModeComboBox->setCurrentIndex(0);
-        _ui->inputDeviceComboBox->setEnabled(true);
-        _ui->outputDeviceComboBox->setEnabled(true);
+        _ui->operationModeComboBox  ->setCurrentIndex(0);
+        _ui->inputDeviceComboBox    ->setEnabled(true);
+        _ui->outputDeviceComboBox   ->setEnabled(true);
         break;
     case Settings::OperationModeCapture:
-        _ui->operationModeComboBox->setCurrentIndex(1);
-        _ui->inputDeviceComboBox->setEnabled(true);
-        _ui->outputDeviceComboBox->setEnabled(false);
+        _ui->operationModeComboBox  ->setCurrentIndex(1);
+        _ui->inputDeviceComboBox    ->setEnabled(true);
+        _ui->outputDeviceComboBox   ->setEnabled(false);
         break;
     case Settings::OperationModePlayback:
-        _ui->operationModeComboBox->setCurrentIndex(2);
-        _ui->inputDeviceComboBox->setEnabled(false);
-        _ui->outputDeviceComboBox->setEnabled(true);
+        _ui->operationModeComboBox  ->setCurrentIndex(2);
+        _ui->inputDeviceComboBox    ->setEnabled(false);
+        _ui->outputDeviceComboBox   ->setEnabled(true);
         break;
     default:
         if(errorReport) {
@@ -294,81 +430,85 @@ void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStr
         _ui->maximumNumberOfPortsComboBox->lineEdit()->setText(QString("%1").arg(preset._maximumNumberOfPorts));
     }
 
+    // - Dithering
+    // - Realtime Prio
+    // - HW Mon
+    // - HW Met
+    // - Monitor Ports
+
     // Advanced configuration
-//    bool    softMode;
-//    bool    monitor;
-//    bool    shorts;
-//    bool    noMemoryLock;
-//    bool    unlockMemory;
-//    bool    HWMonitor;
-//    bool    HWMeter;
-//    bool    ignoreHW;
-//    int     priority;
-//    int     wordLength;
-//    int     wait;
-//    int     channels;
-
-//    int     dither;
-//    int     timeout;
-
-//    int     inputChannels;
-//    int     outputChannels;
-//    int     inputLatency;
-//    int     outputLatency;
-//    int     startDelay;
-//    bool    verbose;
-//    int     maximumNumberOfPorts;
-}
-
-void JackPresetsWidget::on_audioDriverComboBox_activated(QString driverName) {
-    _ui->inputDeviceComboBox->setDriverName(driverName);
-    _ui->outputDeviceComboBox->setDriverName(driverName);
-
-    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
-    preset._audioDriverName = driverName;
-    JackControl::instance().setCurrentPreset(preset);
-}
-
-void JackPresetsWidget::on_operationModeComboBox_activated(int operationMode) {
-    Q_UNUSED(operationMode);
-    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
-    switch(operationMode) {
-    case 0:
-        _ui->inputDeviceComboBox->setEnabled(true);
-        _ui->outputDeviceComboBox->setEnabled(true);
-        preset._operationMode = Settings::OperationModeDuplex;
-        break;
-    case 1:
-        _ui->inputDeviceComboBox->setEnabled(true);
-        _ui->outputDeviceComboBox->setEnabled(false);
-        preset._operationMode = Settings::OperationModeCapture;
-        break;
-    case 2:
-        _ui->inputDeviceComboBox->setEnabled(false);
-        _ui->outputDeviceComboBox->setEnabled(true);
-        preset._operationMode = Settings::OperationModePlayback;
-        break;
+    if(preset._clientTimeout < 0) {
+        if(errorReport) {
+            errorReport->append(tr("Client timeout is set to %1, but must be 0 or greater.").arg(preset._clientTimeout));
+        }
+    } else {
+        _ui->clientTimeoutComboBox->lineEdit()->setText(QString("%1").arg(preset._clientTimeout));
     }
-    JackControl::instance().setCurrentPreset(preset);
+
+    if(preset._maximumNumberOfAudioChannels < -1) {
+        if(errorReport) {
+            errorReport->append(tr("Maximum number of audio channels is set to %1, but must be -1 or greater.").arg(preset._maximumNumberOfAudioChannels));
+        }
+    } else {
+        _ui->maximumNumberOfAudioChannelsSpinBox->setValue(preset._maximumNumberOfAudioChannels);
+    }
+
+    if(preset._maximumNumberOfHardwareInputChannels < -1) {
+        if(errorReport) {
+            errorReport->append(tr("Maximum number of hardware input channels is set to %1, but must be -1 or greater.").arg(preset._maximumNumberOfHardwareInputChannels));
+        }
+    } else {
+        _ui->maximumNumberOfHardwareInputChannelsSpinBox->setValue(preset._maximumNumberOfHardwareInputChannels);
+    }
+
+    if(preset._maximumNumberOfHardwareOutputChannels < -1) {
+        if(errorReport) {
+            errorReport->append(tr("Maximum number of hardware output channels is set to %1, but must be -1 or greater.").arg(preset._maximumNumberOfHardwareOutputChannels));
+        }
+    } else {
+        _ui->maximumNumberOfHardwareOutputChannelsSpinBox->setValue(preset._maximumNumberOfHardwareOutputChannels);
+    }
+
+    if(preset._externalInputLatency < -1) {
+        if(errorReport) {
+            errorReport->append(tr("Maximum number of external input latency is set to %1, but must be -1 or greater.").arg(preset._externalInputLatency));
+        }
+    } else {
+        _ui->externalInputLatencySpinBox->setValue(preset._externalInputLatency);
+    }
+
+    if(preset._externalOutputLatency < -1) {
+        if(errorReport) {
+            errorReport->append(tr("Maximum number of external output latency is set to %1, but must be -1 or greater.").arg(preset._externalOutputLatency));
+        }
+    } else {
+        _ui->externalOutputLatencySpinBox->setValue(preset._externalOutputLatency);
+    }
+
+    if(preset._dummyDriverProcessingDelay < 0) {
+        if(errorReport) {
+            errorReport->append(tr("Dummy processing delay is set to %1, but must be -1 or greater.").arg(preset._dummyDriverProcessingDelay));
+        }
+    } else {
+        _ui->dummyDriverProcessingDelayComboBox->lineEdit()->setText(QString("%1").arg(preset._dummyDriverProcessingDelay));
+    }
+
+    if(preset._wordLength < -1) {
+        if(errorReport) {
+            errorReport->append(tr("Word length is set to %1, but must be -1 or greater.").arg(preset._wordLength));
+        }
+    } else {
+        _ui->wordLengthComboBox->lineEdit()->setText(QString("%1").arg(preset._wordLength));
+    }
+
+    _ui->noMemoryLockCheckBox               ->setChecked(preset._noMemoryLock);
+    _ui->unlockMemoryCheckBox               ->setChecked(preset._unlockMemory);
+    _ui->force16BitWordLengthCheckBox       ->setChecked(preset._force16BitWordLength);
+    _ui->ignoreHardwareBufferSizeCheckBox   ->setChecked(preset._ignoreHardwareBufferSize);
+    _ui->enableSoftModeCheckBox             ->setChecked(preset._enableSoftMode);
+    _ui->showVerboseMessagesCheckBox        ->setChecked(preset._showVerboseMessages);
 }
 
-void JackPresetsWidget::on_inputDeviceComboBox_activated(int index) {
-    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
-    preset._inputDeviceIdentifier = _ui->inputDeviceComboBox->itemData(index).toString();
-    JackControl::instance().setCurrentPreset(preset);
-}
-
-void JackPresetsWidget::on_outputDeviceComboBox_activated(int index) {
-    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
-    preset._outputDeviceIdentifier = _ui->outputDeviceComboBox->itemData(index).toString();
-    JackControl::instance().setCurrentPreset(preset);
-}
-
-void JackPresetsWidget::on_sampleRateComboBox_activated(QString sampleRate) {
-    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
-    preset._samplesPerFrame = sampleRate.toInt();
-    JackControl::instance().setCurrentPreset(preset);
-}
 
 JackPresetsWidget::~JackPresetsWidget() {
     delete _ui;
