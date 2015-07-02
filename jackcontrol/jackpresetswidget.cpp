@@ -169,7 +169,22 @@ void JackPresetsWidget::on_maximumNumberOfPortsComboBox_currentIndexChanged(int 
 }
 
 void JackPresetsWidget::on_ditherComboBox_currentIndexChanged(int index) {
-
+    Settings::JackServerPreset preset = JackControl::instance().currentPreset();
+    switch(index) {
+    case 0:
+        preset._ditherMode = Settings::DitherModeNone;
+        break;
+    case 1:
+        preset._ditherMode = Settings::DitherModeRectangular;
+        break;
+    case 2:
+        preset._ditherMode = Settings::DitherModeShaped;
+        break;
+    case 3:
+        preset._ditherMode = Settings::DitherModeTriangular;
+        break;
+    }
+    JackControl::instance().setCurrentPreset(preset);
 }
 
 void JackPresetsWidget::on_realtimePrioritySpinBox_valueChanged(int value) {
@@ -430,11 +445,32 @@ void JackPresetsWidget::updateWithPreset(Settings::JackServerPreset preset, QStr
         _ui->maximumNumberOfPortsComboBox->lineEdit()->setText(QString("%1").arg(preset._maximumNumberOfPorts));
     }
 
-    // - Dithering
-    // - Realtime Prio
-    // - HW Mon
-    // - HW Met
-    // - Monitor Ports
+    switch(preset._ditherMode) {
+    case Settings::DitherModeNone:
+        _ui->ditherComboBox->setCurrentIndex(0);
+        break;
+    case Settings::DitherModeRectangular:
+        _ui->ditherComboBox->setCurrentIndex(1);
+        break;
+    case Settings::DitherModeShaped:
+        _ui->ditherComboBox->setCurrentIndex(2);
+        break;
+    case Settings::DitherModeTriangular:
+        _ui->ditherComboBox->setCurrentIndex(3);
+        break;
+    }
+
+    if(preset._realtimePriority < 0 || preset._realtimePriority > 99) {
+        if(errorReport) {
+            errorReport->append(tr("Realtime priority is set to %1, but must be betweem 0 and 99.").arg(preset._realtimePriority));
+        }
+    } else {
+        _ui->realtimePrioritySpinBox->setValue(preset._realtimePriority);
+    }
+
+    _ui->enableHardwareMonitoringCheckBox   ->setChecked(preset._enableHardwareMonitoring);
+    _ui->enableHardwareMeteringCheckBox     ->setChecked(preset._enableHardwareMetering);
+    _ui->provideMonitorPortsCheckBox        ->setChecked(preset._provideMonitorPorts);
 
     // Advanced configuration
     if(preset._clientTimeout < 0) {

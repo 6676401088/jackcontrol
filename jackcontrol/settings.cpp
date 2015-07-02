@@ -38,21 +38,13 @@ Settings::JackControlSettings Settings::loadJackControlSettings(
     JackControlSettings jackControlSettings;
 
     bool success = false;
-    QStringList keys = settings.allKeys();
-    if(keys.contains("version")) {
-        jackControlSettings._version = settings.value("version").toInt();
-        switch(jackControlSettings._version) {
-            case 1:
-                success = loadJackControlSettingsVersion1(settings, jackControlSettings);
-                if(ok) { (*ok) = success; }
-                break;
-            default:
-                // Deny all unknown versions
-                if(ok) { (*ok) = false; }
-                break;
-        }
-    } else {
-        if(ok) { (*ok) = false; }
+    jackControlSettings._version = settings.value("version", 1).toInt();
+    switch(jackControlSettings._version) {
+        default: // Unknown version, assume our application's version
+        case 1:
+            success = loadJackControlSettingsVersion1(settings, jackControlSettings);
+            if(ok) { (*ok) = success; }
+            break;
     }
     return jackControlSettings;
 }
@@ -97,26 +89,19 @@ Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
     QFileInfo fileInfo(fileName);
     jackServerPreset._presetName = fileInfo.fileName();
 
-    bool success = false;
-    QStringList keys = settings.allKeys();
-    if(keys.contains("version")) {
-        jackServerPreset._version = settings.value("version").toInt();
-        switch(jackServerPreset._version) {
-            case 1:
-                success = loadJackServerPresetVersion1(
-                    settings,
-                    jackServerPreset
-                );
-                if(ok) { (*ok) = success; }
-                break;
-            default:
-                // Deny all unknown versions
-                if(ok) { (*ok) = false; }
-                break;
-        }
-    } else {
-        if(ok) { (*ok) = false; }
+    bool success = false; 
+    jackServerPreset._version = settings.value("version", 1).toInt();
+    switch(jackServerPreset._version) {
+        default: // Unknown version, assume our application's version
+        case 1:
+            success = loadJackServerPresetVersion1(
+                settings,
+                jackServerPreset
+            );
+            if(ok) { (*ok) = success; }
+            break;
     }
+
     return jackServerPreset;
 }
 
@@ -126,10 +111,10 @@ bool Settings::loadJackServerPresetVersion1(
     QString operationMode;
 
     // Device settings
-    jackServerPreset._audioDriverName         = settings.value("audioDriverName").toString();
-    jackServerPreset._midiDriverName          = settings.value("midiDriverName").toString();
+    jackServerPreset._audioDriverName         = settings.value("audioDriverName", "alsa").toString();
+    jackServerPreset._midiDriverName          = settings.value("midiDriverName", "raw").toString();
 
-    operationMode = settings.value("operationMode").toString().toLower();
+    operationMode = settings.value("operationMode", "duplex").toString().toLower();
     if(operationMode == "duplex") {
         jackServerPreset._operationMode = Settings::OperationModeDuplex;
     } else
@@ -140,10 +125,10 @@ bool Settings::loadJackServerPresetVersion1(
         jackServerPreset._operationMode = Settings::OperationModePlayback;
     }
 
-    jackServerPreset._inputDeviceIdentifier     = settings.value("inputDeviceIdentifier").toString();
-    jackServerPreset._outputDeviceIdentifier    = settings.value("outputDeviceIdentifier").toString();
+    jackServerPreset._inputDeviceIdentifier     = settings.value("inputDeviceIdentifier", "hw:0").toString();
+    jackServerPreset._outputDeviceIdentifier    = settings.value("outputDeviceIdentifier", "hw:0").toString();
 
-    QString ditherMode = settings.value("ditherMode").toString().toLower();
+    QString ditherMode = settings.value("ditherMode", "none").toString().toLower();
     if(ditherMode == "none") {
         jackServerPreset._ditherMode = Settings::DitherModeNone;
     } else
@@ -157,34 +142,34 @@ bool Settings::loadJackServerPresetVersion1(
         jackServerPreset._ditherMode = Settings::DitherModeRectangular;
     }
 
-    jackServerPreset._realtimePriority          = settings.value("realtimePriority").toInt();
+    jackServerPreset._realtimePriority          = settings.value("realtimePriority", 10).toInt();
 
     // Audio processing
-    jackServerPreset._enableRealtimeProcessing  = settings.value("enableRealtimeProcessing").toBool();
-    jackServerPreset._samplesPerFrame           = settings.value("samplesPerFrame").toInt();
-    jackServerPreset._samplesPerSecond          = settings.value("samplesPerSecond").toInt();
-    jackServerPreset._bufferSizeMultiplier      = settings.value("bufferSizeMultiplier").toInt();
-    jackServerPreset._maximumNumberOfPorts      = settings.value("maximumNumberOfPorts").toInt();
-    jackServerPreset._enableHardwareMetering    = settings.value("enableHardwareMetering").toBool();
-    jackServerPreset._enableHardwareMonitoring  = settings.value("enableHardwareMonitoring").toBool();
-    jackServerPreset._provideMonitorPorts       = settings.value("provideMonitorPorts").toBool();
+    jackServerPreset._enableRealtimeProcessing  = settings.value("enableRealtimeProcessing", true).toBool();
+    jackServerPreset._samplesPerFrame           = settings.value("samplesPerFrame", 256).toInt();
+    jackServerPreset._samplesPerSecond          = settings.value("samplesPerSecond", 44100).toInt();
+    jackServerPreset._bufferSizeMultiplier      = settings.value("bufferSizeMultiplier", 2).toInt();
+    jackServerPreset._maximumNumberOfPorts      = settings.value("maximumNumberOfPorts", 512).toInt();
+    jackServerPreset._enableHardwareMetering    = settings.value("enableHardwareMetering", false).toBool();
+    jackServerPreset._enableHardwareMonitoring  = settings.value("enableHardwareMonitoring", false).toBool();
+    jackServerPreset._provideMonitorPorts       = settings.value("provideMonitorPorts", false).toBool();
 
     // Advanced settings
-    jackServerPreset._clientTimeout                     = settings.value("clientTimeout").toInt();
-    jackServerPreset._maximumNumberOfAudioChannels             = settings.value("maximumNumberOfAudioChannels").toInt();
-    jackServerPreset._maximumNumberOfHardwareInputChannels     = settings.value("maximumNumberOfHardwareInputChannels").toInt();
-    jackServerPreset._maximumNumberOfHardwareOutputChannels    = settings.value("maximumNumberOfHardwareOutputChannels").toInt();
-    jackServerPreset._externalInputLatency              = settings.value("externalInputLatency").toInt();
-    jackServerPreset._externalOutputLatency             = settings.value("externalOutputLatency").toInt();
-    jackServerPreset._dummyDriverProcessingDelay        = settings.value("dummyDriverProcessingDelay").toInt();
-    jackServerPreset._wordLength                        = settings.value("wordLength").toInt();
+    jackServerPreset._clientTimeout                     = settings.value("clientTimeout", 500).toInt();
+    jackServerPreset._maximumNumberOfAudioChannels             = settings.value("maximumNumberOfAudioChannels", -1).toInt();
+    jackServerPreset._maximumNumberOfHardwareInputChannels     = settings.value("maximumNumberOfHardwareInputChannels", -1).toInt();
+    jackServerPreset._maximumNumberOfHardwareOutputChannels    = settings.value("maximumNumberOfHardwareOutputChannels", -1).toInt();
+    jackServerPreset._externalInputLatency              = settings.value("externalInputLatency", -1).toInt();
+    jackServerPreset._externalOutputLatency             = settings.value("externalOutputLatency", -1).toInt();
+    jackServerPreset._dummyDriverProcessingDelay        = settings.value("dummyDriverProcessingDelay", 20000).toInt();
+    jackServerPreset._wordLength                        = settings.value("wordLength", 32).toInt();
 
-    jackServerPreset._noMemoryLock                  = settings.value("noMemoryLock").toBool();
-    jackServerPreset._unlockMemory                  = settings.value("unlockMemory").toBool();
-    jackServerPreset._force16BitWordLength          = settings.value("force16BitWordLength").toBool();
-    jackServerPreset._ignoreHardwareBufferSize      = settings.value("ignoreHardwareBufferSize").toBool();
-    jackServerPreset._enableSoftMode                = settings.value("enableSoftMode").toBool();
-    jackServerPreset._showVerboseMessages           = settings.value("showVerboseMessages").toBool();
+    jackServerPreset._noMemoryLock                  = settings.value("noMemoryLock", false).toBool();
+    jackServerPreset._unlockMemory                  = settings.value("unlockMemory", false).toBool();
+    jackServerPreset._force16BitWordLength          = settings.value("force16BitWordLength", false).toBool();
+    jackServerPreset._ignoreHardwareBufferSize      = settings.value("ignoreHardwareBufferSize", false).toBool();
+    jackServerPreset._enableSoftMode                = settings.value("enableSoftMode", false).toBool();
+    jackServerPreset._showVerboseMessages           = settings.value("showVerboseMessages", false).toBool();
     return true;
 }
 
@@ -249,7 +234,7 @@ bool Settings::saveJackServerPresetVersion1(
     settings.setValue("bufferSizeMultiplier",           jackServerPreset._bufferSizeMultiplier);
     settings.setValue("maximumNumberOfPorts",           jackServerPreset._maximumNumberOfPorts);
     settings.setValue("enableHardwareMetering",         jackServerPreset._enableHardwareMetering);
-    settings.setValue("enableHardwareMetering",         jackServerPreset._enableHardwareMonitoring);
+    settings.setValue("enableHardwareMonitoring",       jackServerPreset._enableHardwareMonitoring);
     settings.setValue("provideMonitorPorts",            jackServerPreset._provideMonitorPorts);
 
     // Advanced settings
