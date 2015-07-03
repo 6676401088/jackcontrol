@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-APPNAME := qjackctl
+APPNAME := jackcontrol
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -26,7 +26,7 @@ configure-stamp:
 
 build: build-stamp
 
-build-stamp: configure-stamp 
+build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
@@ -44,12 +44,12 @@ clean:
 	# Add here commands to clean up after the build process.
 	-$(MAKE) -f Makefile.svn clean
 
-	dh_clean 
+	dh_clean
 
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+	dh_clean -k
 	dh_installdirs
 
 	# Add here commands to install the package
@@ -69,7 +69,7 @@ binary-arch: build install
 	dh_installexamples
 #	dh_install
 #	dh_installmenu
-#	dh_installdebconf	
+#	dh_installdebconf
 #	dh_installlogrotate
 #	dh_installemacsen
 #	dh_installpam

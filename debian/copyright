@@ -1,13 +1,12 @@
-This package was debianized by Rui Nuno Capela <rncbc@rncbc.org> on
-Mon, 25 Jun 2007 10:42:40 +0100.
+This package was debianized by Jacob Dawid <jacob@omg-it.works> on
+Fri, 03 Jul 2015 21:10:00 +0100.
 
-It was downloaded from http://qjackctl.sourceforge.net
-
-Upstream Author: Rui Nuno Capela <rncbc@rncbc.org>
+Upstream Author: Jacob Dawid <jacob@omg-it.works>
 
 Copyright:
 
    Copyright (C) 2003-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2014-2015, Jacob Dawid. All rights reserved.
 
 License:
 
@@ -27,4 +26,3 @@ License:
 
 The Debian packaging is (C) 2008-2013, Rui Nuno Capela <rncbc@rncbc.org>
 and is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
-

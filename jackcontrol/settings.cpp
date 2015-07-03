@@ -53,7 +53,7 @@ bool Settings::loadJackControlSettingsVersion1(
     QSettings& settings,
     Settings::JackControlSettings& jackControlSettings) {
     bool ok = true;
-
+    jackControlSettings._mainWindowGeometry = settings.value("mainWindowGeometry").toByteArray();
 
     return ok;
 }
@@ -74,10 +74,10 @@ bool Settings::saveJackControlSettings(
 
 bool Settings::saveJackControlSettingsVersion1(
     QSettings& settings,
-    Settings::JackControlSettings& JackControlSettings) {
+    Settings::JackControlSettings& jackControlSettings) {
     // Settings versioning
     settings.setValue("version",                1);
-
+    settings.setValue("mainWindowGeometry",     jackControlSettings._mainWindowGeometry);
     settings.sync();
     return true;
 }
@@ -89,7 +89,7 @@ Settings::JackServerPreset Settings::loadPreset(QString fileName, bool *ok) {
     QFileInfo fileInfo(fileName);
     jackServerPreset._presetName = fileInfo.fileName();
 
-    bool success = false; 
+    bool success = false;
     jackServerPreset._version = settings.value("version", 1).toInt();
     switch(jackServerPreset._version) {
         default: // Unknown version, assume our application's version

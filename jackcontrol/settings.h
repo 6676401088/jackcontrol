@@ -23,6 +23,7 @@
 // Qt includes
 #include <QString>
 #include <QSettings>
+#include <QByteArray>
 
 class Settings {
 public:
@@ -41,6 +42,7 @@ public:
 
     struct JackControlSettings {
         int             _version;
+        QByteArray      _mainWindowGeometry;
     };
 
     struct JackServerPreset {
