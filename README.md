@@ -35,6 +35,35 @@ qtjack pod into its subdirectory.
 
 Open the top level jackcontrol.pro and build.
 
+How to create a debian package
+------------------------------
+First, copy the source directory to another folder:
+```
+mkdir deb
+cp -R jackcontrol deb
+cd deb/jackcontrol
+```
+
+Then remove the .git folder and build:
+```
+rm -rf .git
+qmake-qt4
+make
+```
+
+Chown all file to root and cd out:
+```
+sudo chown -R root:root .
+cd ..
+```
+
+Then build the package:
+```
+dpkg-deb --build jackcontrol
+```
+
+You'll find the package in the deb folder.
+
 Known bugs
 ----------
 Sometimes the build order gets confused. This is easy to solve: just trigger a

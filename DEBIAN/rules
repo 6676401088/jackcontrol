@@ -18,9 +18,7 @@ configure-stamp:
 	dh_testdir
 
 	# Add here commands to configure the package.
-	-$(MAKE) -f Makefile.svn
-
-	./configure --prefix=/usr
+	qmake-qt4
 	touch configure-stamp
 
 

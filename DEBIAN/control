@@ -5,10 +5,10 @@ Maintainer: Jacob Dawid <jacob@omg-it.works>
 Build-Depends: debhelper (>= 5), libqt4-dev (>= 4.4), libjack-dev,
   libasound2-dev, libx11-dev, x11proto-core-dev
 Standards-Version: 3.7.2
-
 Package: jackcontrol
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Version: 0.1
+Architecture: amd64
+Depends: jackd1 (>= 1:0.124.1+20140122git5013bed0), libasound2 (>= 1.0.16), libc6 (>= 2.14), libgcc1 (>= 1:4.1.1), libjack-jackd2-0 (>= 1.9.5~dfsg-14) | libjack-0.116, libqtcore4 (>= 4:4.7.0~beta1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1)
 Description: JACK Audio Connection Kit Visual Interface.
   JACK Control is a simple application to control the JACK sound server.
   It is based on the original qjackctl, but has undergone huge improvements
