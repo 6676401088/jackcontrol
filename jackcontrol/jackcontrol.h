@@ -22,6 +22,7 @@
 // Qt includes
 #include <QApplication>
 #include <QObject>
+#include <QStringList>
 
 // Own includes
 #include "settings.h"
@@ -41,9 +42,12 @@ public:
     void initialize(int& argc, char **argv);
     int run();
 
+    QStringList availablePresets();
     Settings::JackServerPreset currentPreset();
 
 public slots:
+    void discoverPresets();
+    void loadPreset(QString presetName);
     void setCurrentPreset(Settings::JackServerPreset jackServerPreset);
 
 signals:
@@ -57,5 +61,6 @@ private:
     QApplication *_application;
 
     Settings::JackServerPreset _currentPreset;
+    QStringList _availablePresets;
 };
 

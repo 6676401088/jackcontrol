@@ -54,6 +54,14 @@ JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
     _ui->inputDeviceComboBox->setOperationModeFilter(Settings::OperationModeCapture);
     _ui->outputDeviceComboBox->setOperationModeFilter(Settings::OperationModePlayback);
     _ui->operationModeComboBox->setCurrentIndex(0);
+
+    _ui->presetComboBox->addItems(JackControl::instance().availablePresets());
+    updateWithPreset(JackControl::instance().currentPreset());
+}
+
+void JackPresetsWidget::on_presetComboBox_currentIndexChanged(int index) {
+    QString presetName = _ui->presetComboBox->itemText(index);
+    JackControl::instance().loadPreset(presetName);
 }
 
 void JackPresetsWidget::on_importPresetPushButton_clicked() {

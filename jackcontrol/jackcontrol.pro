@@ -70,7 +70,7 @@ RESOURCES += \
     resources.qrc
 
 TRANSLATIONS += \
-  translations/jackcontrol_de_DE.ts
+    translations/jackcontrol_de_DE.ts
 
 unix {
 	isEmpty(PREFIX) {

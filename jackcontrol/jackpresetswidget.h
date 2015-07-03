@@ -40,6 +40,7 @@ public:
 
 protected slots:
     // Preset management
+    void on_presetComboBox_currentIndexChanged(int index);
     void on_importPresetPushButton_clicked();
     void on_exportPresetPushButton_clicked();
     void on_deletePresetPushButton_clicked();

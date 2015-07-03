@@ -30,17 +30,12 @@ void JackControl::initialize(int& argc, char **argv) {
 }
 
 int JackControl::run() {
+    discoverPresets();
+    loadPreset("default.preset");
+
     // Load and show GUI
     MainWindow mainWindow;
     mainWindow.show();
-
-    QString presetsPath = QDir::home().path(".config/jackcontrol/presets");
-    QDir presetsDir(presetsPath);
-
-    QFileInfoList fileInfoList = presetsDir.entryInfoList();
-
-    // Load current preset
-    setCurrentPreset(Settings::loadPreset(presetsDir.filePath("default.preset")));
 
     // Run application
     int status = _application->exec();
@@ -55,9 +50,34 @@ int JackControl::run() {
     return status;
 }
 
+void JackControl::discoverPresets() {
+    QString presetsPath = QDir::home().filePath(".config/jackcontrol/presets");
+    QDir presetsDir(presetsPath);
+
+    QFileInfoList fileInfoList = presetsDir.entryInfoList();
+    foreach(QFileInfo fileInfo, fileInfoList) {
+        QString fileName = fileInfo.fileName();
+        if(fileName.endsWith(".preset")) {
+            _availablePresets << fileName;
+        }
+    }
+}
+
+void JackControl::loadPreset(QString presetName) {
+    QString presetsPath = QDir::home().filePath(".config/jackcontrol/presets");
+    QDir presetsDir(presetsPath);
+
+    // Load current preset
+    setCurrentPreset(Settings::loadPreset(presetsDir.filePath(presetName)));
+}
+
 void JackControl::setCurrentPreset(Settings::JackServerPreset jackServerPreset) {
     _currentPreset = jackServerPreset;
     emit currentPresetChanged(_currentPreset);
+}
+
+QStringList JackControl::availablePresets() {
+    return _availablePresets;
 }
 
 Settings::JackServerPreset JackControl::currentPreset() {
