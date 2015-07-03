@@ -70,31 +70,18 @@ RESOURCES += \
     resources.qrc
 
 TRANSLATIONS += \
-	translations/qjackctl_cs.ts \
-	translations/qjackctl_de.ts \
-	translations/qjackctl_es.ts \
-	translations/qjackctl_fr.ts \
-	translations/qjackctl_it.ts \
-	translations/qjackctl_ja.ts \
-	translations/qjackctl_nl.ts \
-	translations/qjackctl_ru.ts
+  translations/jackcontrol_de_DE.ts
 
 unix {
-
-	# variables
-	OBJECTS_DIR = .obj
-	MOC_DIR     = .moc
-	UI_DIR      = .ui
-
 	isEmpty(PREFIX) {
 		PREFIX = /usr/local
 	}
 
-	BINDIR = $$PREFIX/bin
-	DATADIR = $$PREFIX/share
+  BINDIR    = $$PREFIX/bin
+  SHAREDIR  = $$PREFIX/share
 	LOCALEDIR = $(localedir)
 
-	DEFINES += DATADIR=\"$$DATADIR\"
+  DEFINES   += SHAREDIR=\"$$SHAREDIR\"
 
 	!isEmpty(LOCALEDIR) {
 		DEFINES += LOCALEDIR=\"$$LOCALEDIR\"

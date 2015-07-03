@@ -34,8 +34,13 @@ int JackControl::run() {
     MainWindow mainWindow;
     mainWindow.show();
 
+    QString presetsPath = QDir::home().path(".config/jackcontrol/presets");
+    QDir presetsDir(presetsPath);
+
+    QFileInfoList fileInfoList = presetsDir.entryInfoList();
+
     // Load current preset
-    setCurrentPreset(Settings::loadPreset(QDir::home().filePath(".config/jackcontrol/presets/default.preset")));
+    setCurrentPreset(Settings::loadPreset(presetsDir.filePath("default.preset")));
 
     // Run application
     int status = _application->exec();
