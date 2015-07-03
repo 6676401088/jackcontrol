@@ -188,7 +188,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>The audio backend driver interface to use</string>
+            <string>The system audio driver to connect with.</string>
            </property>
            <property name="editable">
             <bool>false</bool>
@@ -226,7 +226,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>The ALSA MIDI backend driver to use</string>
+            <string>The ALSA MIDI backend driver to use.</string>
            </property>
            <property name="editable">
             <bool>false</bool>
@@ -279,7 +279,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Provide either audio capture, playback or both</string>
+            <string>Provide either audio capture, playback or both.</string>
            </property>
            <property name="editable">
             <bool>false</bool>
@@ -332,7 +332,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Alternate input device for capture</string>
+            <string>Capture input device.</string>
            </property>
            <property name="editable">
             <bool>false</bool>
@@ -382,7 +382,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Alternate output device for playback</string>
+            <string>Playback device.</string>
            </property>
            <property name="editable">
             <bool>false</bool>
@@ -448,7 +448,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Number of periods in the hardware buffer</string>
+            <string>The number of hardware buffers to use.</string>
            </property>
            <property name="minimum">
             <number>2</number>
@@ -530,7 +530,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Maximum number of ports the JACK server can manage</string>
+            <string>Maximum number of ports the JACK server allows.</string>
            </property>
            <property name="editable">
             <bool>true</bool>
@@ -579,7 +579,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Sample rate in frames per second</string>
+            <string>The number of samples processed in a second.</string>
            </property>
            <property name="editable">
             <bool>false</bool>
@@ -630,7 +630,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Frames per period between process() calls</string>
+            <string>Chunk size of processed samples.</string>
            </property>
            <property name="editable">
             <bool>true</bool>
@@ -694,7 +694,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Set dither mode</string>
+            <string>Sets the dithering mode, ie. the way the samples in signal are being smoothed.</string>
            </property>
            <item>
             <property name="text">
@@ -781,6 +781,9 @@
          </item>
          <item row="5" column="1">
           <widget class="QSpinBox" name="realtimePrioritySpinBox">
+           <property name="toolTip">
+            <string>Sets the realtime processing priority.</string>
+           </property>
            <property name="specialValueText">
             <string>default</string>
            </property>
@@ -806,7 +809,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Use realtime scheduling</string>
+            <string>Activate for lower latency, uses realtime scheduling.</string>
            </property>
            <property name="layoutDirection">
             <enum>Qt::LeftToRight</enum>
@@ -828,7 +831,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Enable hardware monitoring of capture ports</string>
+            <string>Enable hardware monitoring.</string>
            </property>
            <property name="text">
             <string>Hardware monitoring</string>
@@ -847,7 +850,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Enable hardware metering on cards that support it</string>
+            <string>Enable hardware metering on cards that support it.</string>
            </property>
            <property name="text">
             <string>Hardware metering</string>
@@ -866,7 +869,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Provide output monitor ports</string>
+            <string>Provide separate monitor ports.</string>
            </property>
            <property name="text">
             <string>Provide &amp;monitor ports</string>
@@ -913,7 +916,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>External input latency (frames)</string>
+            <string>External input latency.</string>
            </property>
            <property name="specialValueText">
             <string>any</string>
@@ -952,7 +955,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>External output latency (frames)</string>
+            <string>External output latency.</string>
            </property>
            <property name="specialValueText">
             <string>any</string>
@@ -977,7 +980,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Set client timeout limit in miliseconds</string>
+            <string>Time before a client will de declared as non-responsive.</string>
            </property>
            <property name="editable">
             <bool>true</bool>
@@ -1033,7 +1036,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Maximum number of audio channels to allocate</string>
+            <string>Maximum number of audio channels to allocate.</string>
            </property>
            <property name="specialValueText">
             <string>does not apply</string>
@@ -1061,7 +1064,7 @@
             <bool>false</bool>
            </property>
            <property name="toolTip">
-            <string>Word length</string>
+            <string>Word length.</string>
            </property>
            <property name="editable">
             <bool>true</bool>
@@ -1149,7 +1152,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Maximum output audio hardware channels to allocate</string>
+            <string>Maximum output audio hardware channels to allocate.</string>
            </property>
            <property name="specialValueText">
             <string>does not apply</string>
@@ -1214,7 +1217,7 @@
             <bool>false</bool>
            </property>
            <property name="toolTip">
-            <string>Number of microseconds to wait between engine processes (dummy)</string>
+            <string>Simulated processing delay when using the dummy driver.</string>
            </property>
            <property name="editable">
             <bool>true</bool>
@@ -1264,7 +1267,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Maximum input audio hardware channels to allocate</string>
+            <string>Maximum input audio hardware channels to allocate.</string>
            </property>
            <property name="specialValueText">
             <string>does not apply</string>
@@ -1300,7 +1303,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Do not attempt to lock memory, even if in realtime mode</string>
+            <string>Do not attempt to lock memory, even if in realtime mode.</string>
            </property>
            <property name="text">
             <string>No Memory Loc&amp;k</string>
@@ -1319,7 +1322,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Ignore hardware period/buffer size</string>
+            <string>Ignore hardware period/buffer size.</string>
            </property>
            <property name="text">
             <string>&amp;Ignore hardware buffer size</string>
@@ -1338,7 +1341,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Unlock memory of common toolkit libraries (GTK+, QT, FLTK, Wine)</string>
+            <string>Unlock memory of common toolkit libraries.</string>
            </property>
            <property name="text">
             <string>&amp;Unlock Memory</string>
@@ -1357,7 +1360,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Ignore xruns reported by the backend driver</string>
+            <string>Ignore xruns reported by the backend driver.</string>
            </property>
            <property name="text">
             <string>Enable so&amp;ft mode</string>
@@ -1376,7 +1379,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Force 16bit mode instead of failing over 32bit (default)</string>
+            <string>Force 16bit mode instead of failing over 32bit (default).</string>
            </property>
            <property name="text">
             <string>Force &amp;16bit word length</string>
@@ -1395,7 +1398,7 @@
             </font>
            </property>
            <property name="toolTip">
-            <string>Whether to give verbose output on messages</string>
+            <string>Whether to give verbose output on messages.</string>
            </property>
            <property name="text">
             <string>Show &amp;Verbose messages</string>

@@ -28,6 +28,9 @@
 #include <Server>
 #include <Client>
 
+// Own includes
+#include "settings.h"
+
 /**
  * @brief Central JACK service class
  * @author Jacob Dawid <jacob@omg-it.works>
@@ -60,6 +63,8 @@ private:
 
 private:
     JackService(QObject *parent = 0);
+
+    bool configureDriverFromPreset(QtJack::Driver& driver, Settings::JackServerPreset preset);
 
     QSocketNotifier *_stdOutSocketNotifier;
     QtJack::Server _jackServer;
