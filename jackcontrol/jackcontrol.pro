@@ -95,8 +95,12 @@ unix {
 	desktop.path = $$DATADIR/applications
 	desktop.files += $${TARGET}.desktop
 
-	icon.path = $$DATADIR/icons/hicolor/32x32/apps
-	icon.files += images/$${TARGET}.png 
+  icon.path = $$DATADIR/icons
+  icon.files += images/jackcontrol.svg
 }
+
+OTHER_FILES = \
+  deploy/jackcontrol.apparmor \
+  deploy/jackcontrol.desktop
 
 include(../pods.pri)

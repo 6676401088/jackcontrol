@@ -10,4 +10,7 @@ OTHER_FILES = \
   README.md \
   LICENSE \
   AUTHORS \
-  TRANSLATORS
+  TRANSLATORS \
+  ChangeLog \
+  INSTALL \
+  manifest.json

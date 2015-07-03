@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=jackcontrol
+Exec=jackcontrol/jackcontrol
+Icon=jackcontrol/deploy/jackcontrol.svg
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=false

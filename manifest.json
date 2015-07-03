@@ -1,0 +1,15 @@
+{
+    "name": "jackcontrol.jacobdawid",
+    "description": "Jackcontrol JACK frontend.",
+    "architecture": "amd64",
+    "title": "jackcontrol",
+    "hooks": {
+        "app": {
+            "apparmor": "jackcontrol/deploy/jackcontrol.apparmor",
+            "desktop":  "jackcontrol/deploy/jackcontrol.desktop"
+        }
+    },
+    "version": "0.1",
+    "maintainer": "Jacob Dawid <jacob@omg-it.works>",
+    "framework" : "ubuntu-sdk-15.04"
+}
