@@ -30,6 +30,11 @@
 JackService::JackService(QObject *parent)
     : QObject(parent) {
     setupStdOutRedirect();
+
+    connect(&_jackClient, SIGNAL(clientRegistered(QString)),
+            this, SLOT(clientRegistered(QString)));
+    connect(&_jackClient, SIGNAL(clientUnregistered(QString)),
+            this, SLOT(clientUnregistered(QString)));
 }
 
 bool JackService::configureDriverFromPreset(
@@ -130,6 +135,8 @@ bool JackService::startServer() {
             qDebug() << "Could not start JACK server.";
             return false;
         } else {
+            JackControl::instance().showTrayMessage(tr("JACK server has been started."));
+            JackControl::instance().indicateServerRunning();
             qDebug() << "Started JACK server successfully.";
         }
         _jackClient.disconnectFromServer(); // Just in case
@@ -147,6 +154,8 @@ bool JackService::stopServer() {
         qDebug() << "Could not stop JACK server.";
         return false;
     } else {
+        JackControl::instance().showTrayMessage(tr("JACK server has been stopped."));
+        JackControl::instance().indicateServerStopped();
         qDebug() << "Stopped JACK server successfully.";
         return true;
     }
@@ -167,6 +176,14 @@ void JackService::stdOutActivated(int fileDescriptor) {
         achBuffer[cchBuffer] = (char) 0;
         emit message(achBuffer);
     }
+}
+
+void JackService::clientRegistered(QString clientName) {
+    JackControl::instance().showTrayMessage(tr("Client \"%1\" has connected.").arg(clientName));
+}
+
+void JackService::clientUnregistered(QString clientName) {
+    JackControl::instance().showTrayMessage(tr("Client \"%1\" has disconnected.").arg(clientName));
 }
 
 void JackService::setupStdOutRedirect() {

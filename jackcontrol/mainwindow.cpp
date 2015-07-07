@@ -61,6 +61,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&JackService::instance(), SIGNAL(message(QString)),
             this, SLOT(message(QString)));
 
+    connect(&JackControl::instance(), SIGNAL(activated()),
+            this, SLOT(show()));
+
     startTimer(200);
 }
 
@@ -150,14 +153,9 @@ void MainWindow::message(QString message) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    if(QMessageBox::warning(this, tr("Closing JACK control"),
-                            tr("Closing JACK control will also close the JACK server and probably affect running client. Are you really sure you want to quit?"),
-                            QMessageBox::Yes,
-                            QMessageBox::Cancel) == QMessageBox::Yes) {
-        QMainWindow::closeEvent(event);
-    } else {
-        event->ignore();
-    }
+    event->ignore();
+    hide();
+    JackControl::instance().showTrayMessage(tr("JACK Control has been minimized to tray."));
 }
 
 void MainWindow::timerEvent(QTimerEvent *event) {

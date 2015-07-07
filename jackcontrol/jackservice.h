@@ -57,6 +57,8 @@ signals:
 
 private slots:
     void stdOutActivated(int fileDescriptor);
+    void clientRegistered(QString clientName);
+    void clientUnregistered(QString clientName);
 
 private:
     void setupStdOutRedirect();

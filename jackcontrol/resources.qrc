@@ -55,5 +55,8 @@
         <file>images/media-playback-start-2.svg</file>
         <file>images/media-playback-stop-2.svg</file>
         <file>deploy/jackcontrol.svg</file>
+        <file>images/jacktray.svg</file>
+        <file>images/jacktray-running.svg</file>
+        <file>images/jacktray-stopped.svg</file>
     </qresource>
 </RCC>

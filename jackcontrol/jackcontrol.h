@@ -23,9 +23,11 @@
 #include <QApplication>
 #include <QObject>
 #include <QStringList>
+#include <QSystemTrayIcon>
 
 // Own includes
 #include "settings.h"
+#include "mainwindow.h"
 
 class JackControl :
     public QObject {
@@ -42,6 +44,8 @@ public:
     void initialize(int& argc, char **argv);
     int run();
 
+    void showTrayMessage(QString message);
+
     QStringList availablePresets();
     Settings::JackServerPreset currentPreset();
 
@@ -50,17 +54,30 @@ public slots:
     void loadPreset(QString presetName);
     void setCurrentPreset(Settings::JackServerPreset jackServerPreset);
 
+    void indicateServerRunning();
+    void indicateServerStopped();
+
 signals:
     void currentPresetChanged(Settings::JackServerPreset preset);
+    void activated();
+
+private slots:
+    void systemTrayMessageClicked();
+    void systemTrayActivated(QSystemTrayIcon::ActivationReason reason);
+    void quitTriggered();
+    void showWindowTriggered();
 
 private:
     JackControl() :
         QObject() {
     }
 
-    QApplication *_application;
+    QApplication *              _application;
 
-    Settings::JackServerPreset _currentPreset;
-    QStringList _availablePresets;
+    MainWindow *                _mainWindow;
+    QSystemTrayIcon *           _systemTrayIcon;
+
+    Settings::JackServerPreset  _currentPreset;
+    QStringList                 _availablePresets;
 };
 

@@ -19,23 +19,42 @@
 
 // Own includes
 #include "jackcontrol.h"
-#include "mainwindow.h"
 #include "settings.h"
 
 // Qt includes
 #include <QDir>
+#include <QMenu>
+#include <QAction>
+#include <QMessageBox>
 
 void JackControl::initialize(int& argc, char **argv) {
     _application = new QApplication(argc, argv);
+    _mainWindow = new MainWindow();
+
+    QMenu *contextMenu = new QMenu();
+    QAction *showWindowAction = contextMenu->addAction(tr("Show window"));
+    contextMenu->addSeparator();
+    QAction *quitAction = contextMenu->addAction(tr("Quit"));
+
+    _systemTrayIcon = new QSystemTrayIcon();
+    _systemTrayIcon->setContextMenu(contextMenu);
+    _systemTrayIcon->setIcon(QIcon(":/images/jacktray.svg"));
+
+    connect(_systemTrayIcon, SIGNAL(messageClicked()),
+            this, SLOT(systemTrayMessageClicked()));
+    connect(_systemTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(systemTrayActivated(QSystemTrayIcon::ActivationReason)));
+
+    connect(showWindowAction, SIGNAL(triggered()), this, SLOT(showWindowTriggered()));
+    connect(quitAction, SIGNAL(triggered()), this, SLOT(quitTriggered()));
 }
 
 int JackControl::run() {
     discoverPresets();
     loadPreset("default.preset");
 
-    // Load and show GUI
-    MainWindow mainWindow;
-    mainWindow.show();
+    _mainWindow->show();
+    _systemTrayIcon->show();
 
     // Run application
     int status = _application->exec();
@@ -48,6 +67,10 @@ int JackControl::run() {
 
     // Exit
     return status;
+}
+
+void JackControl::showTrayMessage(QString message) {
+    _systemTrayIcon->showMessage(tr("JACK Control"), message, QSystemTrayIcon::Information, 500);
 }
 
 void JackControl::discoverPresets() {
@@ -74,6 +97,39 @@ void JackControl::loadPreset(QString presetName) {
 void JackControl::setCurrentPreset(Settings::JackServerPreset jackServerPreset) {
     _currentPreset = jackServerPreset;
     emit currentPresetChanged(_currentPreset);
+}
+
+void JackControl::indicateServerRunning() {
+    _systemTrayIcon->setIcon(QIcon(":/images/jacktray-running.svg"));
+}
+
+void JackControl::indicateServerStopped() {
+    _systemTrayIcon->setIcon(QIcon(":/images/jacktray-stopped.svg"));
+}
+
+void JackControl::systemTrayMessageClicked() {
+    emit activated();
+}
+
+void JackControl::systemTrayActivated(QSystemTrayIcon::ActivationReason reason) {
+    Q_UNUSED(reason);
+    emit activated();
+}
+
+void JackControl::quitTriggered() {
+    // Note: For some reason the message box only works properly when the main
+    // windows is shown before.
+    _mainWindow->show();
+    if(QMessageBox::warning(_mainWindow, tr("Closing JACK control"),
+                            tr("Closing JACK control will also close the JACK server and probably affect running client. Are you really sure you want to quit?"),
+                            QMessageBox::Yes,
+                            QMessageBox::Cancel) == QMessageBox::Yes) {
+        _application->quit();
+    }
+}
+
+void JackControl::showWindowTriggered() {
+    _mainWindow->show();
 }
 
 QStringList JackControl::availablePresets() {
