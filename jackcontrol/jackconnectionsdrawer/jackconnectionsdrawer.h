@@ -26,6 +26,7 @@
 // QtJack includes
 #include "audioport.h"
 #include "midiport.h"
+#include "client.h"
 
 class JackConnectionsDrawer : public ConnectionsDrawer {
     Q_OBJECT
@@ -59,5 +60,12 @@ protected:
     void addAudioPort(ClientTreeWidget *clientTreeWidget, QtJack::AudioPort audioPort);
     void addMidiPort(ClientTreeWidget *clientTreeWidget, QtJack::MidiPort midiPort);
     void removePort(ClientTreeWidget *clientTreeWidget, QtJack::Port port);
+
+private slots:
+    void connectToJackServer();
+    void disconnectFromJackServer();
+
+private:
+    QtJack::Client _client;
 };
 

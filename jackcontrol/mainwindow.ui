@@ -429,6 +429,20 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/images/utilities-system-monitor.svg</normaloff>:/images/utilities-system-monitor.svg</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Scope</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="JackScopeWidget" name="widget_2" native="true"/>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tabMessages">
        <attribute name="icon">
         <iconset resource="resources.qrc">
@@ -456,6 +470,17 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
+           <widget class="QPushButton" name="clearMessagesPushButton">
+            <property name="text">
+             <string>Clear messages</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resources.qrc">
+              <normaloff>:/images/list-remove.svg</normaloff>:/images/list-remove.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_8">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -480,33 +505,6 @@
            </widget>
           </item>
          </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tabStatus">
-       <attribute name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/images/gnome-nettool.svg</normaloff>:/images/gnome-nettool.svg</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Status</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <item>
-         <widget class="StatusWidget" name="statusWidget" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
         </item>
        </layout>
       </widget>
@@ -572,11 +570,24 @@
    <addaction name="actionStopJackServer"/>
    <addaction name="actionStartJackServer"/>
   </widget>
-  <action name="actionAbout">
-   <property name="text">
-    <string>About</string>
+  <widget class="QToolBar" name="toolBarJackControl">
+   <property name="windowTitle">
+    <string>toolBar</string>
    </property>
-  </action>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionAlwaysOnTop"/>
+  </widget>
   <action name="actionTransportStart">
    <property name="checkable">
     <bool>true</bool>
@@ -727,23 +738,23 @@
     <string>Stop JACK Server</string>
    </property>
   </action>
-  <action name="actionJackSettings">
+  <action name="actionAlwaysOnTop">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/images/preferences-desktop.svg</normaloff>:/images/preferences-desktop.svg</iconset>
+     <normaloff>:/images/view-restore.svg</normaloff>:/images/view-restore.svg</iconset>
    </property>
    <property name="text">
-    <string>JACK Settings</string>
+    <string>AlwaysOnTop</string>
+   </property>
+   <property name="toolTip">
+    <string>Pin the window to be always on top.</string>
    </property>
   </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>StatusWidget</class>
-   <extends>QWidget</extends>
-   <header>statuswidget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>ConnectionsWidget</class>
    <extends>QWidget</extends>
@@ -754,6 +765,12 @@
    <class>JackPresetsWidget</class>
    <extends>QWidget</extends>
    <header>jackpresetswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>JackScopeWidget</class>
+   <extends>QWidget</extends>
+   <header>jackscopewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

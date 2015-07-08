@@ -1,5 +1,4 @@
 /****************************************************************************
-   Copyright (C) 2003-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2015, Jacob Dawid <jacob@omg-it.works>
 
    This program is free software; you can redistribute it and/or
@@ -18,45 +17,41 @@
 
 *****************************************************************************/
 
-#pragma once
-
-// uic includes
-#include "ui_statuswidget.h"
-
 // Qt includes
-#include <QMap>
+#include <QPainter>
 
-class QTreeWidgetItem;
+// Own includes
+#include "jackscopewidget.h"
+#include "jackcontrol.h"
 
-class StatusWidget : public QWidget {
-	Q_OBJECT
+// UIC includes
+#include "ui_jackscopewidget.h"
 
-public:
-    enum StatusItem {
-        ServerState = 0,
-        DspLoad,
-        SampleRate,
-        BufferSize,
-        Realtime,
-        TransportState,
-        TransportTimeCode,
-        TransportBBT,
-        TransportBPM,
-        TicksPerBeat,
-        TimeSignature
-    };
+JackScopeWidget::JackScopeWidget(QWidget *parent) :
+    QWidget(parent),
+    _ui(new Ui::JackScopeWidget) {
+    _ui->setupUi(this);
 
-    StatusWidget(QWidget *parent = 0);
-    ~StatusWidget();
+    _ui->labelTimeDomain->setStyleSheet("");
+    _ui->labelFrequencyDomain->setStyleSheet("");
+}
 
-    void updateStatusItem(StatusItem statusItem, QString value);
+JackScopeWidget::~JackScopeWidget() {
+    delete _ui;
+}
 
-protected:
-    void timerEvent(QTimerEvent *timerEvent);
+void JackScopeWidget::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event);
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
-private:
-    Ui::StatusWidget *ui;
+    QPen pen = painter.pen();
+    pen.setColor(Qt::white);
+    pen.setWidth(1);
+    painter.setPen(pen);
 
-    QMap<StatusItem, QTreeWidgetItem*> _treeWidgetItems;
-};
+    painter.fillRect(_ui->labelTimeDomain->rect(), Qt::black);
+    painter.fillRect(_ui->labelFrequencyDomain->rect(), Qt::black);
 
+    //painter.drawLine(_ui->labelTimeDomain->pos(), _ui->labelTimeDomain->pos() + QPoint(100, 100));
+}

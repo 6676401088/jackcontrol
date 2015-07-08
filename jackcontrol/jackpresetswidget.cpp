@@ -24,7 +24,7 @@
 
 // Own includes
 #include "jackpresetswidget.h"
-#include "jackservice.h"
+#include "jackcontrol.h"
 #include "jackcontrol.h"
 
 // UIC includes
@@ -38,7 +38,7 @@ JackPresetsWidget::JackPresetsWidget(QWidget *parent) :
     connect(&JackControl::instance(), SIGNAL(currentPresetChanged(Settings::JackServerPreset)),
             this, SLOT(updateWithPreset(Settings::JackServerPreset)));
 
-    QtJack::DriverMap drivers = JackService::instance().server().availableDrivers();
+    QtJack::DriverMap drivers = JackControl::instance().server().availableDrivers();
     foreach(QtJack::Driver driver, drivers) {
         _ui->audioDriverComboBox->addItem(driver.name());
     }

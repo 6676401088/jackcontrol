@@ -1,18 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/backward1.png</file>
         <file>images/connect1.png</file>
         <file>images/connections1.png</file>
         <file>images/disconnect1.png</file>
         <file>images/disconnectall1.png</file>
-        <file>images/edit1.png</file>
         <file>images/expandall1.png</file>
-        <file>images/forward1.png</file>
-        <file>images/pause1.png</file>
-        <file>images/play1.png</file>
-        <file>images/rewind1.png</file>
-        <file>images/start1.png</file>
-        <file>images/stop1.png</file>
         <file>images/audio-card.svg</file>
         <file>images/gnome-mime-audio.svg</file>
         <file>images/single-selection-64.png</file>
@@ -58,5 +50,7 @@
         <file>images/jacktray.svg</file>
         <file>images/jacktray-running.svg</file>
         <file>images/jacktray-stopped.svg</file>
+        <file>images/view-restore.svg</file>
+        <file>images/utilities-system-monitor.svg</file>
     </qresource>
 </RCC>

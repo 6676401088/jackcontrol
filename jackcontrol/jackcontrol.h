@@ -24,6 +24,11 @@
 #include <QObject>
 #include <QStringList>
 #include <QSystemTrayIcon>
+#include <QSocketNotifier>
+
+// QtJack includes
+#include "client.h"
+#include "server.h"
 
 // Own includes
 #include "settings.h"
@@ -44,7 +49,12 @@ public:
     void initialize(int& argc, char **argv);
     int run();
 
-    void showTrayMessage(QString message);
+    void showTrayMessage(QString standardOutMessage);
+
+    bool startServer();
+    bool stopServer();
+
+    QtJack::Server& server();
 
     QStringList availablePresets();
     Settings::JackServerPreset currentPreset();
@@ -54,12 +64,13 @@ public slots:
     void loadPreset(QString presetName);
     void setCurrentPreset(Settings::JackServerPreset jackServerPreset);
 
-    void indicateServerRunning();
-    void indicateServerStopped();
-
 signals:
+    void jackServerHasStarted();
+    void jackServerHasStopped();
+
     void currentPresetChanged(Settings::JackServerPreset preset);
     void activated();
+    void standardOutMessage(QString standardOutMessage);
 
 private slots:
     void systemTrayMessageClicked();
@@ -67,10 +78,18 @@ private slots:
     void quitTriggered();
     void showWindowTriggered();
 
+    void stdOutActivated(int fileDescriptor);
+
 private:
     JackControl() :
         QObject() {
     }
+
+    void indicateServerRunning();
+    void indicateServerStopped();
+
+    void setupStdOutRedirect();
+    bool configureDriverFromPreset(QtJack::Driver& driver, Settings::JackServerPreset preset);
 
     QApplication *              _application;
 
@@ -79,5 +98,8 @@ private:
 
     Settings::JackServerPreset  _currentPreset;
     QStringList                 _availablePresets;
+
+    QSocketNotifier *_stdOutSocketNotifier;
+    QtJack::Server _server;
 };
 

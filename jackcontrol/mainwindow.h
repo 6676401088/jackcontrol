@@ -19,13 +19,13 @@
 
 #pragma once
 
-// Own includes
-#include "jackservice.h"
-
 // Qt includes
 #include <QMainWindow>
 #include <QCloseEvent>
 #include <QTimerEvent>
+
+// QtJack includes
+#include "client.h"
 
 namespace Ui {
     class MainWindow;
@@ -54,13 +54,25 @@ public slots:
     void on_actionTransportStop_triggered();
     void on_actionTransportForward_triggered();
 
+    // Jack Control toolbar
+    void on_actionAlwaysOnTop_triggered();
+
+    // Messages tab
+    void on_clearMessagesPushButton_clicked();
     void on_exportLogPushButton_clicked();
 
-    void message(QString message);
+    void appendMessage(QString appendMessage);
 
 protected:
     void closeEvent(QCloseEvent *event);
     void timerEvent(QTimerEvent *event);
 
     Ui::MainWindow *_ui;
+
+private slots:
+    void jackServerHasStarted();
+    void jackServerHasStopped();
+
+private:
+    QtJack::Client _client;
 };

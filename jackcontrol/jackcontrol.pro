@@ -18,10 +18,8 @@ INCLUDEPATH += \
     jackconnectionsdrawer
 
 HEADERS += \
-    statuswidget.h \
     connectionswidget.h \
     mainwindow.h \
-    jackservice.h \
     connectionsdrawer/clienttreewidgetitem.h \
     connectionsdrawer/portconnectionswidget.h \
     connectionsdrawer/porttreewidgetitem.h \
@@ -35,13 +33,12 @@ HEADERS += \
     jackpresetswidget.h \
     soundcardcombobox.h \
     jackcontrol.h \
-    messageshighlighter.h
+    messageshighlighter.h \
+    jackscopewidget.h
 
 SOURCES += \
-    statuswidget.cpp \
     connectionswidget.cpp \
     mainwindow.cpp \
-    jackservice.cpp \
     connectionsdrawer/clienttreewidgetitem.cpp \
     connectionsdrawer/portconnectionswidget.cpp \
     connectionsdrawer/porttreewidgetitem.cpp \
@@ -55,13 +52,14 @@ SOURCES += \
     jackpresetswidget.cpp \
     soundcardcombobox.cpp \
     jackcontrol.cpp \
-    messageshighlighter.cpp
+    messageshighlighter.cpp \
+    jackscopewidget.cpp
 
 FORMS += \
-    statuswidget.ui \
     connectionswidget.ui \
     mainwindow.ui \
-    jackpresetswidget.ui
+    jackpresetswidget.ui \
+    jackscopewidget.ui
 
 RESOURCES += \
     resources.qrc
