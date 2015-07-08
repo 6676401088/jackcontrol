@@ -5,9 +5,6 @@ DEFINES += \
   #SUPPORTS_COREAUDIO \
   #SUPPORTS_PORTAUDIO
 
-# Enable this if you want to build with JACK2
-#DEFINES += QTJACK_JACK2_SUPPORT
-
 TARGET = jackcontrol
 TEMPLATE = app
 QT += widgets
@@ -73,27 +70,27 @@ TRANSLATIONS += \
     translations/jackcontrol_de_DE.ts
 
 unix {
-	isEmpty(PREFIX) {
-		PREFIX = /usr/local
-	}
+  isEmpty(PREFIX) {
+    PREFIX = /usr/local
+  }
 
   BINDIR    = $$PREFIX/bin
   SHAREDIR  = $$PREFIX/share
-	LOCALEDIR = $(localedir)
+  LOCALEDIR = $(localedir)
 
   DEFINES   += SHAREDIR=\"$$SHAREDIR\"
 
-	!isEmpty(LOCALEDIR) {
-		DEFINES += LOCALEDIR=\"$$LOCALEDIR\"
-	}
+  !isEmpty(LOCALEDIR) {
+    DEFINES += LOCALEDIR=\"$$LOCALEDIR\"
+  }
 
-	# make install
-	INSTALLS += target desktop icon
+  # make install
+  INSTALLS += target desktop icon
 
-	target.path = $$BINDIR
+  target.path = $$BINDIR
 
-	desktop.path = $$DATADIR/applications
-	desktop.files += $${TARGET}.desktop
+  desktop.path = $$DATADIR/applications
+  desktop.files += $${TARGET}.desktop
 
   icon.path = $$DATADIR/icons
   icon.files += images/jackcontrol.svg
@@ -104,3 +101,5 @@ OTHER_FILES = \
   deploy/jackcontrol.desktop
 
 include(../pods.pri)
+
+LIBS += -ldl
