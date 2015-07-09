@@ -126,6 +126,7 @@ void JackControl::quitTriggered() {
     // Note: For some reason the message box only works properly when the main
     // windows is shown before.
     _mainWindow->show();
+    _mainWindow->raise();
     if(QMessageBox::warning(_mainWindow, tr("Closing JACK control"),
                             tr("Closing JACK control will also close the JACK server and probably affect running client. Are you really sure you want to quit?"),
                             QMessageBox::Yes,

@@ -21,14 +21,22 @@
 
 // Qt includes
 #include <QWidget>
+#include <QPaintEvent>
+#include <QTimerEvent>
 
+// QtJack includes
+#include "client.h"
+#include "audioport.h"
+#include "processor.h"
+#include "ringbuffer.h"
 
 namespace Ui {
 class JackScopeWidget;
 }
 
 class JackScopeWidget :
-    public QWidget {
+    public QWidget,
+    public QtJack::Processor {
     Q_OBJECT
 
 public:
@@ -37,7 +45,17 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void timerEvent(QTimerEvent *event);
+
+    void process(int samples);
+
+protected slots:
+    void jackServerHasStarted();
+    void jackServerHasStopped();
 
 private:
     Ui::JackScopeWidget *_ui;
+    QtJack::Client _client;
+    QtJack::AudioPort _probePort;
+    QtJack::AudioRingBuffer _ringBuffer;
 };

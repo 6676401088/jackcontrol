@@ -17,7 +17,16 @@
    <item>
     <widget class="QLabel" name="labelTimeDomain">
      <property name="styleSheet">
-      <string notr="true">background: black;</string>
+      <string notr="true"/>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Panel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
      </property>
      <property name="text">
       <string/>
@@ -27,7 +36,16 @@
    <item>
     <widget class="QLabel" name="labelFrequencyDomain">
      <property name="styleSheet">
-      <string notr="true">background: black;</string>
+      <string notr="true"/>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Panel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
      </property>
      <property name="text">
       <string/>
