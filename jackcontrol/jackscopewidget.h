@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <QPaintEvent>
 #include <QTimerEvent>
+#include <QVector>
 
 // QtJack includes
 #include "client.h"
@@ -39,9 +40,21 @@ class JackScopeWidget :
     public QtJack::Processor {
     Q_OBJECT
 
+    struct Probe {
+        QtJack::AudioPort       _port;
+        QtJack::AudioRingBuffer _ringBuffer;
+        QVector<double>         _samples;
+    };
+
 public:
     explicit JackScopeWidget(QWidget *parent = 0);
     ~JackScopeWidget();
+
+public slots:
+    void on_resolutionSpinBox_valueChanged(int value);
+    void on_timeSpanDoubleSpinBox_valueChanged(double value);
+    void on_addProbePushButton_clicked();
+    void on_removeProbePushButton_clicked();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -54,8 +67,12 @@ protected slots:
     void jackServerHasStopped();
 
 private:
+    void addProbe();
+    void removeProbe();
+
     Ui::JackScopeWidget *_ui;
+    int _resolution;
     QtJack::Client _client;
-    QtJack::AudioPort _probePort;
-    QtJack::AudioRingBuffer _ringBuffer;
+
+    QList<Probe*> _probes;
 };
